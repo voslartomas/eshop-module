@@ -1,0 +1,22 @@
+{
+    "name": "webcms2/eshop-module",
+    "type": "library",
+    "description": "WebCMS2 eshop module.",
+    "keywords": ["webcms2","module"],
+    "homepage": "http://www.webcook.cz/WebCMS2",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tomáš Voslař",
+            "email": "tomas.voslar@webcook.cz",
+            "homepage": "http://www.webcook.cz",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+		"webcms2/webcms2": "@dev"
+    },
+    "autoload": {
+        "classmap": ["/"]
+    }
+}
