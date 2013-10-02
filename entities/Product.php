@@ -45,6 +45,18 @@ class Product extends \AdminModule\Seo {
 	 */
 	private $language;
 	
+	/**
+	 * @orm\Column(type="decimal", precision=12, scale=4)
+	 */
+	private $price;
+	
+	/**
+	 * @orm\Column(type="integer")
+	 */
+	private $vat;
+	
+	private $priceWithVat;
+	
 	public function __construct(){
 		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
 	}
@@ -99,5 +111,29 @@ class Product extends \AdminModule\Seo {
 
 	public function setLanguage($language) {
 		$this->language = $language;
+	}
+	
+	public function getPrice() {
+		return $this->price;
+	}
+
+	public function getVat() {
+		return $this->vat;
+	}
+
+	public function setPrice($price) {
+		$this->price = $price;
+	}
+
+	public function setVat($vat) {
+		$this->vat = $vat;
+	}
+	
+	public function getPriceWithVat() {
+		return $this->price * (($this->vat / 100) + 1);
+	}
+
+	public function setPriceWithVat($priceWithVat) {
+		$this->priceWithVat = $priceWithVat;
 	}
 }

@@ -49,6 +49,8 @@ class ProductsPresenter extends BasePresenter{
 		
 		$form = $this->createForm();
 		$form->addText('title', 'Name')->setAttribute('class', 'form-control');
+		$form->addText('price', 'Price')->setAttribute('class', 'form-control');
+		$form->addText('vat', 'Vat')->setAttribute('class', 'form-control');
 		$form->addMultiSelect('categories', 'Categories')->setTranslator(NULL)->setItems($hierarchy)->setAttribute('class', 'form-control');
 		
 		$form->addSubmit('save', 'Save')->setAttribute('class', 'btn btn-success');
@@ -80,6 +82,8 @@ class ProductsPresenter extends BasePresenter{
 
 		$this->product->setTitle($values->title);
 		$this->product->setLanguage($this->state->language);
+		$this->product->setPrice($values->price);
+		$this->product->setVat($values->vat);
 		
 		// delete old categories
 		$this->product->setCategories(new \Doctrine\Common\Collections\ArrayCollection());
@@ -90,7 +94,7 @@ class ProductsPresenter extends BasePresenter{
 			$this->product->addCategory($category);
 		}
 		
-		$this->em->persist($this->product); // FIXME only if is new we have to persist entity, otherway it can be just flushed
+		if(!$this->product->getId()) $this->em->persist($this->product); // FIXME only if is new we have to persist entity, otherway it can be just flushed
 		$this->em->flush();
 		
 		$this->flashMessage($this->translation['Product has been added.'], 'success');
@@ -98,6 +102,8 @@ class ProductsPresenter extends BasePresenter{
 		if(!$this->isAjax())
 			$this->redirect('Products:default', array('idPage' => $this->actualPage->getId()));
 	} 
+	
+	public function actionDefault($idPage) {}
 	
 	protected function createComponentProductsGrid($name){
 				
@@ -108,6 +114,13 @@ class ProductsPresenter extends BasePresenter{
 		);
 		
 		$grid->addColumn('title', 'Name')->setSortable()->setFilter();
+		$grid->addColumn('price', 'Price')->setCustomRender(function($item){
+			return \WebCMS\PriceFormatter::format($item->getPrice());
+		})->setSortable()->setFilter();
+		$grid->addColumn('vat', 'Vat')->setSortable()->setFilter();
+		$grid->addColumn('priceWithVat', 'Price with vat')->setCustomRender(function($item){
+			return \WebCMS\PriceFormatter::format($item->getPriceWithVat());
+		})->setSortable()->setFilter();
 				
 		$grid->addAction("updateProduct", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updateProduct', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
 		$grid->addAction("deleteProduct", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteProduct', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
