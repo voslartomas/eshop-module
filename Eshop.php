@@ -17,6 +17,18 @@ class Eshop extends \WebCMS\Module {
 		array(
 			'name' => 'Eshop',
 			'frontend' => TRUE
+			),
+		array(
+			'name' => 'Categories',
+			'frontend' => TRUE
+			),
+		array(
+			'name' => 'Products',
+			'frontend' => FALSE
+			),
+		array(
+			'name' => 'Basket',
+			'frontend' => TRUE
 			)
 	);
 	
