@@ -9,7 +9,7 @@ use Doctrine\orm\Mapping as orm;
 /**
  * Description of Page
  * @gedmo\Tree(type="nested")
- * @orm\Entity
+ * @orm\Entity(repositoryClass="\WebCMS\EshopModule\Doctrine\CategoryRepository")
  * @orm\Table(name="eshopCategory")
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
