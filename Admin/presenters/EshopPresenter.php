@@ -24,13 +24,13 @@ class EshopPresenter extends \AdminModule\BasePresenter {
 		
 	}
 	
-	public function actionDefault($id){
+	public function actionDefault($idPage){
 				
 	}
 	
-	public function renderDefault($id){
+	public function renderDefault($idPage){
 		$this->reloadContent();
 		
-		$this->template->id = $id;
+		$this->template->idPage = $idPage;
 	}
 }

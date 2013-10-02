@@ -1,6 +1,6 @@
 <?php
 
-namespace AdminModule;
+namespace WebCMS\EshopModule\Doctrine;
 
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 

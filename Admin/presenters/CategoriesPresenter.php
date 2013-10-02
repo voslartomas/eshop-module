@@ -2,6 +2,8 @@
 
 namespace AdminModule\EshopModule;
 
+use Nette\Application\UI;
+
 /**
  * Description of CategoriesPresenter
  *
@@ -53,6 +55,11 @@ class CategoriesPresenter extends BasePresenter{
 		return $form;
 	}
 	
+	public function actionUpdateCategory($idPage, $id){
+		if($id) $this->category = $this->repository->find($id);
+		else $this->category = new \WebCMS\EshopModule\Doctrine\Category();
+	}
+	
 	public function categoryFormSubmitted(UI\Form $form){
 		$values = $form->getValues();
 
@@ -71,7 +78,7 @@ class CategoriesPresenter extends BasePresenter{
 		$this->em->flush();
 		
 		// creates path
-		$path = $repo->getPath($this->category);
+		$path = $this->repository->getPath($this->category);
 		$final = array();
 		foreach($path as $p){
 			if($p->getParent() != NULL) $final[] = $p->getSlug();
@@ -84,7 +91,7 @@ class CategoriesPresenter extends BasePresenter{
 		$this->flashMessage($this->translation['Category has been added.'], 'success');
 		
 		if(!$this->isAjax())
-			$this->redirect('Categories:default');
+			$this->redirect('Categories:default', array('idPage' => $this->actualPage->getId()));
 	} 
 	
 	protected function createComponentCategoriesGrid($name){
@@ -123,20 +130,15 @@ class CategoriesPresenter extends BasePresenter{
 			NULL => 'No'
 		));
 		
-		$grid->addAction("moveUp", "Move up");
-		$grid->addAction("moveDown", "Move down");
-		$grid->addAction("updateCategory", 'Edit')->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
-		$grid->addAction("deleteCategory", 'Delete')->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
+		$grid->addAction("moveUp", "Move up", \Grido\Components\Actions\Action::TYPE_HREF, 'moveUp', array('idPage' => $this->actualPage->getId()));
+		$grid->addAction("moveDown", "Move down", \Grido\Components\Actions\Action::TYPE_HREF, 'moveDown', array('idPage' => $this->actualPage->getId()));
+		$grid->addAction("updateCategory", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updateCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
+		$grid->addAction("deleteCategory", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
 
 		return $grid;
 	}
 	
-	public function actionUpdateCategory($id){
-		if($id) $this->category = $this->repository->find($id);
-		else $this->category = new Category();
-	}
-	
-	public function actionDeleteCategory($id){
+	public function actionDeleteCategory($idPage, $id){
 		$this->category = $this->repository->find($id);
 		$this->em->remove($this->category);
 		$this->em->flush();
@@ -144,48 +146,39 @@ class CategoriesPresenter extends BasePresenter{
 		$this->flashMessage($this->translation['Category has been removed.'], 'success');
 		
 		if(!$this->isAjax())
-			$this->redirect('Categories:default');
+			$this->redirect('Categories:default', array('idPage' => $idPage));
 	}
 	
-	public function actionMoveUp($id){
+	public function actionMoveUp($id, $idPage){
 		$this->category = $this->repository->find($id);
 		
-		if($this->category->getParent()){
-			$this->repository->moveUp($this->category);
-			
-			$this->flashMessage($this->translation['Category has been moved up.'], 'success');
-		}else{
-			$this->flashMessage($this->translation['Category has not been moved up, because it is root category.'], 'warning');
-		}
+		$this->repository->moveUp($this->category);
+		$this->flashMessage($this->translation['Category has been moved up.'], 'success');
 		
 		if(!$this->isAjax())
-			$this->redirect('Categories:default');
+			$this->redirect('Categories:default', array('idPage' => $idPage));
 	}
 	
-	public function actionMoveDown($id){
+	public function actionMoveDown($id, $idPage){
 		$this->category = $this->repository->find($id);
 		
-		if($this->category->getParent()){
-			$this->repository->moveDown($this->category);
-			
-			$this->flashMessage($this->translation['Category has been moved down.'], 'success');
-		}else{
-			$this->flashMessage($this->translation['Category has not been moved up, because it is root category.'], 'warning');
-		}
-		
+		$this->repository->moveDown($this->category);
+		$this->flashMessage($this->translation['Category has been moved down.'], 'success');
+
 		if(!$this->isAjax())
-			$this->redirect('Categories:default');
+			$this->redirect('Categories:default', array('idPage' => $idPage));
 	}
 	
-	public function renderUpdateCategory($id){
+	public function renderUpdateCategory($idPage){
 		$this->reloadModalContent();
 		
 		$this->template->category = $this->category;
+		$this->template->idPage = $idPage;
 	}
 	
-	public function renderDefault($id){
+	public function renderDefault($idPage){
 		$this->reloadContent();
 		
-		$this->template->id = $id;
+		$this->template->idPage = $idPage;
 	}
 }

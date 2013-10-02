@@ -26,7 +26,7 @@ class Category extends \AdminModule\Seo{
     private $description;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $picture;
 	

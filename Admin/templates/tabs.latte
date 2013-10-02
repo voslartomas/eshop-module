@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs" id="myTab">
-  <li {if $active == "eshop"}class="active"{/if}><a class="ajax" n:href="Eshop:default id => $id">{_'Eshop'}</a></li>
-  <li {if $active == "categories"}class="active"{/if}><a class="ajax" n:href="Categories:default id => $id">{_'Categories'}</a></li>
-  <li {if $active == "products"}class="active"{/if}><a class="ajax" n:href="Products:default id => $id">{_'Products'}</a></li>
-  {include ../../../webcms2/AdminModule/templates/system/boxes.latte id => $id}
+  <li {if $active == "eshop"}class="active"{/if}><a class="ajax" n:href="Eshop:default idPage => $idPage">{_'Eshop'}</a></li>
+  <li {if $active == "categories"}class="active"{/if}><a class="ajax" n:href="Categories:default idPage => $idPage">{_'Categories'}</a></li>
+  <li {if $active == "products"}class="active"{/if}><a class="ajax" n:href="Products:default idPage => $idPage">{_'Products'}</a></li>
+  {include ../../../webcms2/AdminModule/templates/system/boxes.latte id => $idPage}
 </ul>
