@@ -28,7 +28,7 @@ class CategoriesPresenter extends BasePresenter{
 	}
 	
 	protected function createComponentCategoryForm(){
-
+		
 		$hierarchy = $this->repository->getTreeForSelect(array(
 			array('by' => 'root', 'dir' => 'ASC'), 
 			array('by' => 'lft', 'dir' => 'ASC')
@@ -37,7 +37,7 @@ class CategoriesPresenter extends BasePresenter{
 				'language = ' . $this->state->language->getId()
 		));
 		
-		$hierarchy = array(0 => $this->translation['Pick parent']) + $hierarchy;
+		$hierarchy = $hierarchy;
 		
 		$form = $this->createForm();
 		$form->addText('title', 'Name')->setAttribute('class', 'form-control');
@@ -95,35 +95,20 @@ class CategoriesPresenter extends BasePresenter{
 	} 
 	
 	protected function createComponentCategoriesGrid($name){
-		
-		$parents = $this->repository->findBy(array(
-			'parent' => NULL,
-			'language' => $this->state->language->getId()
-		));
-		
-		$prnts = array('' => $this->translation['Pick main']);
-		foreach($parents as $p){
-			$prnts[$p->getId()] = $p->getTitle();
-		}
-		
+				
 		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\Category', array(
 			array('by' => 'root', 'dir' => 'ASC'), 
 			array('by' => 'lft', 'dir' => 'ASC')
 			),
 			array(
-				'language = ' . $this->state->language->getId()
+				'language = ' . $this->state->language->getId(),
+				'level > 0'
 			)
 		);
 		
 		$grid->addColumn('title', 'Name')->setCustomRender(function($item){
 			return str_repeat("-", $item->getLevel()) . $item->getTitle();
-		});
-		
-		$grid->addColumnText('root', 'Structure')->setCustomRender(function($item){
-			return '-';
-		});
-		
-		$grid->addFilterSelect('root', 'Structure')->getControl()->setTranslator(NULL)->setItems($prnts);
+		})->setFilter();
 		
 		$grid->addColumn('visible', 'Visible')->setReplacement(array(
 			'1' => 'Yes',
@@ -167,6 +152,24 @@ class CategoriesPresenter extends BasePresenter{
 
 		if(!$this->isAjax())
 			$this->redirect('Categories:default', array('idPage' => $idPage));
+	}
+	
+	public function actionDefault($idPage) {
+		$main = $this->repository->findBy(array(
+			'title' => 'Main',
+			'level' => 0
+		));
+		
+		if(count($main) == 0){
+			$main = new \WebCMS\EshopModule\Doctrine\Category;
+			$main->setTitle('Main');
+			$main->setLanguage($this->state->language);
+			$main->setPath('');
+			$main->setVisible(FALSE);
+			
+			$this->em->persist($main);
+			$this->em->flush();
+		}
 	}
 	
 	public function renderUpdateCategory($idPage){

@@ -14,9 +14,9 @@ class ProductsPresenter extends BasePresenter{
 		
 	}
 	
-	public function renderDefault($id){
+	public function renderDefault($idPage){
 		$this->reloadContent();
 		
-		$this->template->id = $id;
+		$this->template->idPage = $idPage;
 	}
 }
