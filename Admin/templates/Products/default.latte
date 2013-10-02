@@ -3,5 +3,15 @@
 	{include ../tabs.latte active => 'products'}
 
 	<h1>{_'Eshop products'}</h1>
+	
+	<a class="btn btn-primary ajax" n:href="Products:updateProduct idPage => $idPage" data-remote="false" data-target="#myModal" data-toggle="modal" >{_'Add product'}</a>
 
+	<br /><br />
+
+	<div class="tab-content">
+		<div class="tab-pane active">
+			{control productsGrid}
+		</div>
+	</div>
+	
 {/block}

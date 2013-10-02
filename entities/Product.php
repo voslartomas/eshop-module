@@ -34,9 +34,24 @@ class Product extends \AdminModule\Seo {
 	private $photos;
 	
 	/**
-	 * @orm\OneToMany(targetEntity="Category", mappedBy="Product")
+	 * @orm\ManyToMany(targetEntity="Category", cascade={"persist"})
+	 * @orm\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private $categories;
+	
+	/**
+	 * @orm\ManyToOne(targetEntity="\AdminModule\Language")
+	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
+	 */
+	private $language;
+	
+	public function __construct(){
+		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+	
+	public function addCategory($category){
+		$this->categories->add($category);
+	}
 	
 	public function getTitle() {
 		return $this->title;
@@ -76,5 +91,13 @@ class Product extends \AdminModule\Seo {
 
 	public function setCategories($categories) {
 		$this->categories = $categories;
+	}
+	
+	public function getLanguage() {
+		return $this->language;
+	}
+
+	public function setLanguage($language) {
+		$this->language = $language;
 	}
 }
