@@ -34,7 +34,7 @@ class Product extends \AdminModule\Seo {
 	private $photos;
 	
 	/**
-	 * @orm\ManyToMany(targetEntity="Category", cascade={"persist"})
+	 * @orm\ManyToMany(targetEntity="Category", inversedBy="products", cascade={"persist"})
 	 * @orm\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private $categories;

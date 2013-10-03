@@ -26,7 +26,6 @@ class EshopPresenter extends \FrontendModule\BasePresenter{
 	
 	public function actionDefault($id){
 		
-		
 	}
 	
 	public function renderDefault($id){

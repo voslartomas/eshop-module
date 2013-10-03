@@ -99,9 +99,15 @@ class Category extends \AdminModule\Seo{
 	 * @orm\Column(type="boolean")
 	 */
 	public $visible;
+	
+	/**
+	 * @orm\ManyToMany(targetEntity="Product", mappedBy="categories")
+	 */
+	private $products;
 		
     public function __construct()    {
         $this->children = new ArrayCollection();
+		$this->products = new ArrayCollection();
     }
 
     public function getSlug()
@@ -223,4 +229,11 @@ class Category extends \AdminModule\Seo{
         return $this->getTitle();
     }
 	
+	public function getProducts() {
+		return $this->products;
+	}
+
+	public function setProducts($products) {
+		$this->products = $products;
+	}
 }

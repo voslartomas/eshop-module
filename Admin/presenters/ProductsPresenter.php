@@ -48,7 +48,7 @@ class ProductsPresenter extends BasePresenter{
 		$hierarchy = $hierarchy;
 		
 		$form = $this->createForm();
-		$form->addText('title', 'Name')->setAttribute('class', 'form-control');
+		$form->addText('title', 'Name')->setAttribute('class', 'form-control')->setRequired('Please fill in a name.');
 		$form->addText('price', 'Price')->setAttribute('class', 'form-control');
 		$form->addText('vat', 'Vat')->setAttribute('class', 'form-control');
 		$form->addMultiSelect('categories', 'Categories')->setTranslator(NULL)->setItems($hierarchy)->setAttribute('class', 'form-control');
@@ -100,7 +100,7 @@ class ProductsPresenter extends BasePresenter{
 		$this->flashMessage($this->translation['Product has been added.'], 'success');
 		
 		if(!$this->isAjax())
-			$this->redirect('Products:default', array('idPage' => $this->actualPage->getId()));
+			$this->redirect('this');
 	} 
 	
 	public function actionDefault($idPage) {}
@@ -115,14 +115,13 @@ class ProductsPresenter extends BasePresenter{
 		
 		$grid->addColumn('title', 'Name')->setSortable()->setFilter();
 		$grid->addColumn('price', 'Price')->setCustomRender(function($item){
-			return \WebCMS\PriceFormatter::format($item->getPrice());
-		})->setSortable()->setFilter();
-		$grid->addColumn('vat', 'Vat')->setSortable()->setFilter();
-		$grid->addColumn('priceWithVat', 'Price with vat')->setCustomRender(function($item){
-			return \WebCMS\PriceFormatter::format($item->getPriceWithVat());
-		})->setSortable()->setFilter();
+			return \WebCMS\PriceFormatter::format($item->getPrice()) . ' (' .\WebCMS\PriceFormatter::format($item->getPriceWithVat()) . ')';
+		})->setSortable()->setFilterNumber();
+		$grid->addColumn('vat', 'Vat')->setCustomRender(function($item){
+			return $item->getVat() . '%';
+		})->setSortable()->setFilterNumber();
 				
-		$grid->addAction("updateProduct", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updateProduct', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
+		$grid->addAction("updateProduct", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updateProduct', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
 		$grid->addAction("deleteProduct", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteProduct', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
 
 		return $grid;
@@ -140,7 +139,7 @@ class ProductsPresenter extends BasePresenter{
 	}
 		
 	public function renderUpdateProduct($idPage){
-		$this->reloadModalContent();
+		$this->reloadContent();
 		
 		$this->template->product = $this->product;
 		$this->template->idPage = $idPage;

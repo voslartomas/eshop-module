@@ -157,7 +157,8 @@ class CategoriesPresenter extends BasePresenter{
 	public function actionDefault($idPage) {
 		$main = $this->repository->findBy(array(
 			'title' => 'Main',
-			'level' => 0
+			'level' => 0,
+			'language' => $this->state->language
 		));
 		
 		if(count($main) == 0){

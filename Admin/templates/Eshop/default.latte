@@ -3,7 +3,16 @@
 	{include ../tabs.latte active => 'eshop'}
 
 	<h1>{$actualPage->getTitle()}</h1>
-	
-	{_'Eshop statistics'}
-	
+		
+	<table class="table table-responsive table-bordered">
+		<tr>
+			<th>{_'Count of categories'}</th>
+			<th>{_'Count of products'}</th>
+		</tr>
+		<tr>
+			<td>{$counts['categories']}</td>
+			<td>{$counts['products']}</td>
+		</tr>
+	</table>
+		
 {/block}

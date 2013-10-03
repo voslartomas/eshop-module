@@ -31,6 +31,17 @@ class EshopPresenter extends \AdminModule\BasePresenter {
 	public function renderDefault($idPage){
 		$this->reloadContent();
 		
+		$query = $this->em->createQuery('SELECT COUNT(u.id) FROM WebCMS\EshopModule\Doctrine\Category u WHERE u.language = ?1')->setParameter(1, $this->state->language);
+		$count = $query->getSingleScalarResult();
+		
+		$countOf['categories'] = $count - 1;
+		
+		$query = $this->em->createQuery('SELECT COUNT(u.id) FROM WebCMS\EshopModule\Doctrine\Product u WHERE u.language = ?1')->setParameter(1, $this->state->language);
+		$count = $query->getSingleScalarResult();
+		
+		$countOf['products'] = $count;
+		
+		$this->template->counts = $countOf;
 		$this->template->idPage = $idPage;
 	}
 }

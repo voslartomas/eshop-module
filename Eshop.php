@@ -16,11 +16,13 @@ class Eshop extends \WebCMS\Module {
 	protected $presenters = array(
 		array(
 			'name' => 'Eshop',
-			'frontend' => TRUE
+			'frontend' => TRUE,
+			'parameters' => FALSE
 			),
 		array(
 			'name' => 'Categories',
-			'frontend' => TRUE
+			'frontend' => TRUE,
+			'parameters' => TRUE
 			),
 		array(
 			'name' => 'Products',
@@ -28,7 +30,8 @@ class Eshop extends \WebCMS\Module {
 			),
 		array(
 			'name' => 'Basket',
-			'frontend' => TRUE
+			'frontend' => TRUE,
+			'parameters' => FALSE
 			)
 	);
 	
