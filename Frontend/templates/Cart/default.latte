@@ -4,13 +4,15 @@
 	
 	{if count($order->getItems()) > 0}
 		<table class="table table-bordered table-hover">
-			<tr>
-				<th>{_'Name'}</th>
-				<th>{_'Price'}</th>
-				<th>{_'Quantity'}</th>
-				<th>{_'Price total'}</th>
-				<th>{_'Delete item'}</th>
-			</tr>
+			<thead>
+				<tr>
+					<th>{_'Name'}</th>
+					<th>{_'Price'}</th>
+					<th>{_'Quantity'}</th>
+					<th>{_'Price total'}</th>
+					<th>{_'Delete item'}</th>
+				</tr>
+			</thead>
 			{foreach $order->getItems() as $item}
 				<tr>
 					<td>{$item->getName()}</td>
@@ -22,6 +24,12 @@
 					</td>
 				</tr>
 			{/foreach}
+			<tfooter>
+				<th colspan="2">{_'Totals'}</th>
+				<th>{$order->getQuantityTotal()}</th>
+				<th>{$order->getPriceTotal()|price}</th>
+				<th>~</th>
+			</tfooter>
 		</table>
 	{else}
 		{_'There are no item in the shopping cart.'}

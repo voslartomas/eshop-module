@@ -231,4 +231,26 @@ class Order extends \AdminModule\Doctrine\Entity {
 	public function setInvoiceState($invoiceState) {
 		$this->invoiceState = $invoiceState;
 	}
+	
+	/* Calculations */
+	
+	public function getQuantityTotal(){
+		$items = $this->getItems();
+		$total = 0;
+		foreach($items as $item){
+			$total += $item->getQuantity();
+		}
+		
+		return $total;
+	}
+	
+	public function getPriceTotal(){
+		$items = $this->getItems();
+		$total = 0;
+		foreach($items as $item){
+			$total += $item->getPrice() * $item->getQuantity();
+		}
+		
+		return $total;
+	}
 }

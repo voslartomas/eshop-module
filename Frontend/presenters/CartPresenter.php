@@ -3,16 +3,17 @@
 namespace FrontendModule\EshopModule;
 
 /**
- * Description of BasketPresenter
- *
+ * This presenter handle all actions in shopping cart.
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
 class CartPresenter extends BasePresenter{
-	
+	/* \Nette\Http\SessionSection */
 	private $eshopSession;
 	
+	/* \WebCMS\EshopModule\Doctrine\Order */
 	private $order;
 	
+	/* Repository */
 	private $productRepository;
 	
 	protected function startup() {
@@ -32,10 +33,6 @@ class CartPresenter extends BasePresenter{
 		$this->template->order = $this->order;
 	}
 	
-	private function saveOrderState(){
-		$this->eshopSession->order = $this->order;
-	}
-	
 	public function actionDefault($id){
 		if(array_key_exists('itemId', $_POST)){
 			$this->addCartItem($_POST['itemId'], $_POST['quantity']);
@@ -48,6 +45,17 @@ class CartPresenter extends BasePresenter{
 		$this->template->id = $id;
 	}
 	
+	/**
+	 * Saves order into Session.
+	 */
+	private function saveOrderState(){
+		$this->eshopSession->order = $this->order;
+	}
+	
+	/**
+	 * Remove item from shopping cart.
+	 * @param type $itemId
+	 */
 	public function actionDeleteCartItem($itemId){
 		foreach($this->order->getItems() as $item){
 			if($itemId === $item->getItemId()){
@@ -59,6 +67,11 @@ class CartPresenter extends BasePresenter{
 		$this->redirectThis();
 	}
 	
+	/**
+	 * Add item into shopping cart.
+	 * @param type $itemId
+	 * @param type $quantity
+	 */
 	private function addCartItem($itemId, $quantity){
 		if(!$this->existsInCart($itemId)){
 			$product = $this->productRepository->find($itemId);
@@ -71,7 +84,6 @@ class CartPresenter extends BasePresenter{
 			$item->setVat($product->getVat());
 
 			$this->order->addItem($item);
-			$this->saveOrderState();
 		}else{
 			$this->flashMessage($this->translation['This item has been already added.'], 'danger');
 		}
@@ -79,6 +91,11 @@ class CartPresenter extends BasePresenter{
 		$this->redirectThis();
 	}
 	
+	/**
+	 * Checks whether item exists in shopping cart.
+	 * @param type $itemId
+	 * @return boolean
+	 */
 	private function existsInCart($itemId){
 		foreach($this->order->getItems() as $item){
 			if($itemId === $item->getItemId())
@@ -88,6 +105,9 @@ class CartPresenter extends BasePresenter{
 		return FALSE;
 	}
 	
+	/**
+	 * Redirect to self.
+	 */
 	private function redirectThis(){
 		
 		$this->redirect(':Frontend:Eshop:Cart:default', array(
