@@ -63,7 +63,25 @@ class CartPresenter extends BasePresenter{
 			}
 		}
 		
-		$this->flashMessage('Item has been removed from cart.', 'success');
+		$this->flashMessage($this->translation['Item has been removed from cart.'], 'success');
+		$this->redirectThis();
+	}
+	
+	public function actionSetQuantity($itemId, $quantity){
+		if($quantity > 0){
+		
+			foreach($this->order->getItems() as $item){
+				if($itemId === $item->getItemId()){
+					$item->setQuantity($quantity);
+				}
+			}
+
+
+			$this->flashMessage($this->translation['New quantity for item has been set.'], 'success');
+		
+		}else{
+			$this->flashMessage($this->translation['Quantity must be greater then zero.'], 'danger');
+		}
 		$this->redirectThis();
 	}
 	

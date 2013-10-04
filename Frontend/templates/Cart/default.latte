@@ -17,10 +17,14 @@
 				<tr>
 					<td>{$item->getName()}</td>
 					<td>{$item->getPrice()|price}</td>
-					<td>{$item->getQuantity()}</td>
+					<td>
+						<a title="{_'Increase quantity'}" class="btn btn-info" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() + 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr">&#43;</a>
+						{$item->getQuantity()}
+						<a title="{_'Decrease quantity'}" class="btn btn-info" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() - 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr">&#45;</a>
+					</td>
 					<td>{$item->getPriceTotal()|price}</td>
 					<td>
-						<a class="btn btn-danger" n:href=":Frontend:Eshop:Cart:deleteCartItem $item->getItemId(), id => $actualPage->getId(), path => $actualPage->getPath()">&times;</a>
+						<a class="btn btn-danger" n:href=":Frontend:Eshop:Cart:deleteCartItem $item->getItemId(), id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr">&times;</a>
 					</td>
 				</tr>
 			{/foreach}
