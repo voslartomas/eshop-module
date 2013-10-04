@@ -7,7 +7,7 @@ namespace FrontendModule\EshopModule;
  *
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class EshopPresenter extends \FrontendModule\BasePresenter{
+class EshopPresenter extends BasePresenter{
 	
 	private $repository;
 	

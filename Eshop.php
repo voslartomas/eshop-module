@@ -29,7 +29,7 @@ class Eshop extends \WebCMS\Module {
 			'frontend' => FALSE
 			),
 		array(
-			'name' => 'Basket',
+			'name' => 'Cart',
 			'frontend' => TRUE,
 			'parameters' => FALSE
 			)
