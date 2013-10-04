@@ -107,7 +107,7 @@ class ProductsPresenter extends BasePresenter{
 	
 	protected function createComponentProductsGrid($name){
 				
-		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\Product', array(),
+		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\Product', NULL,
 			array(
 				'language = ' . $this->state->language->getId(),
 			)

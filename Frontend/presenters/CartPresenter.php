@@ -45,6 +45,52 @@ class CartPresenter extends BasePresenter{
 		$this->template->id = $id;
 	}
 	
+	public function createComponentCartForm(){
+		$form = $this->createForm();
+		
+		$form->getElementPrototype()->action = $this->link('this', array(
+			'id' => $this->actualPage->getId(),
+			'path' => $this->actualPage->getPath(),
+			'abbr' => $this->abbr,
+			'do' => 'cartForm-submit'
+		));
+		
+		$form->addText('firstname', 'Firstname');
+		$form->addText('lastname', 'Lastname');
+		$form->addText('email', 'Email');
+		$form->addText('phone', 'Phone');
+		$form->addText('street', 'Street');
+		$form->addText('city', 'City');
+		$form->addText('postcode', 'Postcode');
+		$form->addSubmit('send', 'Send order');
+		
+		$form->onSuccess[] = callback($this, 'cartFormSubmitted');
+		
+		return $form;
+	}
+	
+	public function cartFormSubmitted($form){
+		$values = $form->getValues();
+		
+		$this->order->setFirstname($values->firstname);
+		$this->order->setLastname($values->lastname);
+		$this->order->setEmail($values->email);
+		$this->order->setPhone($values->phone);
+		$this->order->setStreet($values->street);
+		$this->order->setCity($values->city);
+		$this->order->setPostCode($values->postcode);
+		
+		$this->order->getPriceTotal(); // TODO no tohle je trochu blbe volat ne? alespon globalni funkci pro vsechny ceny
+		
+		$this->em->persist($this->order);
+		$this->em->flush();
+		$this->order = new \WebCMS\EshopModule\Doctrine\Order;
+		$this->saveOrderState();
+		
+		$this->flashMessage($this->translation['Order has been sent. On given email has been sent email with summary.'], 'success');
+		$this->redirectThis();
+	}
+	
 	/**
 	 * Saves order into Session.
 	 */

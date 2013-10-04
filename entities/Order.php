@@ -9,6 +9,7 @@ use Doctrine\orm\Mapping as orm;
 /**
  * Description of Order
  * @orm\Entity
+ * @orm\Table(name="Orders")
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
 class Order extends \AdminModule\Doctrine\Entity {
@@ -43,47 +44,57 @@ class Order extends \AdminModule\Doctrine\Entity {
 	private $city;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(type="integer")
+	 */
+	private $postcode;
+	
+	/**
+	 * @orm\Column(nullable=true)
 	 */
 	private $state;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $invoiceFirstname;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $invoiceLastname;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $invoiceEmail;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $invoicePhone;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $invoiceStreet;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $invoiceCity;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(type="integer", nullable=true)
+	 */
+	private $invoicePostcode;
+	
+	/**
+	 * @orm\Column(nullable=true)
 	 */
 	private $invoiceState;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $currency;
 	
@@ -92,11 +103,17 @@ class Order extends \AdminModule\Doctrine\Entity {
 	 */
 	private $items;
 	
+	/**
+	 * @orm\Column(type="decimal", precision=12, scale=4)
+	 */
+	private $priceTotal;
+	
 	public function __construct(){
 		$this->items = new ArrayCollection();
 	}
 	
 	public function addItem($item){
+		$item->setOrder($this);
 		$this->items->add($item);
 	}
 	
@@ -232,6 +249,22 @@ class Order extends \AdminModule\Doctrine\Entity {
 		$this->invoiceState = $invoiceState;
 	}
 	
+	public function getPostcode() {
+		return $this->postcode;
+	}
+
+	public function getInvoicePostcode() {
+		return $this->invoicePostcode;
+	}
+
+	public function setPostcode($postcode) {
+		$this->postcode = $postcode;
+	}
+
+	public function setInvoicePostcode($invoicePostcode) {
+		$this->invoicePostcode = $invoicePostcode;
+	}
+	
 	/* Calculations */
 	
 	public function getQuantityTotal(){
@@ -246,11 +279,11 @@ class Order extends \AdminModule\Doctrine\Entity {
 	
 	public function getPriceTotal(){
 		$items = $this->getItems();
-		$total = 0;
+		$this->priceTotal = 0;
 		foreach($items as $item){
-			$total += $item->getPrice() * $item->getQuantity();
+			$this->priceTotal += $item->getPrice() * $item->getQuantity();
 		}
 		
-		return $total;
+		return $this->priceTotal;
 	}
 }

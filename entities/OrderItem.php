@@ -36,8 +36,8 @@ class OrderItem extends \AdminModule\Doctrine\Entity {
 	private $quantity;
 	
 	/**
-	 * @orm\OneToOne(targetEntity="Order", inversedBy="items")
-	 * @orm\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+	 * @orm\ManyToOne(targetEntity="Order", inversedBy="items")
+	 * @orm\JoinColumn(onDelete="CASCADE")
 	 */
 	private $order;
 	
