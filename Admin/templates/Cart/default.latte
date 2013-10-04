@@ -1,0 +1,13 @@
+{block content}
+	
+	{include ../tabs.latte active => 'cart'}
+
+	<h1>{_'Eshop orders'}</h1>
+	
+	<div class="tab-content">
+		<div class="tab-pane active">
+			{control ordersGrid}
+		</div>
+	</div>
+	
+{/block}
