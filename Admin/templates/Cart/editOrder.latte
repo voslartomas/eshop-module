@@ -1,0 +1,54 @@
+{block content}
+
+	{include ../tabs.latte active => 'orders'}
+
+	<h1>{_'Order number'} {$order->getId()}</h1>
+	
+	<div class="tab-content">
+		<div class="tab-pane active">
+			
+			<a class="btn btn-primary ajax" n:href=":Admin:Eshop:Cart:addOrderItem id => $order->getId(), idPage => $idPage" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add order item'}</a>
+			
+			<br /><br />
+			
+			{if count($order->getItems()) > 0}
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>{_'Name'}</th>
+							<th>{_'Price'}</th>
+							<th>{_'Quantity'}</th>
+							<th>{_'Price total'}</th>
+							<th>{_'Delete item'}</th>
+						</tr>
+					</thead>
+					{foreach $order->getItems() as $item}
+						<tr>
+							<td>{$item->getName()}</td>
+							<td>{$item->getPrice()|price}</td>
+							<td>{$item->getQuantity()}</td>
+							<td>{$item->getPriceTotal()|price}</td>
+							<td>
+								<a class="btn btn-primary ajax" n:href=":Admin:Eshop:Cart:addOrderItem $item->getId(), idPage => $idPage, id => $order->getId()" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Edit'}</a>
+								<a class="btn btn-danger" n:href=":Admin:Eshop:Cart:deleteOrderItem $item->getId(), idPage => $idPage, id => $order->getId()">&times;</a>
+							</td>
+						</tr>
+					{/foreach}
+					<tfooter>
+						<th colspan="2">{_'Totals'}</th>
+						<th>{$order->getQuantityTotal()}</th>
+						<th>{$order->getPriceTotal()|price}</th>
+						<th>~</th>
+					</tfooter>
+				</table>
+				
+			{else}
+				{_'There are no ordered products.'}
+			{/if}
+			
+				{include 'orderData.latte'}
+			
+		</div>
+	</div>
+	
+{/block}
