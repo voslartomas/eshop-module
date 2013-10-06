@@ -48,7 +48,7 @@ class CartPresenter extends BasePresenter{
 	public function createComponentCartForm(){
 		$form = $this->createForm();
 		
-		$form->getElementPrototype()->action = $this->link('this', array(
+		$form->getElementPrototype()->action = $this->link(':Frontend:Eshop:Cart:default', array(
 			'id' => $this->actualPage->getId(),
 			'path' => $this->actualPage->getPath(),
 			'abbr' => $this->abbr,
@@ -121,7 +121,6 @@ class CartPresenter extends BasePresenter{
 					$item->setQuantity($quantity);
 				}
 			}
-
 
 			$this->flashMessage($this->translation['New quantity for item has been set.'], 'success');
 		
