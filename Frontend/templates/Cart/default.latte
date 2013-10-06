@@ -35,8 +35,36 @@
 				<th>~</th>
 			</tfooter>
 		</table>
+		
+		{form cartForm}
+			
+			<div class="well">
+			
+				<h2>{_'Payment'}</h2>
+				<div>
+					{foreach $payments as $p}
+						<div>
+							<input type="radio" name="payment" id="p{$p->getId()}" value="{$p->getId()}" {if $order->getPayment() == $p->getId()}checked{/if} /> 
+							<label for="p{$p->getId()}">{$p->getTitle()} {$p->getPrice()|price}</label>
+						</div>
+					{/foreach}
+				</div>
+
+				<h2>{_'Shipping'}</h2>
+				<div>
+					{foreach $shippings as $p}
+						<div>
+							<input type="radio" name="shipping" id="s{$p->getId()}" value="{$p->getId()}" {if $order->getShipping() == $p->getId()}checked{/if} />
+							<label for="s{$p->getId()}">{$p->getTitle()} {$p->getPrice()|price}</label>
+						</div>
+					{/foreach}
+				</div>
 				
-		{control cartForm}
+			</div>
+			
+		
+			{control cartForm}
+		{/form}
 	{else}
 		{_'There are no item in the shopping cart.'}
 	{/if}

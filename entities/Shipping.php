@@ -25,6 +25,12 @@ class Shipping extends \AdminModule\Doctrine\Entity{
 	 */
 	private $title;
 	
+	/**
+	 * @orm\ManyToOne(targetEntity="\AdminModule\Language")
+	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
+	 */
+	private $language;
+	
 	public function getPrice() {
 		return $this->price;
 	}
@@ -47,5 +53,13 @@ class Shipping extends \AdminModule\Doctrine\Entity{
 
 	public function setTitle($title) {
 		$this->title = $title;
+	}
+	
+	public function getLanguage() {
+		return $this->language;
+	}
+
+	public function setLanguage($language) {
+		$this->language = $language;
 	}
 }

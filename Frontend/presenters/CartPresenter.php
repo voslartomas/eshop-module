@@ -41,7 +41,12 @@ class CartPresenter extends BasePresenter{
 	
 	public function renderDefault($id){
 		
-		
+		$this->template->payments = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Payment')->findBy(array(
+			'language' => $this->language
+		));
+		$this->template->shippings = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Shipping')->findBy(array(
+			'language' => $this->language
+		));
 		$this->template->id = $id;
 	}
 	
@@ -65,6 +70,8 @@ class CartPresenter extends BasePresenter{
 		$form->addSubmit('send', 'Send order');
 		
 		$form->onSuccess[] = callback($this, 'cartFormSubmitted');
+
+		$form->setDefaults($this->order->toArray());
 		
 		return $form;
 	}
@@ -80,18 +87,72 @@ class CartPresenter extends BasePresenter{
 		$this->order->setCity($values->city);
 		$this->order->setPostCode($values->postcode);
 		
+		if(array_key_exists('payment', $_POST)) 
+				$this->order->setPayment($_POST['payment']);
+		if(array_key_exists('shipping', $_POST)) 
+			$this->order->setShipping($_POST['shipping']);
+		
 		$this->order->getPriceTotal(); // TODO no tohle je trochu blbe volat ne? alespon globalni funkci pro vsechny ceny
 		
-		// send info email with summary
-		$this->sendSummaryEmail($values);
-		
-		$this->em->persist($this->order);
-		$this->em->flush();
-		$this->order = new \WebCMS\EshopModule\Doctrine\Order;
 		$this->saveOrderState();
 		
-		$this->flashMessage($this->translation['Order has been sent. On given email has been sent email with summary.'], 'success');
+		if($this->requiredFilled($values)){
+			
+			// add shipping and payment as order items
+			$p = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Payment')->find($this->order->getPayment());
+			
+			$payment = new \WebCMS\EshopModule\Doctrine\OrderItem;
+			$payment->setName($p->getTitle());
+			$payment->setPrice($p->getPrice());
+			$payment->setVat($p->getVat());
+			$payment->setQuantity(1);
+			
+			$s = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Shipping')->find($this->order->getShipping());
+			
+			$shipping = new \WebCMS\EshopModule\Doctrine\OrderItem;
+			$shipping->setName($s->getTitle());
+			$shipping->setPrice($s->getPrice());
+			$shipping->setVat($s->getVat());
+			$shipping->setQuantity(1);
+			
+			$this->order->addItem($payment);
+			$this->order->addItem($shipping);
+			
+			// send info email with summary
+			$this->sendSummaryEmail($values);
+			
+			$this->em->persist($this->order);
+			$this->em->flush();
+			$this->order = new \WebCMS\EshopModule\Doctrine\Order;
+			$this->saveOrderState();
+			
+			$this->flashMessage($this->translation['Order has been sent. On given email has been sent email with summary.'], 'success');
+		}else{
+			$this->flashMessage($this->translation['Please fill all required data.'], 'danger');
+		}
+		
 		$this->redirectThis();
+	}
+	
+	private function requiredFilled($values){
+		
+		$payment = $this->order->getPayment();
+		$shipping = $this->order->getShipping();
+		
+		if(!empty($values->firstname) &&
+			!empty($values->lastname) &&
+			!empty($values->email) &&
+			!empty($values->phone) &&
+			!empty($values->street) &&
+			!empty($values->city) &&
+			!empty($values->postcode) &&
+			!empty($payment) &&
+			!empty($shipping)
+		){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
 	}
 	
 	private function sendSummaryEmail($values){

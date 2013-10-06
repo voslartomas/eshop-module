@@ -4,8 +4,6 @@
 
 	<h1>{_'Eshop settings'}</h1>
 	
-	
-	
 	<div class="panel-group" id="accordion">
 		<div class="panel panel-default">
 		  <div class="panel-heading">
@@ -31,7 +29,7 @@
 		  </div>
 		  <div id="collapseTwo" class="panel-collapse collapse">
 			<div class="panel-body">
-			  <a n:href="Settings:addThumbnail" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add thumbnail'}</a>
+			  <a n:href="updatePayment idPage => $actualPage->getId()" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add payment'}</a>
 
 			  <br /><br />
 
@@ -49,7 +47,7 @@
 		  </div>
 		  <div id="collapseThree" class="panel-collapse collapse">
 			<div class="panel-body">
-			  <a n:href="Settings:addThumbnail" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add thumbnail'}</a>
+			  <a n:href="updateShipping idPage => $actualPage->getId()" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add shipping'}</a>
 
 			  <br /><br />
 

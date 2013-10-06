@@ -18,16 +18,16 @@ class CartPresenter extends BasePresenter{
 	
 	private $orderItem;
 	
-	public function startup() {
+	public function startup(){
 		parent::startup();
 		
 		$this->repository = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Order');
 		$this->repositoryOrderItems = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\OrderItem');
 	}
 	
-	public function actionDefault($idPage) {}
+	public function actionDefault($idPage){}
 	
-	protected function beforeRender() {
+	protected function beforeRender(){
 		parent::beforeRender();	
 	}
 	
@@ -41,6 +41,9 @@ class CartPresenter extends BasePresenter{
 				
 		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\Order');
 		
+		$grid->addColumn('created', 'Created')->setCustomRender(function($item){
+			return $item->getCreated()->format('d.m.Y H:i:s');
+		})->setSortable()->setFilter();
 		$grid->addColumn('firstname', 'Firstname')->setSortable()->setFilter();
 		$grid->addColumn('lastname', 'Lastname')->setSortable()->setFilter();
 		$grid->addColumn('email', 'Email')->setSortable()->setFilter();
@@ -52,6 +55,8 @@ class CartPresenter extends BasePresenter{
 			return \WebCMS\PriceFormatter::format($item->getPriceTotal());
 		})->setSortable()->setFilterNumber();
 				
+		$grid->setDefaultSort(array('created' => 'DESC'));
+		
 		$grid->addAction("editOrder", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'editOrder', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
 		$grid->addAction("deleteOrder", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteOrder', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary btn-danger'));
 		

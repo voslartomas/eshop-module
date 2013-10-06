@@ -104,9 +104,31 @@ class Order extends \AdminModule\Doctrine\Entity {
 	private $items;
 	
 	/**
+     * @gedmo\Timestampable(on="create")
+     * @orm\Column(type="datetime")
+     */
+    private $created;
+
+    /**
+     * @gedmo\Timestampable(on="update")
+     * @orm\Column(type="datetime")
+     */
+    private $updated;
+	
+	/**
+	 * @orm\ManyToOne(targetEntity="\AdminModule\Language")
+	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
+	 */
+	private $language;
+	
+	/**
 	 * @orm\Column(type="decimal", precision=12, scale=4)
 	 */
 	private $priceTotal;
+	
+	private $payment;
+	
+	private $shipping;
 	
 	public function __construct(){
 		$this->items = new ArrayCollection();
@@ -286,4 +308,46 @@ class Order extends \AdminModule\Doctrine\Entity {
 		
 		return $this->priceTotal;
 	}
+	
+	public function getPayment() {
+		return $this->payment;
+	}
+
+	public function getShipping() {
+		return $this->shipping;
+	}
+
+	public function setPayment($payment) {
+		$this->payment = $payment;
+	}
+
+	public function setShipping($shipping) {
+		$this->shipping = $shipping;
+	}
+	
+	public function getCreated() {
+		return $this->created;
+	}
+
+	public function getUpdated() {
+		return $this->updated;
+	}
+
+	public function getLanguage() {
+		return $this->language;
+	}
+
+	public function setCreated($created) {
+		$this->created = $created;
+	}
+
+	public function setUpdated($updated) {
+		$this->updated = $updated;
+	}
+
+	public function setLanguage($language) {
+		$this->language = $language;
+	}
+
+
 }

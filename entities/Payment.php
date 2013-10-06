@@ -30,6 +30,12 @@ class Payment extends \AdminModule\Doctrine\Entity{
 	 */
 	private $paymentGate;
 	
+	/**
+	 * @orm\ManyToOne(targetEntity="\AdminModule\Language")
+	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
+	 */
+	private $language;
+	
 	public function getPrice() {
 		return $this->price;
 	}
@@ -60,5 +66,13 @@ class Payment extends \AdminModule\Doctrine\Entity{
 
 	public function setPaymentGate($paymentGate) {
 		$this->paymentGate = $paymentGate;
+	}
+	
+	public function getLanguage() {
+		return $this->language;
+	}
+
+	public function setLanguage($language) {
+		$this->language = $language;
 	}
 }
