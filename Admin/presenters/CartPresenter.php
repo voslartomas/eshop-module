@@ -61,7 +61,7 @@ class CartPresenter extends BasePresenter{
 		if(is_object($defaultStatus)){
 			$grid->addColumn('status', 'status')->setCustomRender(function($item){
 				return is_object($item->getStatus()) ? $item->getStatus()->getTitle() : '';
-			})->setSortable()->setFilterSelect($selectStatuses)->setDefaultValue($defaultStatus->getId());
+			})->setSortable()->setFilterSelect($selectStatuses)/*->setDefaultValue($defaultStatus->getId())*/;
 		}else{
 			$grid->addColumn('status', 'status')->setCustomRender(function($item){
 				return is_object($item->getStatus()) ? $item->getStatus()->getTitle() : '';
@@ -82,6 +82,29 @@ class CartPresenter extends BasePresenter{
 		$defaults = array('created' => 'DESC');
 		$grid->setDefaultSort($defaults);
 		
+		$operations = array();
+		foreach($statuses as $status){
+			$operations['setStatus-' . $status->getId()]  = 'Set status - ' . $status->getTitle();
+		}
+		
+		$grid->setOperations($operations, function($operation, $ids) { 
+			$status = explode('-', $operation);
+			
+			$status = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\OrderState')->find($status[1]);
+			
+			$qb = $this->em->createQueryBuilder();
+			$qb->select('o')->from('\WebCMS\EshopModule\Doctrine\Order', 'o')->add('where', $qb->expr()->in('o.id', '?1'));
+			$qb->setParameter(1, $ids);
+			
+			$result = $qb->getQuery()->getResult();
+			
+			foreach($result as $item){
+				$item->setStatus($status);
+			}
+			
+			$this->em->flush();
+		});
+				
 		$grid->addAction("editOrder", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'editOrder', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
 		$grid->addAction("deleteOrder", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteOrder', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary btn-danger'));
 		
@@ -114,6 +137,21 @@ class CartPresenter extends BasePresenter{
 	public function createComponentOrderForm($name){
 		$form = $this->createForm();
 		
+		$statuses = $this->em->getRepository('WebCMS\EshopModule\Doctrine\OrderState')->findBy(array(
+			'language' => $this->state->language
+		));
+		
+		$selectStatuses = array(NULL => 'Pick status');
+		$defaultStatus = NULL;
+		foreach($statuses as $s){
+			if($s->getDefault())
+				$defaultStatus = $s;
+				
+			$selectStatuses[$s->getId()] = $s->getTitle();
+		}
+		
+		$form->addSelect('status', 'Status', $selectStatuses);
+		
 		$form->addText('firstname', 'Firstname');
 		$form->addText('lastname', 'Lastname');
 		$form->addText('email', 'Email');
@@ -144,6 +182,9 @@ class CartPresenter extends BasePresenter{
 		
 		$values = $form->getValues();
 		
+		$status = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\OrderState')->find($values->status);
+		
+		$this->order->setStatus($status);
 		$this->order->setFirstname($values->firstname);
 		$this->order->setLastname($values->lastname);
 		$this->order->setEmail($values->email);

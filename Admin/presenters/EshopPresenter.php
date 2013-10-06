@@ -41,6 +41,18 @@ class EshopPresenter extends \AdminModule\BasePresenter {
 		
 		$countOf['products'] = $count;
 		
+		$orders = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Order')->findBy(array(
+			'language' => $this->state->language
+		));
+		
+		$totalPrice = 0;
+		foreach($orders as $order){
+			$totalPrice += $order->getPriceTotal();
+		}
+		
+		$countOf['orders'] = count($orders);
+		$countOf['ordersTotalPrice'] = $totalPrice;
+		
 		$this->template->counts = $countOf;
 		$this->template->idPage = $idPage;
 	}

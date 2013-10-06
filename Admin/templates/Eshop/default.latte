@@ -8,10 +8,14 @@
 		<tr>
 			<th>{_'Count of categories'}</th>
 			<th>{_'Count of products'}</th>
+			<th>{_'Count of orders'}</th>
+			<th>{_'Total sum of orders'}</th>
 		</tr>
 		<tr>
 			<td>{$counts['categories']}</td>
 			<td>{$counts['products']}</td>
+			<td>{$counts['orders']}</td>
+			<td>{$counts['ordersTotalPrice']|price}</td>
 		</tr>
 	</table>
 		
