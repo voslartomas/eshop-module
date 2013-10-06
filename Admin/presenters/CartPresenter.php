@@ -41,9 +41,33 @@ class CartPresenter extends BasePresenter{
 				
 		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\Order');
 		
+		$statuses = $this->em->getRepository('WebCMS\EshopModule\Doctrine\OrderState')->findBy(array(
+			'language' => $this->state->language
+		));
+		
+		$selectStatuses = array(NULL => 'Pick status');
+		$defaultStatus = NULL;
+		foreach($statuses as $s){
+			if($s->getDefault())
+				$defaultStatus = $s;
+				
+			$selectStatuses[$s->getId()] = $s->getTitle();
+		}
+		
 		$grid->addColumn('created', 'Created')->setCustomRender(function($item){
 			return $item->getCreated()->format('d.m.Y H:i:s');
 		})->setSortable()->setFilter();
+		
+		if(is_object($defaultStatus)){
+			$grid->addColumn('status', 'status')->setCustomRender(function($item){
+				return is_object($item->getStatus()) ? $item->getStatus()->getTitle() : '';
+			})->setSortable()->setFilterSelect($selectStatuses)->setDefaultValue($defaultStatus->getId());
+		}else{
+			$grid->addColumn('status', 'status')->setCustomRender(function($item){
+				return is_object($item->getStatus()) ? $item->getStatus()->getTitle() : '';
+			})->setSortable()->setFilterSelect($selectStatuses);
+		}
+		
 		$grid->addColumn('firstname', 'Firstname')->setSortable()->setFilter();
 		$grid->addColumn('lastname', 'Lastname')->setSortable()->setFilter();
 		$grid->addColumn('email', 'Email')->setSortable()->setFilter();
@@ -54,8 +78,9 @@ class CartPresenter extends BasePresenter{
 		$grid->addColumn('priceTotal', 'Price total')->setCustomRender(function($item){
 			return \WebCMS\PriceFormatter::format($item->getPriceTotal());
 		})->setSortable()->setFilterNumber();
-				
-		$grid->setDefaultSort(array('created' => 'DESC'));
+			
+		$defaults = array('created' => 'DESC');
+		$grid->setDefaultSort($defaults);
 		
 		$grid->addAction("editOrder", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'editOrder', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
 		$grid->addAction("deleteOrder", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteOrder', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary btn-danger'));

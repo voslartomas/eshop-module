@@ -16,7 +16,7 @@ class OrderState extends \AdminModule\Doctrine\Entity{
 	private $title;
 	
 	/**
-	 * @orm\Column(type="boolean")
+	 * @orm\Column(name="`default`", type="boolean")
 	 */
 	private $default;
 	

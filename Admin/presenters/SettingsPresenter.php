@@ -21,11 +21,14 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 	
 	private $shippingRepository;
 	
+	private $statusRepository;
+	
 	protected function startup() {
 		parent::startup();
 		
 		$this->paymentRepository = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Payment');
 		$this->shippingRepository = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Shipping');
+		$this->statusRepository = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\OrderState');
 	}
 
 	protected function beforeRender() {
@@ -225,6 +228,10 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 		);
 		
 		$grid->addColumn('title', 'Name')->setFilter();
+		$grid->addColumn('default', 'Default')->setReplacement(array(
+			'0' => 'No',
+			'1' => 'Yes'
+		))->setFilter();
 		
 		$grid->addAction("updateStatus", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updateStatus', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
 		$grid->addAction("deleteStatus", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteStatus', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
@@ -253,7 +260,7 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 		$form->onSuccess[] = callback($this, 'statusFormSubmitted');
 		
 		if($this->status->getId())
-			$form->setDefaults ($this->status->toArray());
+			$form->setDefaults($this->status->toArray());
 		
 		return $form;
 	}
@@ -261,9 +268,19 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 	public function statusFormSubmitted(\Nette\Application\UI\Form $form){
 		$values = $form->getValues();
 		
+		if($values->default){
+			$all = $this->statusRepository->findBy(array(
+				'language' => $this->state->language
+			));
+			
+			foreach($all as $item){
+				$item->setDefault(FALSE);
+			}
+		}
+		
 		$this->status->setTitle($values->title);
 		$this->status->setDefault($values->default);
-		$this->status->setDefault($this->state->language);
+		$this->status->setLanguage($this->state->language);
 		
 		if(!$this->status->getId())
 			$this->em->persist($this->status);

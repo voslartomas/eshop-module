@@ -99,6 +99,15 @@ class CartPresenter extends BasePresenter{
 		if($this->requiredFilled($values)){
 			
 			$this->order->setLanguage($this->language);
+			
+			// set default order state
+			$status = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\OrderState')->findOneBy(array(
+				'language' => $this->language,
+				'default' => TRUE
+			));
+			
+			$this->order->setStatus($status);
+			
 			// add shipping and payment as order items
 			$p = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Payment')->find($this->order->getPayment());
 			
