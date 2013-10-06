@@ -56,12 +56,17 @@ class Order extends \AdminModule\Doctrine\Entity {
 	/**
 	 * @orm\Column(nullable=true)
 	 */
-	private $invoiceFirstname;
+	private $invoiceCompany;
 	
 	/**
 	 * @orm\Column(nullable=true)
 	 */
-	private $invoiceLastname;
+	private $invoiceNo;
+	
+	/**
+	 * @orm\Column(nullable=true)
+	 */
+	private $invoiceVatNo;
 	
 	/**
 	 * @orm\Column(nullable=true)
@@ -222,14 +227,6 @@ class Order extends \AdminModule\Doctrine\Entity {
 	public function setItems($items) {
 		$this->items = $items;
 	}
-	
-	public function getInvoiceFirstname() {
-		return $this->invoiceFirstname;
-	}
-
-	public function getInvoiceLastname() {
-		return $this->invoiceLastname;
-	}
 
 	public function getInvoiceEmail() {
 		return $this->invoiceEmail;
@@ -249,14 +246,6 @@ class Order extends \AdminModule\Doctrine\Entity {
 
 	public function getInvoiceState() {
 		return $this->invoiceState;
-	}
-
-	public function setInvoiceFirstname($invoiceFirstname) {
-		$this->invoiceFirstname = $invoiceFirstname;
-	}
-
-	public function setInvoiceLastname($invoiceLastname) {
-		$this->invoiceLastname = $invoiceLastname;
 	}
 
 	public function setInvoiceEmail($invoiceEmail) {
@@ -363,5 +352,29 @@ class Order extends \AdminModule\Doctrine\Entity {
 
 	public function setStatus($status) {
 		$this->status = $status;
+	}
+	
+	public function getInvoiceCompany() {
+		return $this->invoiceCompany;
+	}
+
+	public function getInvoiceNo() {
+		return $this->invoiceNo;
+	}
+
+	public function getInvoiceVatNo() {
+		return $this->invoiceVatNo;
+	}
+
+	public function setInvoiceCompany($invoiceCompany) {
+		$this->invoiceCompany = $invoiceCompany;
+	}
+
+	public function setInvoiceNo($invoiceNo) {
+		$this->invoiceNo = $invoiceNo;
+	}
+
+	public function setInvoiceVatNo($invoiceVatNo) {
+		$this->invoiceVatNo = $invoiceVatNo;
 	}
 }

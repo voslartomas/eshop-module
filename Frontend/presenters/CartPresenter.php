@@ -21,7 +21,7 @@ class CartPresenter extends BasePresenter{
 		
 		$this->productRepository = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Product');
 		
-		$this->eshopSession = $this->session->getSection('eshop');
+		$this->eshopSession = $this->session->getSection('eshop' . $this->language->getId());
 		
 		if(!$this->eshopSession->offsetExists('order')){
 			$this->order = new \WebCMS\EshopModule\Doctrine\Order;
@@ -60,13 +60,26 @@ class CartPresenter extends BasePresenter{
 			'do' => 'cartForm-submit'
 		));
 		
-		$form->addText('firstname', 'Firstname');
-		$form->addText('lastname', 'Lastname');
-		$form->addText('email', 'Email');
-		$form->addText('phone', 'Phone');
-		$form->addText('street', 'Street');
-		$form->addText('city', 'City');
-		$form->addText('postcode', 'Postcode');
+		$form->addGroup('Delivery');
+		$form->addText('firstname', 'Firstname')->setRequired('Please fill in the firstname.');
+		$form->addText('lastname', 'Lastname')->setRequired('Please fill in the lastname.');
+		$form->addText('email', 'Email')->setRequired('Please fill in the email.');
+		$form->addText('phone', 'Phone')->setRequired('Please fill in the phone.');
+		$form->addText('street', 'Street')->setRequired('Please fill in the street.');
+		$form->addText('city', 'City')->setRequired('Please fill in the city.');
+		$form->addText('postcode', 'Postcode')->setRequired('Please fill in the postcode.');
+		
+		// invoice data
+		$form->addGroup('Invoice');
+		$form->addText('invoiceCompany', 'Company');
+		$form->addText('invoiceNo', 'No.');
+		$form->addText('invoiceVatNo', 'Tax No.');
+		$form->addText('invoiceEmail', 'Email');
+		$form->addText('invoicePhone', 'Phone');
+		$form->addText('invoiceStreet', 'Street');
+		$form->addText('invoiceCity', 'City');
+		$form->addText('invoicePostcode', 'Postcode');
+		
 		$form->addSubmit('send', 'Send order');
 		
 		$form->onSuccess[] = callback($this, 'cartFormSubmitted');
@@ -87,8 +100,17 @@ class CartPresenter extends BasePresenter{
 		$this->order->setCity($values->city);
 		$this->order->setPostCode($values->postcode);
 		
+		$this->order->setInvoiceCompany($values->invoiceCompany);
+		$this->order->setInvoiceNo($values->invoiceNo);
+		$this->order->setInvoiceVatNo($values->invoiceVatNo);
+		$this->order->setInvoiceEmail($values->invoiceEmail);
+		$this->order->setInvoicePhone($values->invoicePhone);
+		$this->order->setInvoiceStreet($values->invoiceStreet);
+		$this->order->setInvoiceCity($values->invoiceCity);
+		$this->order->setInvoicePostcode($values->invoicePostcode);
+		
 		if(array_key_exists('payment', $_POST)) 
-				$this->order->setPayment($_POST['payment']);
+			$this->order->setPayment($_POST['payment']);
 		if(array_key_exists('shipping', $_POST)) 
 			$this->order->setShipping($_POST['shipping']);
 		
