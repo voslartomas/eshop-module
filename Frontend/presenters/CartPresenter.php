@@ -98,6 +98,7 @@ class CartPresenter extends BasePresenter{
 		
 		if($this->requiredFilled($values)){
 			
+			$this->order->setLanguage($this->language);
 			// add shipping and payment as order items
 			$p = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Payment')->find($this->order->getPayment());
 			

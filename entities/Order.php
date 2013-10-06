@@ -122,6 +122,12 @@ class Order extends \AdminModule\Doctrine\Entity {
 	private $language;
 	
 	/**
+	 * @orm\ManyToOne(targetEntity="OrderState")
+	 * @orm\JoinColumn(onDelete="SET NULL")
+	 */
+	private $status;
+	
+	/**
 	 * @orm\Column(type="decimal", precision=12, scale=4)
 	 */
 	private $priceTotal;
@@ -137,6 +143,8 @@ class Order extends \AdminModule\Doctrine\Entity {
 	public function addItem($item){
 		$item->setOrder($this);
 		$this->items->add($item);
+		
+		$this->getPriceTotal(); // recalculation
 	}
 	
 	public function removeItem($item){
@@ -349,5 +357,11 @@ class Order extends \AdminModule\Doctrine\Entity {
 		$this->language = $language;
 	}
 
+	public function getStatus() {
+		return $this->status;
+	}
 
+	public function setStatus($status) {
+		$this->status = $status;
+	}
 }

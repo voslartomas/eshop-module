@@ -14,6 +14,9 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 	/* @var \WebCMS\EshopModule\Doctrine\Shipping */
 	private $shipping;
 	
+	/* @var \WebCMS\EshopModule\Doctrine\OrderState */
+	private $status;
+	
 	private $paymentRepository;
 	
 	private $shippingRepository;
@@ -206,6 +209,82 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 		$this->em->flush();
 		
 		$this->flashMessage('Shipping has been deleted.', 'success');
+		
+		if(!$this->isAjax())
+			$this->redirect('Settings:default', array(
+				'idPage' => $this->actualPage->getId()
+			));
+	}
+	
+	/* ORDER STATUS */
+	
+	public function createComponentStatusesGrid($name){
+		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\OrderState', NULL, array(
+				'language = ' . $this->state->language->getId(),
+			)
+		);
+		
+		$grid->addColumn('title', 'Name')->setFilter();
+		
+		$grid->addAction("updateStatus", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updateStatus', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
+		$grid->addAction("deleteStatus", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteStatus', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
+
+		return $grid;
+	}
+	
+	public function actionUpdateStatus($idPage, $id){
+		if($id) $this->status = $this->statusRepository->find($id);
+		else $this->status = new \WebCMS\EshopModule\Doctrine\OrderState;
+	}
+	
+	public function renderUpdateStatus($idPage){
+		$this->reloadModalContent();
+		
+		$this->template->idPage = $idPage;
+	}
+	
+	public function createComponentStatusForm($name){
+		$form = $this->createForm();
+		
+		$form->addText('title', 'Title');
+		$form->addCheckbox('default', 'Default');
+		$form->addSubmit('send', 'Save');
+		
+		$form->onSuccess[] = callback($this, 'statusFormSubmitted');
+		
+		if($this->status->getId())
+			$form->setDefaults ($this->status->toArray());
+		
+		return $form;
+	}
+	
+	public function statusFormSubmitted(\Nette\Application\UI\Form $form){
+		$values = $form->getValues();
+		
+		$this->status->setTitle($values->title);
+		$this->status->setDefault($values->default);
+		$this->status->setDefault($this->state->language);
+		
+		if(!$this->status->getId())
+			$this->em->persist($this->status);
+		
+		$this->em->flush();
+		
+		$this->flashMessage('Status has been saved.', 'success');
+		
+		if(!$this->isAjax())
+			$this->redirect('Settings:default', array(
+				'idPage' => $this->actualPage->getId()
+			));
+	}
+	
+	public function actionDeleteStatus($id){
+		$status = $this->statusRepository->find($id);
+		
+		$this->em->remove($status);
+		$this->em->flush();
+		
+		$this->flashMessage('Status has been deleted.', 'success');
 		
 		if(!$this->isAjax())
 			$this->redirect('Settings:default', array(

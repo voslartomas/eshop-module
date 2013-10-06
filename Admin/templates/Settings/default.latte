@@ -56,5 +56,24 @@
 		  </div>
 		</div>
 	  </div>
+	  <div class="panel panel-default">
+		  <div class="panel-heading">
+			<h4 class="panel-title">
+			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+				{_'Status'}
+			  </a>
+			</h4>
+		  </div>
+		  <div id="collapseFour" class="panel-collapse collapse">
+			<div class="panel-body">
+			  <a n:href="updateStatus idPage => $actualPage->getId()" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add status'}</a>
+
+			  <br /><br />
+
+			  {control statusesGrid}
+			</div>
+		  </div>
+		</div>
+	  </div>
 	
 {/block}
