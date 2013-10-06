@@ -82,6 +82,9 @@ class CartPresenter extends BasePresenter{
 		
 		$this->order->getPriceTotal(); // TODO no tohle je trochu blbe volat ne? alespon globalni funkci pro vsechny ceny
 		
+		// send info email with summary
+		$this->sendSummaryEmail($values);
+		
 		$this->em->persist($this->order);
 		$this->em->flush();
 		$this->order = new \WebCMS\EshopModule\Doctrine\Order;
@@ -89,6 +92,48 @@ class CartPresenter extends BasePresenter{
 		
 		$this->flashMessage($this->translation['Order has been sent. On given email has been sent email with summary.'], 'success');
 		$this->redirectThis();
+	}
+	
+	private function sendSummaryEmail($values){
+		
+		// order items
+		$items = '';
+		foreach($this->order->getItems() as $item){
+			$items .= $item->getName() . ' ' . $item->getQuantity() . ' x ' . \WebCMS\SystemHelper::price($item->getPrice()) . ' = ' . \WebCMS\SystemHelper::price($item->getQuantity() * $item->getPrice()) . '<br />';
+		}
+		
+		// email
+		$email = new \Nette\Mail\Message;
+		$email->addTo($values->email);
+		$email->setFrom($this->settings->get('Info email', \WebCMS\Settings::SECTION_BASIC)->getValue());
+		$email->setSubject($this->translation['Order was created.']);
+		$email->setHtmlBody($this->settings->get('Order saved email', 'eshopModule')->getValue(FALSE, 
+				array(
+					'[FIRSTNAME]',
+					'[LASTNAME]',
+					'[EMAIL]',
+					'[PHONE]',
+					'[STREET]',
+					'[CITY]',
+					'[POSTCODE]',
+					'[TOTAL_PRICE]',
+					'[ORDER_ITEMS]'
+				),
+				array(
+					$values->firstname,
+					$values->lastname,
+					$values->email,
+					$values->phone,
+					$values->street,
+					$values->city,
+					$values->postcode,
+					\WebCMS\SystemHelper::price($this->order->getPriceTotal()),
+					$items
+				)
+			));
+		
+		$email->send();
+		
 	}
 	
 	/**
