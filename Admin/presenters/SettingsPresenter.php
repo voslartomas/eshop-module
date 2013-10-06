@@ -37,5 +37,39 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 		$this->template->idPage = $idPage;
 	}
 	
+	public function createComponentPaymentsGrid($name){
+		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\Payment', NULL, array(
+				'language = ' . $this->state->language->getId(),
+			)
+		);
+		
+		$grid->addColumn('title', 'Name')->setFilter();
+		
+		$grid->addColumn('price', 'Price')->setCustomRender(function($item){
+			return \WebCMS\SystemHelper::price($item->getPrice());
+		});
+		
+		$grid->addAction("updatePayment", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updatePayment', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
+		$grid->addAction("deletePayment", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deletePayment', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
+
+		return $grid;
+	}
 	
+	public function createComponentShippingsGrid($name){
+		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\Shipping', NULL, array(
+				'language = ' . $this->state->language->getId(),
+			)
+		);
+		
+		$grid->addColumn('title', 'Name')->setFilter();
+		
+		$grid->addColumn('price', 'Price')->setCustomRender(function($item){
+			return \WebCMS\SystemHelper::price($item->getPrice());
+		});
+		
+		$grid->addAction("updateShipping", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updateShipping', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
+		$grid->addAction("deleteShipping", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteShipping', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
+
+		return $grid;
+	}
 }

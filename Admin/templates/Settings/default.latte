@@ -4,6 +4,59 @@
 
 	<h1>{_'Eshop settings'}</h1>
 	
-	{control settingsForm}
+	
+	
+	<div class="panel-group" id="accordion">
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+			<h4 class="panel-title">
+			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+				{_'Basic settings'}
+			  </a>
+			</h4>
+		  </div>
+		  <div id="collapseOne" class="panel-collapse collapse">
+			<div class="panel-body">
+			  {control settingsForm}
+			</div>
+		  </div>
+		</div>
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+			<h4 class="panel-title">
+			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+				{_'Payments'}
+			  </a>
+			</h4>
+		  </div>
+		  <div id="collapseTwo" class="panel-collapse collapse">
+			<div class="panel-body">
+			  <a n:href="Settings:addThumbnail" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add thumbnail'}</a>
+
+			  <br /><br />
+
+			  {control paymentsGrid}
+			</div>
+		  </div>
+		</div>
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+			<h4 class="panel-title">
+			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+				{_'Transport'}
+			  </a>
+			</h4>
+		  </div>
+		  <div id="collapseThree" class="panel-collapse collapse">
+			<div class="panel-body">
+			  <a n:href="Settings:addThumbnail" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add thumbnail'}</a>
+
+			  <br /><br />
+
+			  {control shippingsGrid}
+			</div>
+		  </div>
+		</div>
+	  </div>
 	
 {/block}
