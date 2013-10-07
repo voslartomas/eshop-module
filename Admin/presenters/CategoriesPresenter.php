@@ -49,7 +49,7 @@ class CategoriesPresenter extends BasePresenter{
 		
 		$form->onSuccess[] = callback($this, 'categoryFormSubmitted');
 		
-		if($this->category){
+		if($this->category->getId()){
 			$form->setDefaults($this->category->toArray());
 		}
 		
@@ -68,7 +68,7 @@ class CategoriesPresenter extends BasePresenter{
 			$parent = $this->repository->find($values->parent);
 		else
 			$parent = NULL;
-				
+
 		$this->category->setTitle($values->title);
 		$this->category->setVisible($values->visible);
 		$this->category->setParent($parent);
@@ -76,7 +76,12 @@ class CategoriesPresenter extends BasePresenter{
 		$this->category->setLanguage($this->state->language);
 		$this->category->setPath('tmp value');
 		
-		$this->em->persist($this->category); // FIXME only if is new we have to persist entity, otherway it can be just flushed
+		if(array_key_exists('files', $_POST)) 
+			$this->category->setPicture($_POST['files'][0]);
+		else
+			$this->category->setPicture(NULL);
+		
+		if(!$this->category->getId()) $this->em->persist($this->category); // FIXME only if is new we have to persist entity, otherway it can be just flushed
 		$this->em->flush();
 		
 		// creates path
@@ -119,7 +124,7 @@ class CategoriesPresenter extends BasePresenter{
 		
 		$grid->addAction("moveUp", "Move up", \Grido\Components\Actions\Action::TYPE_HREF, 'moveUp', array('idPage' => $this->actualPage->getId()));
 		$grid->addAction("moveDown", "Move down", \Grido\Components\Actions\Action::TYPE_HREF, 'moveDown', array('idPage' => $this->actualPage->getId()));
-		$grid->addAction("updateCategory", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updateCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
+		$grid->addAction("updateCategory", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updateCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
 		$grid->addAction("deleteCategory", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
 
 		return $grid;
@@ -176,7 +181,7 @@ class CategoriesPresenter extends BasePresenter{
 	}
 	
 	public function renderUpdateCategory($idPage){
-		$this->reloadModalContent();
+		$this->reloadContent();
 		
 		$this->template->category = $this->category;
 		$this->template->idPage = $idPage;

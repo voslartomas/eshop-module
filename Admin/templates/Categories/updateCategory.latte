@@ -1,3 +1,53 @@
-{block modalContent}
-	{control categoryForm}
+{block content}
+
+	{include ../tabs.latte active => 'categories'}
+
+	<h1>{_'Eshop category edit'}</h1>
+	{form categoryForm}
+			
+	<div class="control-group">
+		{label title /}
+		<div class="controls">
+			{input title}
+		</div>
+	</div>
+	<div class="control-group">
+		{label parent /}
+		<div class="controls">
+			{input parent}
+		</div>
+	</div>
+	<div class="control-group">
+		{label visible /}
+		<div class="controls">
+			{input visible}
+		</div>
+	</div>
+	<div class="control-group">
+		{label favourite /}
+		<div class="controls">
+			{input favourite}
+		</div>
+	</div>
+	
+	<a n:href=":Admin:Filesystem:default dialog => true, multiple => true" data-container="#pictures" class="btn btn-primary ajax filesDialog" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Load files'}</a>
+	
+	<br /><br />
+
+	  <div class="well row" id="pictures">
+		  {if $category->getPicture()|length > 0}
+			<div class="col-md-3 jq_fileBox">
+				<div class="img-thumbnail">
+					<img src="{$basePath}{$category->getPicture()|thumbnail:'system'}" />
+					<input type="hidden" name="files[]" value="{$category->getPicture()}" />
+					<span class="btn btn-default jq_fileDelete">&times</span>
+				</div>
+			</div>
+		  {/if}
+	</div>
+	
+	{input save}
+	
+	{/form}	  
+	
 {/block}

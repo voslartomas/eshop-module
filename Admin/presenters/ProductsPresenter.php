@@ -18,6 +18,8 @@ class ProductsPresenter extends BasePresenter{
 	/* @var \WebCMS\EshopModule\Doctrine\Product */
 	private $product;
 	
+	private $photos;
+	
 	protected function beforeRender() {
 		parent::beforeRender();	
 	}
@@ -44,8 +46,6 @@ class ProductsPresenter extends BasePresenter{
 			array(
 				'language = ' . $this->state->language->getId()
 		));
-		
-		$hierarchy = $hierarchy;
 		
 		$form = $this->createForm();
 		$form->addText('title', 'Name')->setAttribute('class', 'form-control')->setRequired('Please fill in a name.');
@@ -77,6 +77,10 @@ class ProductsPresenter extends BasePresenter{
 	public function actionUpdateProduct($idPage, $id){
 		if($id) $this->product = $this->repository->find($id);
 		else $this->product = new \WebCMS\EshopModule\Doctrine\Product();
+		
+		$this->photos = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Photo')->findBy(array(
+			'product' => $this->product
+		));
 	}
 	
 	public function productFormSubmitted(UI\Form $form){
@@ -96,6 +100,39 @@ class ProductsPresenter extends BasePresenter{
 		foreach($values->categories as $c){
 			$category = $this->categoryRepository->find($c);
 			$this->product->addCategory($category);
+		}
+		
+		// delete old photos and save new ones
+		$qb = $this->em->createQueryBuilder();
+		$qb->delete('WebCMS\EshopModule\Doctrine\Photo', 'l')
+				->where('l.product = ?1')
+				->setParameter(1, $this->product)
+				->getQuery()
+				->execute();
+		
+		if(array_key_exists('files', $_POST)){
+			$counter = 0;
+			if(array_key_exists('fileDefault', $_POST)) $default = intval($_POST['fileDefault'][0]) - 1;
+			else $default = -1;
+			
+			foreach($_POST['files'] as $path){
+
+				$photo = new \WebCMS\EshopModule\Doctrine\Photo;
+				$photo->setTitle($_POST['fileNames'][$counter]);
+				
+				if($default === $counter){
+					$photo->setDefault(TRUE);
+					$this->product->setDefaultPicture($path);
+				}else
+					$photo->setDefault(FALSE);
+					
+				$photo->setPath($path);
+				$photo->setProduct($this->product);
+
+				$this->em->persist($photo);
+
+				$counter++;
+			}
 		}
 		
 		if(!$this->product->getId()) $this->em->persist($this->product); // FIXME only if is new we have to persist entity, otherway it can be just flushed
@@ -145,6 +182,7 @@ class ProductsPresenter extends BasePresenter{
 	public function renderUpdateProduct($idPage){
 		$this->reloadContent();
 		
+		$this->template->photos = $this->photos;
 		$this->template->product = $this->product;
 		$this->template->idPage = $idPage;
 	}

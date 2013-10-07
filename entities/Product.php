@@ -69,8 +69,14 @@ class Product extends \AdminModule\Seo {
 	
 	private $link;
 	
+	/**
+	 * @orm\Column
+	 */
+	private $defaultPicture;
+	
 	public function __construct(){
 		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->photos = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	public function addCategory($category){
@@ -171,5 +177,13 @@ class Product extends \AdminModule\Seo {
 
 	public function setAction($action) {
 		$this->action = $action;
+	}
+	
+	public function getDefaultPicture() {
+		return $this->defaultPicture;
+	}
+	
+	public function setDefaultPicture($defaultPicture) {
+		$this->defaultPicture = $defaultPicture;
 	}
 }
