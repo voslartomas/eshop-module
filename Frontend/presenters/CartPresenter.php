@@ -317,4 +317,24 @@ class CartPresenter extends BasePresenter{
 			'abbr' => $this->abbr
 				));
 	}
+	
+	public function cartBox($context, $fromPage){
+		$eshopSession = $context->session->getSection('eshop' . $context->language->getId());
+		$order = $eshopSession->order;
+		
+		$itemsCount = count($order->getItems());
+		
+		$template = $context->createTemplate();
+		$template->setFile('../app/templates/eshop-module/boxes/cartBox.latte');
+		
+		$template->priceTotal = $order->getPriceTotal();
+		$template->itemsCount = $itemsCount;
+		$template->link = $context->link(':Frontend:Eshop:Cart:default', array(
+			'id' => $fromPage->getId(),
+			'path' => $fromPage->getPath(),
+			'abbr' => $context->abbr
+				));
+		
+		return $template;
+	}
 }
