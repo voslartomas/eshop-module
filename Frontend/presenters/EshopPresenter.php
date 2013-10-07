@@ -46,7 +46,9 @@ class EshopPresenter extends BasePresenter{
 		$favouritesProducts = $this->repositoryProducts->findBy(array(
 			'language' => $this->language,
 			'favourite' => TRUE
-		));
+		), array(
+			'id' => 'ASC'
+		), 5, 0);
 		
 		$actionProducts = $this->repositoryProducts->findBy(array(
 			'language' => $this->language,
@@ -57,10 +59,45 @@ class EshopPresenter extends BasePresenter{
 		$this->setProductsLinks($favouritesProducts, $catPage);
 		$this->setProductsLinks($actionProducts, $catPage);
 		
+		$this->template->limit = 5;
+		$this->template->offset = 0;
 		$this->template->favouriteCategories = $favouritesCategories;
 		$this->template->favouriteProducts = $favouritesProducts;
 		$this->template->actionProducts = $actionProducts;
 		$this->template->id = $id;
+	}
+	
+	public function actionLazyLoadFavouriteProducts($limit, $offset, $counter){
+		if($this->isAjax()){
+			$this->invalidateControl('lazyLoader');
+		}
+		
+		$catPage = $this->em->getRepository('\AdminModule\Page')->findOneBy(array(
+			'language' => $this->language,
+			'moduleName' => 'Eshop',
+			'presenter' => 'Categories'
+		));
+		
+		$template = $this->createTemplate();
+		$template->setFile('../app/templates/eshop-module/Eshop/lazyLoadFavouriteProducts.latte');
+		$template->counter = $counter;
+		$template->limit = $limit;
+		$template->actualPage = $this->actualPage;
+		$template->abbr = $this->abbr;
+		$template->offset = $offset + $limit;
+		$products = $this->repositoryProducts->findBy(array(
+			'language' => $this->language,
+			'favourite' => TRUE
+		), array(
+			'id' => 'ASC'
+		), $limit, $offset);
+		
+		$this->setProductsLinks($products, $catPage);
+		
+		$template->products = $products;
+		
+		$template->render();
+		$this->terminate();
 	}
 	
 	private function setCategoriesLinks($categories, $catPage){
@@ -91,5 +128,3 @@ class EshopPresenter extends BasePresenter{
 		}
 	}
 }
-
-?>

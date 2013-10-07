@@ -78,9 +78,12 @@ class ProductsPresenter extends BasePresenter{
 		if($id) $this->product = $this->repository->find($id);
 		else $this->product = new \WebCMS\EshopModule\Doctrine\Product();
 		
-		$this->photos = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Photo')->findBy(array(
+		if($this->product->getId()) $this->photos = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Photo')->findBy(array(
 			'product' => $this->product
 		));
+	else 
+		$this->photos = array();
+	
 	}
 	
 	public function productFormSubmitted(UI\Form $form){
@@ -103,12 +106,17 @@ class ProductsPresenter extends BasePresenter{
 		}
 		
 		// delete old photos and save new ones
-		$qb = $this->em->createQueryBuilder();
-		$qb->delete('WebCMS\EshopModule\Doctrine\Photo', 'l')
-				->where('l.product = ?1')
-				->setParameter(1, $this->product)
-				->getQuery()
-				->execute();
+		if($this->product->getId()){
+			$qb = $this->em->createQueryBuilder();
+			$qb->delete('WebCMS\EshopModule\Doctrine\Photo', 'l')
+					->where('l.product = ?1')
+					->setParameter(1, $this->product)
+					->getQuery()
+					->execute();
+			
+		}else{
+			$this->product->setDefaultPicture('');
+		}
 		
 		if(array_key_exists('files', $_POST)){
 			$counter = 0;
