@@ -55,7 +55,19 @@ class Product extends \AdminModule\Seo {
 	 */
 	private $vat;
 	
+	/**
+	 * @orm\Column(type="boolean")
+	 */
+	private $favourite;
+	
+	/**
+	 * @orm\Column(type="boolean")
+	 */
+	private $action;
+	
 	private $priceWithVat;
+	
+	private $link;
 	
 	public function __construct(){
 		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -135,5 +147,29 @@ class Product extends \AdminModule\Seo {
 
 	public function setPriceWithVat($priceWithVat) {
 		$this->priceWithVat = $priceWithVat;
+	}
+	
+	public function getFavourite() {
+		return $this->favourite;
+	}
+
+	public function setFavourite($favourite) {
+		$this->favourite = $favourite;
+	}
+	
+	public function getLink() {
+		return $this->link;
+	}
+
+	public function setLink($link) {
+		$this->link = $link;
+	}
+	
+	public function getAction() {
+		return $this->action;
+	}
+
+	public function setAction($action) {
+		$this->action = $action;
 	}
 }

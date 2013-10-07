@@ -104,7 +104,14 @@ class Category extends \AdminModule\Seo{
 	 * @orm\ManyToMany(targetEntity="Product", mappedBy="categories")
 	 */
 	private $products;
+	
+	/**
+	 * @orm\Column(type="boolean")
+	 */
+	private $favourite;
 		
+	private $link;
+	
     public function __construct()    {
         $this->children = new ArrayCollection();
 		$this->products = new ArrayCollection();
@@ -235,5 +242,21 @@ class Category extends \AdminModule\Seo{
 
 	public function setProducts($products) {
 		$this->products = $products;
+	}
+	
+	public function getFavourite() {
+		return $this->favourite;
+	}
+
+	public function setFavourite($favourite) {
+		$this->favourite = $favourite;
+	}
+	
+	public function getLink() {
+		return $this->link;
+	}
+	
+	public function setLink($link) {
+		$this->link = $link;
 	}
 }

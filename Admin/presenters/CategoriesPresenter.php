@@ -43,6 +43,7 @@ class CategoriesPresenter extends BasePresenter{
 		$form->addText('title', 'Name')->setAttribute('class', 'form-control');
 		$form->addSelect('parent', 'Parent')->setTranslator(NULL)->setItems($hierarchy)->setAttribute('class', 'form-control');
 		$form->addCheckbox('visible', 'Show')->setAttribute('class', 'form-control')->setDefaultValue(1);
+		$form->addCheckbox('favourite', 'Favourite')->setAttribute('class', 'form-control');
 		
 		$form->addSubmit('save', 'Save')->setAttribute('class', 'btn btn-success');
 		
@@ -71,6 +72,7 @@ class CategoriesPresenter extends BasePresenter{
 		$this->category->setTitle($values->title);
 		$this->category->setVisible($values->visible);
 		$this->category->setParent($parent);
+		$this->category->setFavourite($values->favourite);
 		$this->category->setLanguage($this->state->language);
 		$this->category->setPath('tmp value');
 		

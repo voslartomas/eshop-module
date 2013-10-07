@@ -49,6 +49,8 @@ class ProductsPresenter extends BasePresenter{
 		
 		$form = $this->createForm();
 		$form->addText('title', 'Name')->setAttribute('class', 'form-control')->setRequired('Please fill in a name.');
+		$form->addCheckbox('favourite', 'Favourite')->setAttribute('class', 'form-control');
+		$form->addCheckbox('action', 'Action')->setAttribute('class', 'form-control');
 		$form->addText('price', 'Price')->setAttribute('class', 'form-control');
 		$form->addText('vat', 'Vat')->setAttribute('class', 'form-control');
 		$form->addMultiSelect('categories', 'Categories')->setTranslator(NULL)->setItems($hierarchy)->setAttribute('class', 'form-control');
@@ -84,6 +86,8 @@ class ProductsPresenter extends BasePresenter{
 		$this->product->setLanguage($this->state->language);
 		$this->product->setPrice($values->price);
 		$this->product->setVat($values->vat);
+		$this->product->setFavourite($values->favourite);
+		$this->product->setAction($values->action);
 		
 		// delete old categories
 		$this->product->setCategories(new \Doctrine\Common\Collections\ArrayCollection());

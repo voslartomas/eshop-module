@@ -332,7 +332,13 @@ class CartPresenter extends BasePresenter{
 		
 		if(is_object($order)){
 			$template->priceTotal = $order->getPriceTotal();
-			$template->itemsCount = count($order->getItems());
+			
+			$count = 0;
+			foreach($order->getItems() as $item){
+				$count += $item->getQuantity();
+			}
+			
+			$template->itemsCount = $count;
 		}else{
 			$template->priceTotal = 0;
 			$template->itemsCount = 0;
