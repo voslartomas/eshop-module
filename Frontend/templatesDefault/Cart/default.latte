@@ -1,0 +1,72 @@
+{block #content}
+	
+	<h1>{_'Shopping cart'}</h1>
+	
+	{if count($order->getItems()) > 0}
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>{_'Name'}</th>
+					<th>{_'Price'}</th>
+					<th>{_'Quantity'}</th>
+					<th>{_'Price total'}</th>
+					<th>{_'Delete item'}</th>
+				</tr>
+			</thead>
+			{foreach $order->getItems() as $item}
+				<tr>
+					<td>{$item->getName()}</td>
+					<td>{$item->getPrice()|price}</td>
+					<td>
+						<a title="{_'Increase quantity'}" class="btn btn-info" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() + 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr">&#43;</a>
+						{$item->getQuantity()}
+						<a title="{_'Decrease quantity'}" class="btn btn-info" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() - 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr">&#45;</a>
+					</td>
+					<td>{$item->getPriceTotal()|price}</td>
+					<td>
+						<a class="btn btn-danger" n:href=":Frontend:Eshop:Cart:deleteCartItem $item->getItemId(), id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr">&times;</a>
+					</td>
+				</tr>
+			{/foreach}
+			<tfooter>
+				<th colspan="2">{_'Totals'}</th>
+				<th>{$order->getQuantityTotal()}</th>
+				<th>{$order->getPriceTotal()|price}</th>
+				<th>~</th>
+			</tfooter>
+		</table>
+		
+		{form cartForm}
+			
+			<div class="well">
+			
+				<h2>{_'Payment'}</h2>
+				<div>
+					{foreach $payments as $p}
+						<div>
+							<input type="radio" name="payment" id="p{$p->getId()}" value="{$p->getId()}" {if $order->getPayment() == $p->getId()}checked{/if} /> 
+							<label for="p{$p->getId()}">{$p->getTitle()} {$p->getPrice()|price}</label>
+						</div>
+					{/foreach}
+				</div>
+
+				<h2>{_'Shipping'}</h2>
+				<div>
+					{foreach $shippings as $p}
+						<div>
+							<input type="radio" name="shipping" id="s{$p->getId()}" value="{$p->getId()}" {if $order->getShipping() == $p->getId()}checked{/if} />
+							<label for="s{$p->getId()}">{$p->getTitle()} {$p->getPrice()|price}</label>
+						</div>
+					{/foreach}
+				</div>
+				
+			</div>
+			
+		
+			{control cartForm}
+		{/form}
+	{else}
+		{_'There are no items in the shopping cart.'}
+	{/if}
+	
+{/block}

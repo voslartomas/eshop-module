@@ -44,7 +44,8 @@ class Eshop extends \WebCMS\Module {
 	);
 	
 	public function __construct(){
-		//$this->addBox('Page box', 'Page', 'textBox');
+		$this->addBox('Shopping cart', 'Cart', 'cartBox', 'Eshop');
+		$this->addBox('Categories list box', 'Categories', 'listBox', 'Eshop');
 	}
 	
 }

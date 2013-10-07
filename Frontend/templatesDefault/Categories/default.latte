@@ -1,0 +1,21 @@
+{block #content}
+	
+	{if !$product}
+		
+		<h1>{$title}</h1>
+		
+		{!$categories}
+
+		{foreach $products as $p}
+			<a n:href=":Frontend:{$page->getModuleName()}:{$page->getPresenter()}:default path => $page->getPath() . '/' . $category->getPath(), parameters => array($p->getSlug()), abbr => $abbr">{$p->getTitle()}</a>
+			
+			{include '../addToCart.latte' item => $p}
+		{/foreach}
+		
+	{else}
+		
+		{include 'productDetail.latte'}
+		
+	{/if}
+	
+{/block}

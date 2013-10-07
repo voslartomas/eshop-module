@@ -1,0 +1,9 @@
+{if isset($cartUrl)}
+	<form method="POST" action="{$cartUrl}">
+		<input type="hidden" name="itemId" value="{$item->getId()}" />
+		<input type="number" name="quantity" value="1" />
+		<input type="submit" name="add" value="{_'Add item to cart'}" />
+	</form>
+{else}
+	{_'No shopping cart is defined.'}
+{/if}

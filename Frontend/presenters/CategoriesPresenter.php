@@ -39,7 +39,7 @@ class CategoriesPresenter extends BasePresenter{
 			if(count($category) > 0){ 
 				$title = $category[0]->getTitle();
 				$category = $category[0];
-				$categories = $this->getStructure($category, $this->repository, TRUE, 'nav navbar-nav', FALSE, FALSE);
+				$categories = $this->getStructure($this, $category, $this->repository, TRUE, 'nav navbar-nav', FALSE, FALSE, $this->actualPage);
 			}else{
 				$category = NULL;
 				$title = '';
@@ -81,7 +81,7 @@ class CategoriesPresenter extends BasePresenter{
 			// check for products
 			$products = $category->getProducts();
 			
-			$categories = $this->getStructure($category, $this->repository, TRUE, 'nav navbar-nav', FALSE, FALSE);
+			$categories = $this->getStructure($this, $category, $this->repository, TRUE, 'nav navbar-nav', FALSE, FALSE, $this->actualPage);
 			
 		}
 		
@@ -123,5 +123,16 @@ class CategoriesPresenter extends BasePresenter{
 				$title,
 				$this->actualPage->getPath() . '/' . $item->getPath() . $path
 			);
+	}
+	
+	public function listBox($context, $fromPage){
+		
+		$repository = $context->em->getRepository('\WebCMS\EshopModule\Doctrine\Category');
+		$category = $repository->findOneBy(array(
+				'language' => $context->language,
+				'title' => 'Main'
+			));
+		
+		return $this->getStructure($context, $category, $repository, FALSE, 'nav navbar-nav', TRUE, FALSE, $fromPage);
 	}
 }

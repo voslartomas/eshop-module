@@ -63,7 +63,7 @@ class CartPresenter extends BasePresenter{
 		$form->addGroup('Delivery');
 		$form->addText('firstname', 'Firstname')->setRequired('Please fill in the firstname.');
 		$form->addText('lastname', 'Lastname')->setRequired('Please fill in the lastname.');
-		$form->addText('email', 'Email')->setRequired('Please fill in the email.');
+		$form->addText('email', 'Email')->setRequired('Please fill in the email.')->addRule(\Nette\Forms\Form::EMAIL, 'This is not correct email address.');
 		$form->addText('phone', 'Phone')->setRequired('Please fill in the phone.');
 		$form->addText('street', 'Street')->setRequired('Please fill in the street.');
 		$form->addText('city', 'City')->setRequired('Please fill in the city.');
