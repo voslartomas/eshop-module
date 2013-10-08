@@ -83,10 +83,31 @@ class CartPresenter extends BasePresenter{
 		$form->addSubmit('send', 'Send order');
 		
 		$form->onSuccess[] = callback($this, 'cartFormSubmitted');
+		
+		// account-module integration
+		if($user = $this->getAccount()){
+			$form->setDefaults($user->toArray(TRUE));
+		}
 
-		$form->setDefaults($this->order->toArray());
+		$form->setDefaults($this->order->toArray(TRUE));
 		
 		return $form;
+	}
+	
+	/**
+	 * Account module integration method.
+	 */
+	private function getAccount(){
+		$accountSession = $this->session->getSection('accountModule');
+		if($accountSession->offsetExists('user')){
+			$user = $accountSession->user;
+			
+			if($user->getId()){
+				return $user;
+			}
+		}
+		
+		return NULL;
 	}
 	
 	public function cartFormSubmitted($form){
@@ -119,6 +140,13 @@ class CartPresenter extends BasePresenter{
 		$this->saveOrderState();
 		
 		if($this->requiredFilled($values)){
+			
+			// account module integration
+			if($user = $this->getAccount()){
+				$user = $this->em->getRepository('WebCMS\AccountModule\Doctrine\Account')->find($user->getId());
+				
+				$this->order->setAccount($user);
+			}
 			
 			$this->order->setLanguage($this->language);
 			

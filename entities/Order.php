@@ -141,6 +141,12 @@ class Order extends \AdminModule\Doctrine\Entity {
 	
 	private $shipping;
 	
+	/**
+	 * @orm\ManyToOne(targetEntity="\WebCMS\AccountModule\Doctrine\Account", inversedBy="orders")
+	 * @orm\JoinColumn(onDelete="SET NULL")
+	 */
+	private $account;
+	
 	public function __construct(){
 		$this->items = new ArrayCollection();
 	}
@@ -376,5 +382,13 @@ class Order extends \AdminModule\Doctrine\Entity {
 
 	public function setInvoiceVatNo($invoiceVatNo) {
 		$this->invoiceVatNo = $invoiceVatNo;
+	}
+	
+	public function getAccount() {
+		return $this->account;
+	}
+
+	public function setAccount($account) {
+		$this->account = $account;
 	}
 }
