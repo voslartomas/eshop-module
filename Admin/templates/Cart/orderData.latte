@@ -1,70 +1,72 @@
 {form orderForm}
+	
 	<div class="form-group">
 		{label status /}
 		{input status class => 'form-control'}
 	</div>
-	<h2>{_'Delivery address'}</h2>
-	<div class="form-group">
-		{label firstname /}
-		{input firstname class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label lastname /}
-		{input lastname class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label email /}
-		{input email class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label phone /}
-		{input phone class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label street /}
-		{input street class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label city /}
-		{input city class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label postcode /}
-		{input postcode class => 'form-control'}
-	</div>
 	
-	<h2>{_'Invoice address'}</h2>
-	<div class="form-group">
-		{label invoiceCompany /}
-		{input invoiceCompany class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label invoiceNo /}
-		{input invoiceNo class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label invoiceVatNo /}
-		{input invoiceVatNo class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label invoiceEmail /}
-		{input invoiceEmail class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label invoicePhone /}
-		{input invoicePhone class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label invoiceStreet /}
-		{input invoiceStreet class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label invoiceCity /}
-		{input invoiceCity class => 'form-control'}
-	</div>
-	<div class="form-group">
-		{label invoicePostcode /}
-		{input invoicePostcode class => 'form-control'}
+	<div class="row">
+		<div class="col-md-6">
+			
+			<h2>{_'Delivery address'}</h2>
+			
+			<div class="form-group">
+				{label firstname /}
+				{input firstname class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label lastname /}
+				{input lastname class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label email /}
+				{input email class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label phone /}
+				{input phone class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label street /}
+				{input street class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label city /}
+				{input city class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label postcode /}
+				{input postcode class => 'form-control'}
+			</div>
+		</div>
+		
+		<div class="col-md-6">
+			<h2>{_'Invoice address'}</h2>
+			<div class="form-group">
+				{label invoiceCompany /}
+				{input invoiceCompany class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label invoiceNo /}
+				{input invoiceNo class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label invoiceVatNo /}
+				{input invoiceVatNo class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label invoiceStreet /}
+				{input invoiceStreet class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label invoiceCity /}
+				{input invoiceCity class => 'form-control'}
+			</div>
+			<div class="form-group">
+				{label invoicePostcode /}
+				{input invoicePostcode class => 'form-control'}
+			</div>
+		</div>
 	</div>
 		
 	{input send class => 'btn btn-success'}

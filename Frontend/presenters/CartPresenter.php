@@ -74,8 +74,6 @@ class CartPresenter extends BasePresenter{
 		$form->addText('invoiceCompany', 'Company');
 		$form->addText('invoiceNo', 'No.');
 		$form->addText('invoiceVatNo', 'Tax No.');
-		$form->addText('invoiceEmail', 'Email');
-		$form->addText('invoicePhone', 'Phone');
 		$form->addText('invoiceStreet', 'Street');
 		$form->addText('invoiceCity', 'City');
 		$form->addText('invoicePostcode', 'Postcode');
@@ -124,8 +122,6 @@ class CartPresenter extends BasePresenter{
 		$this->order->setInvoiceCompany($values->invoiceCompany);
 		$this->order->setInvoiceNo($values->invoiceNo);
 		$this->order->setInvoiceVatNo($values->invoiceVatNo);
-		$this->order->setInvoiceEmail($values->invoiceEmail);
-		$this->order->setInvoicePhone($values->invoicePhone);
 		$this->order->setInvoiceStreet($values->invoiceStreet);
 		$this->order->setInvoiceCity($values->invoiceCity);
 		$this->order->setInvoicePostcode($values->invoicePostcode);
