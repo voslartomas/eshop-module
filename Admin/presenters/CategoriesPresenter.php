@@ -113,19 +113,19 @@ class CategoriesPresenter extends BasePresenter{
 			)
 		);
 		
-		$grid->addColumn('title', 'Name')->setCustomRender(function($item){
+		$grid->addColumnText('title', 'Name')->setCustomRender(function($item){
 			return str_repeat("-", $item->getLevel()) . $item->getTitle();
-		})->setFilter();
+		})->setFilterText();
 		
-		$grid->addColumn('visible', 'Visible')->setReplacement(array(
+		$grid->addColumnText('visible', 'Visible')->setReplacement(array(
 			'1' => 'Yes',
 			NULL => 'No'
 		));
 		
-		$grid->addAction("moveUp", "Move up", \Grido\Components\Actions\Action::TYPE_HREF, 'moveUp', array('idPage' => $this->actualPage->getId()));
-		$grid->addAction("moveDown", "Move down", \Grido\Components\Actions\Action::TYPE_HREF, 'moveDown', array('idPage' => $this->actualPage->getId()));
-		$grid->addAction("updateCategory", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'updateCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
-		$grid->addAction("deleteCategory", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
+		$grid->addActionHref("moveUp", "Move up", 'moveUp', array('idPage' => $this->actualPage->getId()));
+		$grid->addActionHref("moveDown", "Move down", 'moveDown', array('idPage' => $this->actualPage->getId()));
+		$grid->addActionHref("updateCategory", 'Edit', 'updateCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
+		$grid->addActionHref("deleteCategory", 'Delete', 'deleteCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
 
 		return $grid;
 	}

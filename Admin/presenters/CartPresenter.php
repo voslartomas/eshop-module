@@ -54,28 +54,28 @@ class CartPresenter extends BasePresenter{
 			$selectStatuses[$s->getId()] = $s->getTitle();
 		}
 		
-		$grid->addColumn('created', 'Created')->setCustomRender(function($item){
+		$grid->addColumnDate('created', 'Created')->setCustomRender(function($item){
 			return $item->getCreated()->format('d.m.Y H:i:s');
-		})->setSortable()->setFilter();
+		})->setSortable()->setFilterDate();
 		
 		if(is_object($defaultStatus)){
-			$grid->addColumn('status', 'status')->setCustomRender(function($item){
+			$grid->addColumnText('status', 'status')->setCustomRender(function($item){
 				return is_object($item->getStatus()) ? $item->getStatus()->getTitle() : '';
 			})->setSortable()->setFilterSelect($selectStatuses)/*->setDefaultValue($defaultStatus->getId())*/;
 		}else{
-			$grid->addColumn('status', 'status')->setCustomRender(function($item){
+			$grid->addColumnText('status', 'status')->setCustomRender(function($item){
 				return is_object($item->getStatus()) ? $item->getStatus()->getTitle() : '';
 			})->setSortable()->setFilterSelect($selectStatuses);
 		}
 		
-		$grid->addColumn('firstname', 'Firstname')->setSortable()->setFilter();
-		$grid->addColumn('lastname', 'Lastname')->setSortable()->setFilter();
-		$grid->addColumn('email', 'Email')->setSortable()->setFilter();
-		$grid->addColumn('street', 'Street')->setSortable()->setFilter();
-		$grid->addColumn('city', 'City')->setSortable()->setFilter();
-		$grid->addColumn('postcode', 'Postcode')->setSortable()->setFilterNumber();
+		$grid->addColumnText('firstname', 'Firstname')->setSortable()->setFilterText();
+		$grid->addColumnText('lastname', 'Lastname')->setSortable()->setFilterText();
+		$grid->addColumnText('email', 'Email')->setSortable()->setFilterText();
+		$grid->addColumnText('street', 'Street')->setSortable()->setFilterText();
+		$grid->addColumnText('city', 'City')->setSortable()->setFilterText();
+		$grid->addColumnText('postcode', 'Postcode')->setSortable()->setFilterText();
 		
-		$grid->addColumn('priceTotal', 'Price total')->setCustomRender(function($item){
+		$grid->addColumnNumber('priceTotal', 'Price total')->setCustomRender(function($item){
 			return \WebCMS\PriceFormatter::format($item->getPriceTotal());
 		})->setSortable()->setFilterNumber();
 			
@@ -87,7 +87,7 @@ class CartPresenter extends BasePresenter{
 			$operations['setStatus-' . $status->getId()]  = 'Set status - ' . $status->getTitle();
 		}
 		
-		$grid->setOperations($operations, function($operation, $ids) { 
+		$grid->setOperation($operations, function($operation, $ids) { 
 			$status = explode('-', $operation);
 			
 			$status = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\OrderState')->find($status[1]);
@@ -105,8 +105,8 @@ class CartPresenter extends BasePresenter{
 			$this->em->flush();
 		});
 				
-		$grid->addAction("editOrder", 'Edit', \Grido\Components\Actions\Action::TYPE_HREF, 'editOrder', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
-		$grid->addAction("deleteOrder", 'Delete', \Grido\Components\Actions\Action::TYPE_HREF, 'deleteOrder', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary btn-danger'));
+		$grid->addActionHref("editOrder", 'Edit', 'editOrder', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
+		$grid->addActionHref("deleteOrder", 'Delete', 'deleteOrder', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary btn-danger'));
 		
 		return $grid;
 	}
