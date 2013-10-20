@@ -54,6 +54,7 @@ class ProductsPresenter extends BasePresenter{
 		$form->addText('price', 'Price')->setAttribute('class', 'form-control');
 		$form->addText('vat', 'Vat')->setAttribute('class', 'form-control');
 		$form->addMultiSelect('categories', 'Categories')->setTranslator(NULL)->setItems($hierarchy)->setAttribute('class', 'form-control');
+		$form->addTextArea('description')->setAttribute('class', 'form-control editor');
 		
 		$form->addSubmit('save', 'Save')->setAttribute('class', 'btn btn-success');
 		
@@ -95,6 +96,7 @@ class ProductsPresenter extends BasePresenter{
 		$this->product->setVat($values->vat);
 		$this->product->setFavourite($values->favourite);
 		$this->product->setAction($values->action);
+		$this->product->setDescription($values->description);
 		
 		// delete old categories
 		$this->product->setCategories(new \Doctrine\Common\Collections\ArrayCollection());

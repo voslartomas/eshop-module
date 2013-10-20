@@ -29,7 +29,7 @@ class Product extends \AdminModule\Seo {
     private $slug;
 	
 	/**
-	 * @orm\OneToMany(targetEntity="Photo", mappedBy="Product")
+	 * @orm\OneToMany(targetEntity="Photo", mappedBy="product")
 	 */
 	private $photos;
 	
