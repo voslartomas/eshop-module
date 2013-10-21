@@ -106,7 +106,7 @@ class Category extends \AdminModule\Seo{
 	private $products;
 	
 	/**
-	 * @orm\Column(type="boolean")
+	 * @orm\Column(type="boolean", nullable=true)
 	 */
 	private $favourite;
 		
