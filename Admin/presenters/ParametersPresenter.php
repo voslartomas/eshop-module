@@ -139,7 +139,7 @@ class ParametersPresenter extends BasePresenter{
 		$this->em->remove($value);
 		$this->em->flush();
 		
-		$this->flashMessage($this->translation['Parameter has been removed.'], 'success');
+		$this->flashMessage($this->translation['Parameter value has been removed.'], 'success');
 		
 		$this->redirect('updateParameter', array(
 			'idPage' => $this->actualPage->getId(),
