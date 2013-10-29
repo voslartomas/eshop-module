@@ -36,6 +36,10 @@ class Eshop extends \WebCMS\Module {
 		array(
 			'name' => 'Settings',
 			'frontend' => FALSE
+			),
+		array(
+			'name' => 'Parameters',
+			'frontend' => FALSE
 			)
 	);
 	

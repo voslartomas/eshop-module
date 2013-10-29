@@ -65,6 +65,12 @@ class Product extends \AdminModule\Seo {
 	 */
 	private $action;
 	
+	/**
+	 * @orm\ManyToMany(targetEntity="ParameterValue", cascade={"persist"})
+	 * @orm\JoinColumn(onDelete="CASCADE")
+	 */
+	private $parameters;
+	
 	private $priceWithVat;
 	
 	private $link;

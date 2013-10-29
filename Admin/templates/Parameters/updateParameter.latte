@@ -1,0 +1,20 @@
+{block content}
+
+	{include ../tabs.latte active => 'parameters'}
+
+	<h1>{_'Parameter edit'}</h1>
+	
+	{control parameterForm}
+	
+	{if $parameter->getId()}
+		
+		<br /><br />
+		
+		<a class="btn btn-primary ajax" n:href="Parameters:updateValue idPage => $idPage, parameter => $parameter->getId()" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add value'}</a>
+
+		<br /><br />
+		
+		{control parametersValuesGrid}
+	{/if}
+	
+{/block}

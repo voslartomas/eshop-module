@@ -1,0 +1,17 @@
+{block content}
+	
+	{include ../tabs.latte active => 'parameters'}
+
+	<h1>{_'Product parameters'}</h1>
+	
+	<a class="btn btn-primary ajax" n:href="Parameters:updateParameter idPage => $idPage">{_'Add parameter'}</a>
+
+	<br /><br />
+	
+	<div class="tab-content">
+		<div class="tab-pane active">
+			{control parametersGrid}
+		</div>
+	</div>
+	
+{/block}

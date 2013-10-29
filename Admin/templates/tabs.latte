@@ -3,6 +3,7 @@
   <li {if $active == "orders"}class="active"{/if}><a class="ajax" n:href="Cart:default idPage => $idPage">{_'Orders'}</a></li>
   <li {if $active == "categories"}class="active"{/if}><a class="ajax" n:href="Categories:default idPage => $idPage">{_'Categories'}</a></li>
   <li {if $active == "products"}class="active"{/if}><a class="ajax" n:href="Products:default idPage => $idPage">{_'Products'}</a></li>
+  <li {if $active == "parameters"}class="active"{/if}><a class="ajax" n:href="Parameters:default idPage => $idPage">{_'Parameters'}</a></li>
   <li {if $active == "settings"}class="active"{/if}><a class="ajax" n:href="Settings:default idPage => $idPage">{_'Settings'}</a></li>
   {include ../../../webcms2/AdminModule/templates/system/boxes.latte id => $idPage}
 </ul>
