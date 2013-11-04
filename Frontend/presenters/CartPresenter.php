@@ -61,24 +61,24 @@ class CartPresenter extends BasePresenter{
 		));
 		
 		$form->addGroup('Delivery');
-		$form->addText('firstname', 'Firstname')->setRequired('Please fill in the firstname.');
-		$form->addText('lastname', 'Lastname')->setRequired('Please fill in the lastname.');
-		$form->addText('email', 'Email')->setRequired('Please fill in the email.')->addRule(\Nette\Forms\Form::EMAIL, 'This is not correct email address.');
-		$form->addText('phone', 'Phone')->setRequired('Please fill in the phone.');
-		$form->addText('street', 'Street')->setRequired('Please fill in the street.');
-		$form->addText('city', 'City')->setRequired('Please fill in the city.');
-		$form->addText('postcode', 'Postcode')->setRequired('Please fill in the postcode.');
+		$form->addText('firstname', 'Firstname')->setRequired('Please fill in the firstname.')->setAttribute('class', 'form-control');
+		$form->addText('lastname', 'Lastname')->setRequired('Please fill in the lastname.')->setAttribute('class', 'form-control');
+		$form->addText('email', 'Email')->setRequired('Please fill in the email.')->setAttribute('class', 'form-control')->addRule(\Nette\Forms\Form::EMAIL, 'This is not correct email address.');
+		$form->addText('phone', 'Phone')->setRequired('Please fill in the phone.')->setAttribute('class', 'form-control');
+		$form->addText('street', 'Street')->setRequired('Please fill in the street.')->setAttribute('class', 'form-control');
+		$form->addText('city', 'City')->setRequired('Please fill in the city.')->setAttribute('class', 'form-control');
+		$form->addText('postcode', 'Postcode')->setRequired('Please fill in the postcode.')->setAttribute('class', 'form-control');
 		
 		// invoice data
 		$form->addGroup('Invoice');
-		$form->addText('invoiceCompany', 'Company');
-		$form->addText('invoiceNo', 'No.');
-		$form->addText('invoiceVatNo', 'Tax No.');
-		$form->addText('invoiceStreet', 'Street');
-		$form->addText('invoiceCity', 'City');
-		$form->addText('invoicePostcode', 'Postcode');
+		$form->addText('invoiceCompany', 'Company')->setAttribute('class', 'form-control');
+		$form->addText('invoiceNo', 'No.')->setAttribute('class', 'form-control');
+		$form->addText('invoiceVatNo', 'Tax No.')->setAttribute('class', 'form-control');
+		$form->addText('invoiceStreet', 'Street')->setAttribute('class', 'form-control');
+		$form->addText('invoiceCity', 'City')->setAttribute('class', 'form-control');
+		$form->addText('invoicePostcode', 'Postcode')->setAttribute('class', 'form-control');
 		
-		$form->addSubmit('send', 'Send order');
+		$form->addSubmit('send', 'Send order')->setAttribute('class', 'btn btn-primary btn-lg');
 		
 		$form->onSuccess[] = callback($this, 'cartFormSubmitted');
 		
