@@ -43,6 +43,8 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 	public function createComponentSettingsForm(){
 		
 		$settings = array();
+		$settings[] = $this->settings->get('Category body class', 'eshopModule', 'text', array());
+		$settings[] = $this->settings->get('Product detail body class', 'eshopModule', 'text', array());
 		$settings[] = $this->settings->get('Order saved email', 'eshopModule', 'textarea', array());
 		
 		return $this->createSettingsForm($settings);

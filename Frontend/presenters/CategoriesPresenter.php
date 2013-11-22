@@ -88,6 +88,16 @@ class CategoriesPresenter extends BasePresenter{
 		// it is here, because of breadcrumbs
 		parent::beforeRender();
 		
+		if(!$product){
+			$this->actualPage->setClass(
+				$this->settings->get('Category body class', 'eshopModule', 'text')->getValue()
+			);
+		}else{
+			$this->actualPage->setClass(
+				$this->settings->get('Product detail body class', 'eshopModule', 'text')->getValue()
+			);
+		}
+		
 		$this->template->product = $product;
 		$this->template->category = $category;
 		$this->template->page = $this->actualPage;
