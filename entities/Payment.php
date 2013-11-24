@@ -40,6 +40,10 @@ class Payment extends \AdminModule\Doctrine\Entity{
 		return $this->price;
 	}
 
+	public function getPriceWithVat(){
+		return $this->getPrice() * (($this->getVat() / 100) + 1);
+	}
+	
 	public function getVat() {
 		return $this->vat;
 	}

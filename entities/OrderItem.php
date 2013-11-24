@@ -97,7 +97,7 @@ class OrderItem extends \AdminModule\Doctrine\Entity {
 		return $this->getPrice() * $this->getQuantity();
 	}
 	
-	public function getPriceWithVatTotal(){
+	public function getPriceTotalWithVat(){
 		return $this->getPriceWithVat() * $this->getQuantity();
 	}
 }

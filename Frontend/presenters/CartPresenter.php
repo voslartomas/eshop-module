@@ -216,7 +216,7 @@ class CartPresenter extends BasePresenter{
 		// order items
 		$items = '';
 		foreach($this->order->getItems() as $item){
-			$items .= $item->getName() . ' ' . $item->getQuantity() . ' x ' . \WebCMS\SystemHelper::price($item->getPrice()) . ' = ' . \WebCMS\SystemHelper::price($item->getQuantity() * $item->getPrice()) . '<br />';
+			$items .= $item->getName() . ' ' . $item->getQuantity() . ' x ' . \WebCMS\SystemHelper::price($item->getPriceWithVat()) . ' = ' . \WebCMS\SystemHelper::price($item->getPriceTotalWithVat()) . '<br />';
 		}
 		
 		// email
@@ -234,6 +234,7 @@ class CartPresenter extends BasePresenter{
 					'[CITY]',
 					'[POSTCODE]',
 					'[TOTAL_PRICE]',
+					'[TOTAL_PRICE_WITH_VAT]',
 					'[ORDER_ITEMS]'
 				),
 				array(
@@ -245,6 +246,7 @@ class CartPresenter extends BasePresenter{
 					$values->city,
 					$values->postcode,
 					\WebCMS\SystemHelper::price($this->order->getPriceTotal()),
+					\WebCMS\SystemHelper::price($this->order->getPriceTotalWithVat()),
 					$items
 				)
 			));

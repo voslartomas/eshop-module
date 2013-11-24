@@ -19,6 +19,7 @@
 							<th>{_'Price'}</th>
 							<th>{_'Quantity'}</th>
 							<th>{_'Price total'}</th>
+							<th>{_'Price total with VAT'}</th>
 							<th>{_'Delete item'}</th>
 						</tr>
 					</thead>
@@ -28,6 +29,7 @@
 							<td>{$item->getPrice()|price}</td>
 							<td>{$item->getQuantity()}</td>
 							<td>{$item->getPriceTotal()|price}</td>
+							<td>{$item->getPriceTotalWithVat()|price}</td>
 							<td>
 								<a class="btn btn-primary ajax" n:href=":Admin:Eshop:Cart:addOrderItem $item->getId(), idPage => $idPage, id => $order->getId()" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Edit'}</a>
 								<a class="btn btn-danger" n:href=":Admin:Eshop:Cart:deleteOrderItem $item->getId(), idPage => $idPage, id => $order->getId()">&times;</a>
@@ -38,6 +40,7 @@
 						<th colspan="2">{_'Totals'}</th>
 						<th>{$order->getQuantityTotal()}</th>
 						<th>{$order->getPriceTotal()|price}</th>
+						<th>{$order->getPriceTotalWithVat()|price}</th>
 						<th>~</th>
 					</tfooter>
 				</table>

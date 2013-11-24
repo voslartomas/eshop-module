@@ -75,8 +75,8 @@ class CartPresenter extends BasePresenter{
 		$grid->addColumnText('city', 'City')->setSortable()->setFilterText();
 		$grid->addColumnText('postcode', 'Postcode')->setSortable()->setFilterText();
 		
-		$grid->addColumnNumber('priceTotal', 'Price total')->setCustomRender(function($item){
-			return \WebCMS\PriceFormatter::format($item->getPriceTotal());
+		$grid->addColumnNumber('priceTotalWithVat', 'Price total')->setCustomRender(function($item){
+			return \WebCMS\PriceFormatter::format($item->getPriceTotalWithVat());
 		})->setSortable()->setFilterNumber();
 			
 		$defaults = array('created' => 'DESC');

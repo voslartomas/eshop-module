@@ -312,6 +312,16 @@ class Order extends \AdminModule\Doctrine\Entity {
 		return $this->priceTotal;
 	}
 	
+	public function getPriceTotalWithVat(){
+		$items = $this->getItems();
+		$this->priceTotal = 0;
+		foreach($items as $item){
+			$this->priceTotal += $item->getPriceTotalWithVat();
+		}
+		
+		return $this->priceTotal;
+	}
+	
 	public function getPayment() {
 		return $this->payment;
 	}
