@@ -34,8 +34,8 @@ class CartPresenter extends BasePresenter{
 	}
 	
 	public function actionDefault($id){
-		if(array_key_exists('itemId', $_POST)){
-			$this->addCartItem($_POST['itemId'], $_POST['quantity']);
+		if(array_key_exists('itemId', $_REQUEST)){
+			$this->addCartItem($_REQUEST['itemId'], $_REQUEST['quantity']);
 		}
 	}
 	
@@ -309,11 +309,32 @@ class CartPresenter extends BasePresenter{
 			$item->setVat($product->getVat());
 
 			$this->order->addItem($item);
+			
+			if($this->isAjax()){
+				$snippets = array(
+					'snippet--flashMessages' => '<div class="alert alert-success fade in">' . $this->translation['Item has been added to the shopping cart.'] . '<a href="#" class="close" data-dismiss="alert">×</a></div>'
+				);
+			}else{
+				$this->flashMessage($this->translation['Item has been added to the shopping cart.'], 'success');
+			}
 		}else{
-			$this->flashMessage($this->translation['This item has been already added.'], 'danger');
+		if($this->isAjax()){
+				$snippets = array(
+					'snippet--flashMessages' => '<div class="alert alert-danger fade in">' . $this->translation['This item has been already added.'] . '<a href="#" class="close" data-dismiss="alert">×</a></div>'
+				);
+			}else{
+				$this->flashMessage($this->translation['This item has been already added.'], 'danger');
+			}
 		}
 		
-		$this->redirectThis();
+		if($this->isAjax()){
+			$box = $this->cartBox($this, $this->actualPage, TRUE);
+			$snippets['snippet--boxCart'] = $box->__toString();
+			
+			$this->payload->snippets = $snippets;
+		}else{
+			$this->redirectThis();
+		}
 	}
 	
 	/**
@@ -342,11 +363,12 @@ class CartPresenter extends BasePresenter{
 				));
 	}
 	
-	public function cartBox($context, $fromPage){
+	public function cartBox($context, $fromPage, $initAnimation = FALSE){
 		$eshopSession = $context->session->getSection('eshop' . $context->language->getId());
 		$order = $eshopSession->order;
 		
 		$template = $context->createTemplate();
+		$template->initAnimation = $initAnimation;
 		$template->setFile('../app/templates/eshop-module/boxes/cartBox.latte');
 		$template->link = $context->link(':Frontend:Eshop:Cart:default', array(
 			'id' => $fromPage->getId(),
@@ -370,4 +392,6 @@ class CartPresenter extends BasePresenter{
 		
 		return $template;
 	}
+	
+	
 }
