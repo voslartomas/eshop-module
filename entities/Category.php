@@ -237,7 +237,15 @@ class Category extends \AdminModule\Seo{
     }
 	
 	public function getProducts() {
-		return $this->products;
+		
+		$products = array();
+		foreach($this->products as $p){
+			if(!$p->getHide()){
+				$products[] = $p;
+			}
+		}
+		
+		return $products;
 	}
 
 	public function setProducts($products) {

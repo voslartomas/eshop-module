@@ -45,19 +45,22 @@ class EshopPresenter extends BasePresenter{
 		
 		$favouritesProducts = $this->repositoryProducts->findBy(array(
 			'language' => $this->language,
-			'favourite' => TRUE
+			'favourite' => TRUE,
+			'hide' => FALSE
 		), array(
 			'id' => 'ASC'
 		), 5, 0);
 		
 		$countActionProducts = $this->repositoryProducts->findBy(array(
 			'language' => $this->language,
-			'action' => TRUE
+			'action' => TRUE,
+			'hide' => FALSE
 		));
 		
 		$actionProducts = $this->repositoryProducts->findBy(array(
 			'language' => $this->language,
-			'action' => TRUE
+			'action' => TRUE,
+			'hide' => FALSE
 		), array(
 			'id' => 'DESC'
 		), 2, mt_rand(0, count($countActionProducts) - 2));
@@ -94,7 +97,8 @@ class EshopPresenter extends BasePresenter{
 		$template->offset = $offset + $limit;
 		$products = $this->repositoryProducts->findBy(array(
 			'language' => $this->language,
-			'favourite' => TRUE
+			'favourite' => TRUE,
+			'hide' => FALSE
 		), array(
 			'id' => 'ASC'
 		), $limit, $offset);

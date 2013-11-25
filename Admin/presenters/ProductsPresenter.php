@@ -51,6 +51,8 @@ class ProductsPresenter extends BasePresenter{
 		$form->addText('title', 'Name')->setAttribute('class', 'form-control')->setRequired('Please fill in a name.');
 		$form->addCheckbox('favourite', 'Favourite')->setAttribute('class', 'form-control');
 		$form->addCheckbox('action', 'Action')->setAttribute('class', 'form-control');
+		$form->addCheckbox('hide', 'Hide')->setAttribute('class', 'form-control');
+		$form->addText('store', 'Store')->setAttribute('class', 'form-control');
 		//$form->addText('price', 'Price')->setAttribute('class', 'form-control');
 		$form->addText('vat', 'Vat')->setAttribute('class', 'form-control');
 		$form->addText('priceWithVat', 'Price with VAT')->setAttribute('class', 'form-control');
@@ -94,6 +96,8 @@ class ProductsPresenter extends BasePresenter{
 
 		$this->product->setTitle($values->title);
 		$this->product->setLanguage($this->state->language);
+		$this->product->setHide($values->hide);
+		$this->product->setStore($values->store);
 		$this->product->setPrice($values->priceWithVat - $values->priceWithVat * ($values->vat / ($values->vat + 100)));
 		$this->product->setVat($values->vat);
 		$this->product->setFavourite($values->favourite);
