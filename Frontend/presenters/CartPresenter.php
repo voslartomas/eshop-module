@@ -419,21 +419,25 @@ class CartPresenter extends BasePresenter{
 				));
 		
 		if(is_object($order)){
-			$template->priceTotal = $order->getPriceTotal();
-			$template->priceTotalWithVat = $order->getPriceTotalWithVat();
 			
-			$count = 0;
-			foreach($order->getItems() as $item){
-				if($item->getType() !== \WebCMS\EshopModule\Doctrine\OrderItem::PAYMENT 
-						&& $item->getType() !== \WebCMS\EshopModule\Doctrine\OrderItem::SHIPPING) 
-					$count += $item->getQuantity();
+			if($order->getQuantityTotal() > 0){
+				$template->priceTotal = $order->getPriceTotal();
+				$template->priceTotalWithVat = $order->getPriceTotalWithVat();
+
+				$count = 0;
+				foreach($order->getItems() as $item){
+					if($item->getType() !== \WebCMS\EshopModule\Doctrine\OrderItem::PAYMENT 
+							&& $item->getType() !== \WebCMS\EshopModule\Doctrine\OrderItem::SHIPPING) 
+						$count += $item->getQuantity();
+				}
+
+				$template->itemsCount = $count;
+			}else{
+				$template->priceTotal = 0;
+				$template->priceTotalWithVat = 0;
+				$template->itemsCount = 0;
 			}
-			
-			$template->itemsCount = $count;
-		}else{
-			$template->priceTotal = 0;
-			$template->priceTotalWithVat = 0;
-			$template->itemsCount = 0;
+		
 		}
 		
 		return $template;

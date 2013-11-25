@@ -233,7 +233,21 @@ class Order extends \AdminModule\Doctrine\Entity {
 	}
 
 	public function getItems() {
-		return $this->items;
+		
+		$return = array();
+		foreach($this->items as $item){
+			if($item->getType() === OrderItem::ITEM){
+				$return[] = $item;
+			}
+		}
+		
+		foreach($this->items as $item){
+			if($item->getType() !== OrderItem::ITEM){
+				$return[] = $item;
+			}
+		}
+		
+		return $return;
 	}
 
 	public function setFirstname($firstname) {
