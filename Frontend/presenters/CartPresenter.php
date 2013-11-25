@@ -424,7 +424,9 @@ class CartPresenter extends BasePresenter{
 			
 			$count = 0;
 			foreach($order->getItems() as $item){
-				$count += $item->getQuantity();
+				if($item->getType() !== \WebCMS\EshopModule\Doctrine\OrderItem::PAYMENT 
+						&& $item->getType() !== \WebCMS\EshopModule\Doctrine\OrderItem::SHIPPING) 
+					$count += $item->getQuantity();
 			}
 			
 			$template->itemsCount = $count;

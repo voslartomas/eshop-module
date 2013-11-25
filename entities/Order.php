@@ -334,7 +334,9 @@ class Order extends \AdminModule\Doctrine\Entity {
 		$items = $this->getItems();
 		$total = 0;
 		foreach($items as $item){
-			$total += $item->getQuantity();
+			if($item->getType() === OrderItem::ITEM){
+				$total += $item->getQuantity();
+			}
 		}
 		
 		return $total;
