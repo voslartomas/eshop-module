@@ -51,8 +51,9 @@ class ProductsPresenter extends BasePresenter{
 		$form->addText('title', 'Name')->setAttribute('class', 'form-control')->setRequired('Please fill in a name.');
 		$form->addCheckbox('favourite', 'Favourite')->setAttribute('class', 'form-control');
 		$form->addCheckbox('action', 'Action')->setAttribute('class', 'form-control');
-		$form->addText('price', 'Price')->setAttribute('class', 'form-control');
+		//$form->addText('price', 'Price')->setAttribute('class', 'form-control');
 		$form->addText('vat', 'Vat')->setAttribute('class', 'form-control');
+		$form->addText('priceWithVat', 'Price with VAT')->setAttribute('class', 'form-control');
 		$form->addMultiSelect('categories', 'Categories')->setTranslator(NULL)->setItems($hierarchy)->setAttribute('class', 'form-control');
 		$form->addTextArea('description')->setAttribute('class', 'form-control editor');
 		
@@ -62,6 +63,7 @@ class ProductsPresenter extends BasePresenter{
 		
 		if($this->product){
 			$defaults = $this->product->toArray();
+			$defaults['priceWithVat'] = round($defaults['priceWithVat'], 4);
 			
 			$defaultCategories = array();
 			foreach($this->product->getCategories() as $c){
@@ -92,7 +94,7 @@ class ProductsPresenter extends BasePresenter{
 
 		$this->product->setTitle($values->title);
 		$this->product->setLanguage($this->state->language);
-		$this->product->setPrice($values->price);
+		$this->product->setPrice($values->priceWithVat - $values->priceWithVat * ($values->vat / ($values->vat + 100)));
 		$this->product->setVat($values->vat);
 		$this->product->setFavourite($values->favourite);
 		$this->product->setAction($values->action);

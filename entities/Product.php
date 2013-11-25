@@ -71,6 +71,16 @@ class Product extends \AdminModule\Seo {
 	 */
 	private $parameters;
 	
+	/**
+	 * @orm\Column(type="integer")
+	 */
+	private $store;
+	
+	/**
+	 * @orm\Column(type="boolean")
+	 */
+	private $hide;
+	
 	private $priceWithVat;
 	
 	private $link;
@@ -200,5 +210,21 @@ class Product extends \AdminModule\Seo {
 		}
 		
 		return new Photo();
+	}
+	
+	public function getStore() {
+		return $this->store;
+	}
+
+	public function getHide() {
+		return $this->hide;
+	}
+
+	public function setStore($store) {
+		$this->store = $store;
+	}
+
+	public function setHide($hide) {
+		$this->hide = $hide;
 	}
 }
