@@ -1,15 +1,17 @@
 {block #content}
-	
+
 	<h1>{_'Shopping cart'}</h1>
-	
+
 	{if count($order->getItems()) > 0}
-		<table class="table table-bordered table-hover">
+	<div class="table-responsive cartTable">
+		<table class="table table-striped table-hover">
 			<thead>
 				<tr>
 					<th>{_'Name'}</th>
 					<th>{_'Price'}</th>
 					<th>{_'Quantity'}</th>
 					<th>{_'Price total'}</th>
+					<th>{_'Price total with VAT'}</th>
 					<th>{_'Delete item'}</th>
 				</tr>
 			</thead>
@@ -18,13 +20,14 @@
 					<td>{$item->getName()}</td>
 					<td>{$item->getPrice()|price}</td>
 					<td>
-						<a title="{_'Increase quantity'}" class="btn btn-info" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() + 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr">&#43;</a>
+						<a title="{_'Increase quantity'}" class="btn btn-default" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() + 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr"><span class="glyphicon glyphicon-plus"></span></a>
 						{$item->getQuantity()}
-						<a title="{_'Decrease quantity'}" class="btn btn-info" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() - 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr">&#45;</a>
+						<a title="{_'Decrease quantity'}" class="btn btn-default" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() - 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr"><span class="glyphicon glyphicon-minus"></span></a>
 					</td>
 					<td>{$item->getPriceTotal()|price}</td>
+					<td>{$item->getPriceTotalWithVat()|price}</td>
 					<td>
-						<a class="btn btn-danger" n:href=":Frontend:Eshop:Cart:deleteCartItem $item->getItemId(), id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr">&times;</a>
+						<a class="btn btn-danger" n:href=":Frontend:Eshop:Cart:deleteCartItem $item->getItemId(), id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr"><span class="glyphicon glyphicon-remove"></span></a>
 					</td>
 				</tr>
 			{/foreach}
@@ -32,41 +35,168 @@
 				<th colspan="2">{_'Totals'}</th>
 				<th>{$order->getQuantityTotal()}</th>
 				<th>{$order->getPriceTotal()|price}</th>
+				<th>{$order->getPriceTotalWithVat()|price}</th>
 				<th>~</th>
 			</tfooter>
 		</table>
-		
+		<div class="cartSummary">
+			<strong>{_'Celkem k úhradě'}</strong><span>{$order->getPriceTotalWithVat()|price}</span><br />
+			<strong><small>{_'Bez DPH'}</small></strong><span>{$order->getPriceTotal()|price}</span>
+		</div>
+	</div>
 		{form cartForm}
-			
-			<div class="well">
-			
-				<h2>{_'Payment'}</h2>
-				<div>
-					{foreach $payments as $p}
-						<div>
-							<input type="radio" name="payment" id="p{$p->getId()}" value="{$p->getId()}" {if $order->getPayment() == $p->getId()}checked{/if} /> 
-							<label for="p{$p->getId()}">{$p->getTitle()} {$p->getPrice()|price}</label>
-						</div>
-					{/foreach}
-				</div>
 
-				<h2>{_'Shipping'}</h2>
-				<div>
-					{foreach $shippings as $p}
-						<div>
-							<input type="radio" name="shipping" id="s{$p->getId()}" value="{$p->getId()}" {if $order->getShipping() == $p->getId()}checked{/if} />
-							<label for="s{$p->getId()}">{$p->getTitle()} {$p->getPrice()|price}</label>
+			<div class="row">
+			    <div class="col-xs-12 col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+						<h2 class="panel-title">{_'Payment'}</h2>
 						</div>
-					{/foreach}
-				</div>
-				
-			</div>
-			
-		
-			{control cartForm}
+						<div class="panel-body">
+						  {foreach $payments as $p}
+							<div>
+								<input class="jq_payment" type="radio" name="payment" id="p{$p->getId()}" value="{$p->getId()}" {if $order->getPayment() == $p->getId()}checked{/if} />
+								<label for="p{$p->getId()}">{$p->getTitle()} {$p->getPriceWithVat()|price}</label>
+							</div>
+						{/foreach}
+						</div>
+					</div>
+			    </div>
+			    <div class="col-xs-12 col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+						<h2 class="panel-title">{_'Shipping'}</h2>
+						</div>
+						<div class="panel-body">
+						  {foreach $shippings as $p}
+							<div>
+								<input class="jq_shipping" type="radio" name="shipping" id="s{$p->getId()}" value="{$p->getId()}" {if $order->getShipping() == $p->getId()}checked{/if} />
+								<label for="s{$p->getId()}">{$p->getTitle()} {$p->getPriceWithVat()|price}</label>
+							</div>
+						{/foreach}
+						</div>
+					</div>
+			    </div>
+
+				<script>
+					$(function(){
+						$(".jq_payment").change(function(){
+							$.nette.ajax({ url : {plink setPayment path => $actualPage->getPath(), abbr => $abbr}, data : { idPayment : $(this).val() } });
+						});
+						
+						$(".jq_shipping").change(function(){
+							$.nette.ajax({ url : {plink setShipping path => $actualPage->getPath(), abbr => $abbr}, data : { idShipping : $(this).val() } });
+						});
+					});
+				</script>
+						
+					<div class="col-xs-12 col-md-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h2 class="panel-title">{_'Delivery'}</h2>
+							</div>
+							<div class="panel-body">
+								<div class="control-group">
+									{label firstname /}
+									<div class="controls">
+										{input firstname}
+									</div>
+								</div>
+								<div class="control-group">
+									{label lastname /}
+									<div class="controls">
+										{input lastname}
+									</div>
+								</div>
+								<div class="control-group">
+									{label email /}
+									<div class="controls">
+										{input email}
+									</div>
+								</div>
+								<div class="control-group">
+									{label phone /}
+									<div class="controls">
+										{input phone}
+									</div>
+								</div>
+								<div class="control-group">
+									{label street /}
+									<div class="controls">
+										{input street}
+									</div>
+								</div>
+								<div class="control-group">
+									{label city /}
+									<div class="controls">
+										{input city}
+									</div>
+								</div>
+								<div class="control-group">
+									{label postcode /}
+									<div class="controls">
+										{input postcode}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h2 class="panel-title">{_'Invoice'}</h2>
+								<p>{_'Fill in this form only if the invoice address is different to the delivery address.'}</p>
+							</div>
+							<div class="panel-body">
+								<div class="control-group">
+									{label invoiceCompany /}
+									<div class="controls">
+										{input invoiceCompany}
+									</div>
+								</div>
+								<div class="control-group">
+									{label invoiceNo /}
+									<div class="controls">
+										{input invoiceNo}
+									</div>
+								</div>
+								<div class="control-group">
+									{label invoiceVatNo /}
+									<div class="controls">
+										{input invoiceVatNo}
+									</div>
+								</div>
+								<div class="control-group">
+									{label invoiceStreet /}
+									<div class="controls">
+										{input invoiceStreet}
+									</div>
+								</div>
+								<div class="control-group">
+									{label invoiceCity /}
+									<div class="controls">
+										{input invoiceCity}
+									</div>
+								</div>
+								<div class="control-group">
+									{label invoicePostcode /}
+									<div class="controls">
+										{input invoicePostcode}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix">
+						<div class="col-xs-12 col-md-12 text-center">
+							{input send class => 'btn btn-primary btn-suprise-me'}
+						</div>
+					</div>
+
+		    </div><!-- /.row-->
 		{/form}
 	{else}
 		{_'There are no items in the shopping cart.'}
 	{/if}
-	
+
 {/block}

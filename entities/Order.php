@@ -151,8 +151,46 @@ class Order extends \AdminModule\Doctrine\Entity {
 		$this->items = new ArrayCollection();
 	}
 	
+	public function removePayment(){
+		foreach($this->items as $item){
+			if($item->getType() === OrderItem::PAYMENT){
+				$this->items->removeElement($item);
+			}
+		}
+	}
+	
+	public function addPayment($item){
+		$item->setOrder($this);
+		$item->setType(OrderItem::PAYMENT);
+		
+		$this->removePayment();
+		$this->items->add($item);
+		
+		$this->getPriceTotal();
+	}
+	
+	public function removeShipping(){
+		foreach($this->items as $item){
+			if($item->getType() === OrderItem::SHIPPING){
+				$this->items->removeElement($item);
+			}
+		}
+	}
+	
+	public function addShipping($item){
+		$item->setOrder($this);
+		$item->setType(OrderItem::SHIPPING);
+		
+		$this->removeShipping();
+		$this->items->add($item);
+		
+		$this->getPriceTotal();
+	}
+	
 	public function addItem($item){
 		$item->setOrder($this);
+		$item->setType(OrderItem::ITEM);
+		
 		$this->items->add($item);
 		
 		$this->getPriceTotal(); // recalculation

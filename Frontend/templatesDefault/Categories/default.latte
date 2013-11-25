@@ -1,17 +1,42 @@
 {block #content}
-	
+
 	{if !$product}
 		
-		<h1>{$title}</h1>
+		<section id="productGrid">
+		    <header>
+			<h1>{$title}</h1>
+		    </header>
 		
+			{!$category->getDescription()}
+			
 		{!$categories}
-
+		{var $counter = 0}
+		
+		    <ul>
 		{foreach $products as $p}
+		    {var $counter++}
+		    <li class="grid1x1 product">
+			<div class="linkWrapperWrapper">
+			    <div class="linkWrapper">
+				<a n:href=":Frontend:{$page->getModuleName()}:{$page->getPresenter()}:default path => $page->getPath() . '/' . $category->getPath(), parameters => array($p->getSlug()), abbr => $abbr">
+				    {$p->getPriceWithVat()|price}
+				</a>
+				<a n:href=":Frontend:{$page->getModuleName()}:{$page->getPresenter()}:default path => $page->getPath() . '/' . $category->getPath(), parameters => array($p->getSlug()), abbr => $abbr" title="{$p->getTitle()} {_'za'} {$p->getPrice()|price}" class="hideIt">
+				    {$p->getTitle()}
+				</a>
+			    </div>
+			    </div>
+			    <a n:href=":Frontend:{$page->getModuleName()}:{$page->getPresenter()}:default path => $page->getPath() . '/' . $category->getPath(), parameters => array($p->getSlug()), abbr => $abbr" title="{$p->getTitle()} {_'za'} {$p->getPrice()|price}">
+				<img src="{$basePath}{$p->getDefaultPicture()|thumbnail:'homepageBox'}" alt="" />	
+			    </a>
+{*
 			<a n:href=":Frontend:{$page->getModuleName()}:{$page->getPresenter()}:default path => $page->getPath() . '/' . $category->getPath(), parameters => array($p->getSlug()), abbr => $abbr">{$p->getTitle()}</a>
 			
-			{include '../addToCart.latte' item => $p}
+			{include '../addToCart.latte' item => $p} 
+  *}		</li>
 		{/foreach}
-		
+		    </ul>
+		</section><!-- /#productGrid -->
 	{else}
 		
 		{include 'productDetail.latte'}

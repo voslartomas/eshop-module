@@ -171,8 +171,8 @@ class CartPresenter extends BasePresenter{
 			$shipping->setVat($s->getVat());
 			$shipping->setQuantity(1);
 			
-			$this->order->addItem($payment);
-			$this->order->addItem($shipping);
+			$this->order->addPayment($payment);
+			$this->order->addShipping($shipping);
 			
 			// send info email with summary
 			$this->sendSummaryEmail($values);
@@ -186,6 +186,46 @@ class CartPresenter extends BasePresenter{
 		}else{
 			$this->flashMessage($this->translation['Please fill all required data.'], 'danger');
 		}
+		
+		$this->redirectThis();
+	}
+	
+	public function actionSetPayment($idPayment){
+		// add payment as order items
+		$p = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Payment')->find($idPayment);
+		
+		$payment = new \WebCMS\EshopModule\Doctrine\OrderItem;
+		$payment->setName($p->getTitle());
+		$payment->setPrice($p->getPrice());
+		$payment->setVat($p->getVat());
+		$payment->setQuantity(1);
+		
+		$this->order->addPayment($payment);
+		
+		$this->order->setPayment($idPayment);
+		$this->saveOrderState();
+		
+		$this->flashMessageTranslated('Payment has been setted.', 'success');
+		
+		$this->redirectThis();
+	}
+	
+	public function actionSetShipping($idShipping){
+		// add shipping as order item
+		$p = $this->em->getRepository('\WebCMS\EshopModule\Doctrine\Shipping')->find($idShipping);
+		
+		$shipping = new \WebCMS\EshopModule\Doctrine\OrderItem;
+		$shipping->setName($p->getTitle());
+		$shipping->setPrice($p->getPrice());
+		$shipping->setVat($p->getVat());
+		$shipping->setQuantity(1);
+		
+		$this->order->addShipping($shipping);
+		
+		$this->order->setShipping($idShipping);
+		$this->saveOrderState();
+		
+		$this->flashMessageTranslated('Shipping has been setted.', 'success');
 		
 		$this->redirectThis();
 	}

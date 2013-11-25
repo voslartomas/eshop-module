@@ -1,4 +1,148 @@
 {block #content}
-	<h1>{$actualPage->getTitle()}</h1>
 	
+	 <section id="promotion" role="promotion">
+		 <div class="innerWrap clearfix">
+		     <header><h1>{_'Akční produkty skate oblečení'}</h1></header>
+			 {foreach $actionProducts as $p}
+				 <article class="promoBlock{if $iterator->isLast()} last{/if}">
+				     <header><h1>{$p->getTitle()}</h1></header>
+				 <div class="linkWrapperWrapper">
+					 <div class="linkWrapper">
+					{include ../addToCart.latte item => $p, hideQuantity => TRUE}
+					 </div>
+				 </div>
+				     <div class="innerPromotion">
+					<img src="{$basePath}{$p->getDefaultPicture()|thumbnail:'homepagePromo'}" alt="skateandstreet-promo" class="centerThisImage"/>
+				    </div><!-- /.innerPromotion -->
+				 </article>
+			 {/foreach}
+		</div><!-- innerWrap -->
+	 </section>
+
+	<section id="productGrid">
+		<div class="innerWrap">
+				
+				{var $counter = 1}
+				    <ul class="clearfix">
+					<li class="grid1x1 title">
+					    <header class="makeMoreSpace">
+						    <h1><span>{_'Oblíbené kategorie'}</span> {_'SKATE OBLEČENÍ'}</h1>
+					    </header>
+					    <!-- nejspis nutne mit zde obrazek -->
+					    <img src="images/kategorie-yellow.png" alt="" />
+					</li><!-- jako nadpis -->
+				{foreach $favouriteCategories as $c}
+					{var $counter++}
+					<li class="grid1x1 category">
+						<div class="linkWrapperWrapper">
+							<div class="linkWrapper">
+							<a href="{$c->getLink()}" title="{$c->getTitle()}">
+								<div class="contentBackground"></div>
+								<div class="content">
+								<span class="ico heart"></span>
+									{$c->getTitle()}
+								</div>
+							</a>
+							</div>
+						</div>
+						<a href="{$c->getLink()}" title="{$c->getTitle()}">
+						    {if $c->getPicture() == NULL}
+							<img src="{$basePath}/images/missing-category.png" alt="missing-category" />
+						    {else}	
+							<img src="{$basePath}{$c->getPicture()|thumbnail:'homepageBox'}" alt="{$c->getPicture()|thumbnail:'homepageBox'}" />	
+						    {/if}
+						</a>	
+					</li>
+				{/foreach}
+				<li>
+				    <div class="grid1x1 title products">
+					    <div class="makeMoreSpace">
+						    <h1><span>{_'Dále jsou vámi'}</span> {_'OBLÍBENÉ KOUSKY'}</h1>
+					    </div>
+					    <!-- nejspis nutne mit zde obrazek -->
+					    <img src="images/produkty-blue.png" alt="" />
+				    </div><!-- jako nadpis -->
+				</li>
+				{var $counter++}
+				
+				{foreach $favouriteProducts as $c}
+					{var $counter++}
+				<li class="grid1x1 product {if $counter % 4 == 0} last{/if}">
+						<div class="linkWrapperWrapper">
+							<div class="linkWrapper">
+							<a href="{$c->getLink()}" title="{$c->getTitle()} {_'za'} {$c->getPrice()|price}">
+								{$c->getPriceWithVat()|price}
+							</a>
+							<a href="{$c->getLink()}" title="{$c->getTitle()} {_'za'} {$c->getPrice()|price}" class="hideIt">
+								{$c->getTitle()}
+							</a>
+							</div>
+						</div>
+						<a href="{$c->getLink()}" title="{$c->getTitle()} {_'za'} {$c->getPrice()|price}">
+							<img src="{$basePath}{$c->getDefaultPicture()|thumbnail:'homepageBox'}" alt="" />	
+						</a>
+				</li><!-- product -->
+				{/foreach}
+				    </ul>
+				
+				<div id="lazyLoader" class="text-center">
+					<!-- nekonecne strankovani. (i) nic krome vesmiru neni nekonecne! (ii) produkty by mohly byt nekonecne! :) -->
+					<a n:href="lazyLoadFavouriteProducts path => $actualPage->getPath(), abbr => $abbr, limit => $limit, offset => $limit, counter => $counter" class="btn btn-default btn-lg btn-suprise-me ajax" title="{_'Překvap mě dalšími kousky'}">
+					    <span class="glyphicon glyphicon-th"></span> &nbsp;&nbsp;{_'Překvap mě dalšími kousky'}
+					</a>
+				    <span class="ajaxLoader">
+						<img src="{$basePath}/images/preloader.gif" alt="preloader.gif" />
+				    </span>
+				</div>
+				
+					<script>
+						$(function(){
+							
+							$(".centerThisImage").one('load', function() {
+								centerImage(this);
+							  }).each(function() {
+								if(this.complete) $(this).load();
+							  });
+							
+							$.nette.init(function (ajaxHandler) {
+									
+								$('a.ajax').live('click', function(e){
+									e.preventDefault();
+									
+									$(".ajaxLoader").show();
+									
+									$.get($(this).attr('href'), function(data){
+										$(".btn-suprise-me").remove();
+										$(".product:last").after(data);
+										$(".ajaxLoader").hide();
+									});
+								});
+								
+								$('form.ajax').live('click', ajaxHandler);
+							});
+							
+						});
+						
+						$(window).resize(function() {
+						    //windowResize();
+						});
+						
+						function centerImage(img) {
+							img.style.marginLeft = -(img.width/2) + "px";
+							img.style.marginTop = -(img.height/2) + "px";
+						  }
+						
+						function windowResize(){
+							
+							
+						}
+
+						    
+
+						  
+					</script>
+					
+		</div><!-- innerWrap -->
+    </section><!-- /#productGrid -->
+
 {/block}

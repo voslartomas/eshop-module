@@ -1,9 +1,45 @@
-<h1>{$product->getTitle()}</h1>
+<div class="row">
+    <div class="col-xs-12 col-md-6">
+	<header>
+	    <h1>{$product->getTitle()}</h1>
+	</header>
+	<section class="productDescription">
+	    <div class="description descriptionBlock">
+		{!$product->getDescription()}
+	    </div>
+	    <div class="price descriptionBlock">
+		<span class="withVat">
+		    {$product->getPriceWithVat()|price}
+		</span>
+		<span class="withoutVat">
+		    {$product->getPrice()|price} {_'bez DPH 21 %'}
+		</span>
+		{include '../addToCart.latte' item => $product, shortText => TRUE}
+		<span class="clearfix"></span>
+	    </div>
 
-{$product->getPrice()|price}
+	</section>
 
-{$product->getPriceWithVat()|price}
+    </div><!-- /responsive-->
+    <div class="col-xs-12 col-md-offset-2 col-md-4">
+	<img src="{$basePath}{$product->getMainPhoto()->getPath()|thumbnail:'homepageBox'}" class="img-responsive"/>
+	<div class="row productThumbnails">
+	{foreach $product->getPhotos() as $photo}
+		<div class="col-sm-6 col-md-4 thumbHolder">
+			<div>
+				<a href="{$basePath}{$photo->getPath()}" data-lightbox="photogallery" title="{$photo->getTitle()}">
+					<img src="{$basePath}{$photo->getPath()|thumbnail:'system'}" class="img-responsive" />
+				</a>
+			</div>
+		</div>
+	{/foreach}
+	</div>
+    </div><!-- /responsive -->
 
-{$product->getDescription()}
+</div><!-- /.row -->
 
-{include '../addToCart.latte' item => $product}
+
+
+
+
+

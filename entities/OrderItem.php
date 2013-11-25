@@ -41,6 +41,14 @@ class OrderItem extends \AdminModule\Doctrine\Entity {
 	 */
 	private $order;
 	
+	private $type;
+	
+	const PAYMENT = 1;
+	
+	const SHIPPING = 2;
+	
+	const ITEM = 3;
+	
 	public function getItemId() {
 		return $this->itemId;
 	}
@@ -99,5 +107,13 @@ class OrderItem extends \AdminModule\Doctrine\Entity {
 	
 	public function getPriceTotalWithVat(){
 		return $this->getPriceWithVat() * $this->getQuantity();
+	}
+	
+	public function getType() {
+		return $this->type;
+	}
+
+	public function setType($type) {
+		$this->type = $type;
 	}
 }

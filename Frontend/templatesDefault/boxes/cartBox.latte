@@ -1,0 +1,27 @@
+<a href="{$link}" title="{_'Košík'} - {$itemsCount} {_'ks'} za {$priceTotalWithVat|price}" class="shoppingCart">
+	<div class="ico">
+		<!-- ico kosik -->
+	</div>
+		{_'Košík'}
+	<span class="amount">
+		{$itemsCount} {_'ks'}
+		<span class="price">{$priceTotalWithVat|price}</span>
+	</span>
+</a>
+
+{if $initAnimation}
+	<script>
+		(function($) {
+			$.fn.goTo = function() {
+				$('html, body').animate({
+					scrollTop: $(this).offset().top + 'px'
+				}, 'fast');
+				return this; // for chaining...
+			}
+		})(jQuery);
+
+		$(function(){
+			$("body").goTo();
+		});
+	</script>
+{/if}

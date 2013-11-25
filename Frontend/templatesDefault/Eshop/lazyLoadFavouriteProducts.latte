@@ -1,0 +1,29 @@
+{foreach $products as $c}
+	{var $counter++}
+	<div class="grid1x1 product {if $counter % 4 == 0} last{/if}">
+		<div class="linkWrapperWrapper">
+			<div class="linkWrapper">
+			<a href="{$c->getLink()}" title="{$c->getTitle()} {_'za'} {$c->getPrice()|price}">
+				{$c->getPriceWithVat()|price}
+			</a>
+			<a href="{$c->getLink()}" title="{$c->getTitle()} {_'za'} {$c->getPrice()|price}" class="hideIt">
+				{$c->getTitle()}
+			</a>
+			</div>
+		</div>
+		<a href="{$c->getLink()}" title="{$c->getTitle()} {_'za'} {$c->getPrice()|price}">
+			<img src="{$basePath}{$c->getDefaultPicture()|thumbnail:'homepageBox'}" alt="" />
+		</a>
+	</div><!-- product -->
+{/foreach}
+
+{if count($products) == $limit}
+    <div class="text-center">
+	<a n:href="lazyLoadFavouriteProducts path => $actualPage->getPath(), abbr => $abbr, limit => $limit, offset => $offset, counter => $counter" class="btnSkate ajax" title="{_'Překvap mě dalšími kousky'}">
+		{_'Překvap mě dalšími kousky'}
+	</a>
+    </div>
+{else}
+	<div class="clearfix"></div>
+	<div class="well well-lg text-center">{_'Už tu bohužel nic dalšího není.'}</div>
+{/if}
