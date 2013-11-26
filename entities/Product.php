@@ -81,6 +81,11 @@ class Product extends \AdminModule\Seo {
 	 */
 	private $hide;
 	
+	/**
+	 * @orm\OneToMany(targetEntity="ProductVariant", mappedBy="product", cascade={"persist"})
+	 */
+	private $variants;
+	
 	private $priceWithVat;
 	
 	private $link;
@@ -93,10 +98,15 @@ class Product extends \AdminModule\Seo {
 	public function __construct(){
 		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->photos = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->variants = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	public function addCategory($category){
 		$this->categories->add($category);
+	}
+	
+	public function addVariant($variant){
+		$this->variants->add($variant);
 	}
 	
 	public function getTitle() {
@@ -226,5 +236,21 @@ class Product extends \AdminModule\Seo {
 
 	public function setHide($hide) {
 		$this->hide = $hide;
+	}
+	
+	public function getParameters() {
+		return $this->parameters;
+	}
+
+	public function getVariants() {
+		return $this->variants;
+	}
+
+	public function setParameters($parameters) {
+		$this->parameters = $parameters;
+	}
+
+	public function setVariants($variants) {
+		$this->variants = $variants;
 	}
 }

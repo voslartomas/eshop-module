@@ -202,4 +202,23 @@ class ProductsPresenter extends BasePresenter{
 		$this->template->product = $this->product;
 		$this->template->idPage = $idPage;
 	}
+	
+	protected function createComponentProductsVariantGrid($name){
+				
+		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\ProductVariant', NULL,
+			array(
+				'product = ' . $this->product
+			)
+		);
+		
+		$grid->addColumnText('title', 'Name')->setSortable()->setFilterText();
+		$grid->addColumnNumber('price', 'Price')->setCustomRender(function($item){
+			return \WebCMS\PriceFormatter::format($item->getPrice()) . ' (' .\WebCMS\PriceFormatter::format($item->getPriceWithVat()) . ')';
+		})->setSortable()->setFilterNumber();
+		
+		$grid->addActionHref("updateVariant", 'Edit', 'updateVariant', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
+		$grid->addActionHref("deleteVariant", 'Delete', 'deleteVariant', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
+
+		return $grid;
+	}
 }
