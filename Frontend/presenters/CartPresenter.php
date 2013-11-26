@@ -438,7 +438,11 @@ class CartPresenter extends BasePresenter{
 				$template->itemsCount = 0;
 			}
 		
-		}
+		}else{
+				$template->priceTotal = 0;
+				$template->priceTotalWithVat = 0;
+				$template->itemsCount = 0;
+			}
 		
 		return $template;
 	}
