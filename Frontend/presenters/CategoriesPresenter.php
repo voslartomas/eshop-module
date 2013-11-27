@@ -76,7 +76,9 @@ class CategoriesPresenter extends BasePresenter{
 			$category = $this->repository->findBy(array(
 				'slug' => $lastParam
 			));
+			
 			$category = $category[0];
+			
 			$title = $category->getTitle();
 			
 			foreach($parameters as $p){
@@ -87,8 +89,18 @@ class CategoriesPresenter extends BasePresenter{
 			}
 			
 			// and finally add product to breadcrumbs
-			if($product) 
+			if($product){
+				// set product url
+				$product->setLink(
+					$this->link(':Frontend:Eshop:Categories:default', array(
+						'id' => $category->getId(),
+						'path' => $this->actualPage->getPath() . '/' . $category->getPath() . '/' . $product->getSlug(),
+						'abbr' => $this->abbr
+					))
+				);
+				
 				$this->addBreadcrumbsItem($category, $product);
+			}
 			
 			// check for products
 			$products = $category->getProducts();

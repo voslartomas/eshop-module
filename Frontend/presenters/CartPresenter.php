@@ -133,10 +133,17 @@ class CartPresenter extends BasePresenter{
 		$this->order->setInvoiceCity($values->invoiceCity);
 		$this->order->setInvoicePostcode($values->invoicePostcode);
 		
-		if(array_key_exists('payment', $_POST)) 
+		if(array_key_exists('payment', $_POST)){
 			$this->order->setPayment($_POST['payment']);
-		if(array_key_exists('shipping', $_POST)) 
+		}else{
+			$this->flashMessageTranslated('Please pick payment.', 'info');
+		}
+		
+		if(array_key_exists('shipping', $_POST)){
 			$this->order->setShipping($_POST['shipping']);
+		}else{
+			$this->flashMessageTranslated('Please pick shipping.', 'info');
+		}
 		
 		$this->order->getPriceTotal(); // TODO no tohle je trochu blbe volat ne? alespon globalni funkci pro vsechny ceny
 		
@@ -266,9 +273,24 @@ class CartPresenter extends BasePresenter{
 			$items .= $item->getName() . ' ' . $item->getQuantity() . ' x ' . \WebCMS\SystemHelper::price($item->getPriceWithVat()) . ' = ' . \WebCMS\SystemHelper::price($item->getPriceTotalWithVat()) . '<br />';
 		}
 		
+		// get account URL
+		$moduleAccount = $this->em->getRepository('AdminModule\Module')->findOneBy(array(
+			'name' => 'Account'
+		));
+		
+		$page = $this->em->getRepository('AdminModule\Page')->findOneBy(array(
+			'module' => $moduleAccount
+		));
+		
+		$accountUrl = $this->link('//default', array(
+			'path' => $page->getPath(),
+			'abbr' => $this->abbr
+		));
+		
 		// email
 		$email = new \Nette\Mail\Message;
 		$email->addTo($values->email);
+		$email->addBcc($this->settings->get('Info email', \WebCMS\Settings::SECTION_BASIC)->getValue());
 		$email->setFrom($this->settings->get('Info email', \WebCMS\Settings::SECTION_BASIC)->getValue());
 		$email->setSubject($this->translation['Order was created.']);
 		$email->setHtmlBody($this->settings->get('Order saved email', 'eshopModule')->getValue(FALSE, 
@@ -282,7 +304,8 @@ class CartPresenter extends BasePresenter{
 					'[POSTCODE]',
 					'[TOTAL_PRICE]',
 					'[TOTAL_PRICE_WITH_VAT]',
-					'[ORDER_ITEMS]'
+					'[ORDER_ITEMS]',
+					'[ACCOUNT_URL]'
 				),
 				array(
 					$values->firstname,
@@ -294,7 +317,8 @@ class CartPresenter extends BasePresenter{
 					$values->postcode,
 					\WebCMS\SystemHelper::price($this->order->getPriceTotal()),
 					\WebCMS\SystemHelper::price($this->order->getPriceTotalWithVat()),
-					$items
+					$items,
+					$accountUrl
 				)
 			));
 		
