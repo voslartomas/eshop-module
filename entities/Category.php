@@ -121,6 +121,10 @@ class Category extends \AdminModule\Seo{
     {
         return $this->slug;
     }
+	
+	public function setSlug($slug) {
+		$this->slug = $slug;
+	}
 
     public function getId()
     {

@@ -41,6 +41,10 @@ class CategoriesPresenter extends BasePresenter{
 		
 		$form = $this->createForm();
 		$form->addText('title', 'Name')->setAttribute('class', 'form-control');
+		$form->addText('slug', 'SEO adresa url')->setAttribute('class', 'form-control');
+		$form->addText('metaTitle', 'SEO title')->setAttribute('class', 'form-control');
+		$form->addText('metaDescription', 'SEO description')->setAttribute('class', 'form-control');
+		$form->addText('metaKeywords', 'SEO keywords')->setAttribute('class', 'form-control');
 		$form->addSelect('parent', 'Parent')->setTranslator(NULL)->setItems($hierarchy)->setAttribute('class', 'form-control');
 		$form->addCheckbox('visible', 'Show')->setAttribute('class', 'form-control')->setDefaultValue(1);
 		$form->addCheckbox('favourite', 'Favourite')->setAttribute('class', 'form-control');
@@ -71,6 +75,10 @@ class CategoriesPresenter extends BasePresenter{
 			$parent = NULL;
 
 		$this->category->setTitle($values->title);
+		$this->category->setSlug($values->slug);
+		$this->category->setMetaTitle($values->metaTitle);
+		$this->category->setMetaDescription($values->metaDescription);
+		$this->category->setMetaKeywords($values->metaKeywords);
 		$this->category->setVisible($values->visible);
 		$this->category->setParent($parent);
 		$this->category->setFavourite($values->favourite);
@@ -85,6 +93,8 @@ class CategoriesPresenter extends BasePresenter{
 		
 		if(!$this->category->getId()) $this->em->persist($this->category); // FIXME only if is new we have to persist entity, otherway it can be just flushed
 		$this->em->flush();
+		
+		// FIXME it is necessary to recalculate childrens path when slug is changed or is changed parent!
 		
 		// creates path
 		$path = $this->repository->getPath($this->category);

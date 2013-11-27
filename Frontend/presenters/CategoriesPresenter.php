@@ -99,7 +99,18 @@ class CategoriesPresenter extends BasePresenter{
 					))
 				);
 				
+				// seo settings
+				$this->actualPage->setMetaTitle($product->getMetaTitle());
+				$this->actualPage->setMetaDescription($product->getMetaDescription());
+				$this->actualPage->setMetaKeywords($product->getMetaKeywords());
+				
 				$this->addBreadcrumbsItem($category, $product);
+			}else{
+				// category
+				// seo settings
+				$this->actualPage->setMetaTitle($category->getMetaTitle());
+				$this->actualPage->setMetaDescription($category->getMetaDescription());
+				$this->actualPage->setMetaKeywords($category->getMetaKeywords());
 			}
 			
 			// check for products

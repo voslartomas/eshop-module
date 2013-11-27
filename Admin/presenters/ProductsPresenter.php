@@ -55,6 +55,10 @@ class ProductsPresenter extends BasePresenter{
 		
 		$form = $this->createForm();
 		$form->addText('title', 'Name')->setAttribute('class', 'form-control')->setRequired('Please fill in a name.');
+		$form->addText('slug', 'SEO adresa url')->setAttribute('class', 'form-control');
+		$form->addText('metaTitle', 'SEO title')->setAttribute('class', 'form-control');
+		$form->addText('metaDescription', 'SEO description')->setAttribute('class', 'form-control');
+		$form->addText('metaKeywords', 'SEO keywords')->setAttribute('class', 'form-control');
 		$form->addCheckbox('favourite', 'Favourite')->setAttribute('class', 'form-control');
 		$form->addCheckbox('action', 'Action')->setAttribute('class', 'form-control');
 		$form->addCheckbox('hide', 'Hide')->setAttribute('class', 'form-control');
@@ -89,6 +93,10 @@ class ProductsPresenter extends BasePresenter{
 		$values = $form->getValues();
 
 		$this->product->setTitle($values->title);
+		$this->product->setSlug($values->slug);
+		$this->product->setMetaTitle($values->metaTitle);
+		$this->product->setMetaDescription($values->metaDescription);
+		$this->product->setMetaKeywords($values->metaKeywords);
 		$this->product->setLanguage($this->state->language);
 		$this->product->setHide($values->hide);
 		$this->product->setStore($values->store);

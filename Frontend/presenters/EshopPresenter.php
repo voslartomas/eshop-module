@@ -123,7 +123,7 @@ class EshopPresenter extends BasePresenter{
 		}
 	}
 	
-	private function setProductsLinks($products, $catPage){
+	public function setProductsLinks($products, $catPage){
 		foreach($products as $c){
 			
 			$category = $c->getCategories();
