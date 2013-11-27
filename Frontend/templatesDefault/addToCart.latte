@@ -1,8 +1,64 @@
 {if isset($cartUrl)}
-	<form method="POST" action="{$cartUrl}">
+	
+	{if !isset($hideQuantity)}
+		{var $hideQuantity = FALSE}
+	{/if}
+
+	{if !isset($shortText)}
+		{var $shortText = FALSE}
+	{/if}
+	
+	<form method="POST" action="{$cartUrl}" class="ajax form-inline">
+	    <div class="form-group">
 		<input type="hidden" name="itemId" value="{$item->getId()}" />
-		<input type="number" name="quantity" value="1" />
-		<input type="submit" name="add" value="{_'Add item to cart'}" />
+		<input type="number" name="quantity" class="form-control" value="1" {if $hideQuantity}style="display:none;"{/if} />
+		
+		<!--<input type="submit" name="add" value="{_'Add item to cart'}" />-->
+		{if $shortText}
+			
+			<span>
+				{if count($item->getVariants()) > 0}
+					<select name="variant" class="jq_variant" required>
+						<option value="error">{_'Pick a product variant'}</option>
+						{foreach $item->getVariants() as $variant}
+							<option {if array_key_exists('variant', $_GET)}{if $_GET['variant'] == $variant->getId()}selected{/if}{/if} name="variant" value="{$variant->getId()}">{$variant->getTitle()} - {$variant->getPriceWithVat()|price}</option>
+						{/foreach}
+					</select>
+					
+					<script>
+						$(function(){
+							$(".jq_variant").change(function(){
+								var url = {plink :Frontend:{$page->getModuleName()}:{$page->getPresenter()}:default path => $page->getPath() . '/' . $category->getPath(), parameters => array($item->getSlug()), abbr => $abbr};	
+								
+								if($(this).val() !== 'error'){
+									 url = url + '?variant=' + $(this).val()
+								}
+								
+								window.location = url;
+							});
+						});
+					</script>
+				{/if}
+			</span>
+			
+			<button type="submit" name="add" class="btn btn-default btn-lg btn-buy">
+				<div class="contentBackground"></div>
+				<div class="content">
+				<span class="ico heart"></span>
+				{_'Koupit'}
+				</div>
+			</button>
+		{else}
+			
+			<button type="submit" name="add">
+				<div class="contentBackground"></div>
+				<div class="content">
+				<span class="ico heart"></span>
+				{_'Koupit hned'}
+				</div>
+			</button>
+		{/if}
+	    </div>
 	</form>
 {else}
 	{_'No shopping cart is defined.'}

@@ -13,7 +13,7 @@
         </a>
       </h4>
     </div>
-    <div id="collapseTwo" class="panel-collapse collapse in">
+    <div id="collapseTwo" class="panel-collapse collapse{if $panel == 'basic'} in{/if}">
       <div class="panel-body">
         {control productForm}
       </div>
@@ -55,26 +55,30 @@
 		
       </div>
     </div>
-	<div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-          {_'Product variant'}
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse">
-      <div class="panel-body">
-        
-		  {control productsVariantGrid}
-		  
-			<br /><br />
-		 
-      </div>
+	{if $product->getId()}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+			  <h4 class="panel-title">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+				  {_'Product variant'}
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseThree" class="panel-collapse collapse{if $panel == 'variants'} in{/if}">
+			  <div class="panel-body">
 
-		
-      </div>
-    </div>
+				  <a class="btn btn-primary ajax" n:href="Products:updateVariant idPage => $idPage, idProduct => $product->getId()" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add variant'}</a>
+
+					<br /><br />
+
+				  {control productsVariantGrid}
+
+			  </div>
+
+
+			  </div>
+		</div>
+	{/if}
   </div>
 </div>
 	{/form}

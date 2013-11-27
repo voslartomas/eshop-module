@@ -43,6 +43,8 @@ class OrderItem extends \AdminModule\Doctrine\Entity {
 	
 	private $type;
 	
+	private $variant;
+	
 	const PAYMENT = 1;
 	
 	const SHIPPING = 2;
@@ -115,5 +117,13 @@ class OrderItem extends \AdminModule\Doctrine\Entity {
 
 	public function setType($type) {
 		$this->type = $type;
+	}
+	
+	public function getVariant() {
+		return $this->variant;
+	}
+
+	public function setVariant($variant) {
+		$this->variant = $variant;
 	}
 }

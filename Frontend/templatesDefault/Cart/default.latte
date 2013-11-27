@@ -2,7 +2,7 @@
 
 	<h1>{_'Shopping cart'}</h1>
 
-	{if count($order->getItems()) > 0}
+	{if $order->getQuantityTotal() > 0}
 	<div class="table-responsive cartTable">
 		<table class="table table-striped table-hover">
 			<thead>
@@ -20,14 +20,18 @@
 					<td>{$item->getName()}</td>
 					<td>{$item->getPrice()|price}</td>
 					<td>
-						<a title="{_'Increase quantity'}" class="btn btn-default" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() + 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr"><span class="glyphicon glyphicon-plus"></span></a>
-						{$item->getQuantity()}
-						<a title="{_'Decrease quantity'}" class="btn btn-default" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() - 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr"><span class="glyphicon glyphicon-minus"></span></a>
+						{if $item->getType() === WebCMS\EshopModule\Doctrine\OrderItem::ITEM}
+							<a title="{_'Increase quantity'}" class="btn btn-default" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() + 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr"><span class="glyphicon glyphicon-plus"></span></a>
+							{$item->getQuantity()}
+							<a title="{_'Decrease quantity'}" class="btn btn-default" n:href=":Frontend:Eshop:Cart:setQuantity $item->getItemId(), $item->getQuantity() - 1, id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr"><span class="glyphicon glyphicon-minus"></span></a>
+						{/if}
 					</td>
 					<td>{$item->getPriceTotal()|price}</td>
 					<td>{$item->getPriceTotalWithVat()|price}</td>
 					<td>
-						<a class="btn btn-danger" n:href=":Frontend:Eshop:Cart:deleteCartItem $item->getItemId(), id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr"><span class="glyphicon glyphicon-remove"></span></a>
+						{if $item->getType() === WebCMS\EshopModule\Doctrine\OrderItem::ITEM}
+							<a class="btn btn-danger" n:href=":Frontend:Eshop:Cart:deleteCartItem $item->getItemId(), variant => $item->getVariant(), id => $actualPage->getId(), path => $actualPage->getPath(), abbr => $abbr"><span class="glyphicon glyphicon-remove"></span></a>
+						{/if}
 					</td>
 				</tr>
 			{/foreach}

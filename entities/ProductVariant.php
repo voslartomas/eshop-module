@@ -56,7 +56,7 @@ class ProductVariant extends \AdminModule\Doctrine\Entity {
 	}
 	
 	public function getPriceWithVat() {
-		return $this->price * (($this->vat / 100) + 1);
+		return $this->price * (($this->product->getVat() / 100) + 1);
 	}
 
 	public function getLink() {

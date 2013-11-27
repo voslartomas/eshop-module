@@ -35,7 +35,14 @@ class CartPresenter extends BasePresenter{
 	
 	public function actionDefault($id){
 		if(array_key_exists('itemId', $_REQUEST)){
-			$this->addCartItem($_REQUEST['itemId'], $_REQUEST['quantity']);
+			
+			if(!array_key_exists('variant', $_REQUEST)){
+				$variant = 0;
+			}else{
+				$variant = $_REQUEST['variant'];
+			}
+			
+			$this->addCartItem($_REQUEST['itemId'], $_REQUEST['quantity'], $variant);
 		}
 	}
 	
@@ -306,9 +313,10 @@ class CartPresenter extends BasePresenter{
 	 * Remove item from shopping cart.
 	 * @param type $itemId
 	 */
-	public function actionDeleteCartItem($itemId){
+	public function actionDeleteCartItem($itemId, $variant){
+		
 		foreach($this->order->getItems() as $item){
-			if($itemId === $item->getItemId()){
+			if($itemId === $item->getItemId() && $variant == $item->getVariant()){
 				$this->order->removeItem($item);
 			}
 		}
@@ -339,34 +347,56 @@ class CartPresenter extends BasePresenter{
 	 * @param type $itemId
 	 * @param type $quantity
 	 */
-	private function addCartItem($itemId, $quantity){
-		if(!$this->existsInCart($itemId)){
-			$product = $this->productRepository->find($itemId);
-
-			$item = new \WebCMS\EshopModule\Doctrine\OrderItem;
-			$item->setItemId($itemId);
-			$item->setName($product->getTitle());
-			$item->setQuantity($quantity);
-			$item->setPrice($product->getPrice());
-			$item->setVat($product->getVat());
-
-			$this->order->addItem($item);
+	private function addCartItem($itemId, $quantity, $variant){
+		
+		$error = FALSE;
+		if($variant === 'error'){
+			$snippets = array(
+				'snippet--flashMessages' => '<div class="alert alert-danger fade in">' . $this->translation['Please choose product variant.'] . '<a href="#" class="close" data-dismiss="alert">×</a></div>'
+			);
 			
-			if($this->isAjax()){
-				$snippets = array(
-					'snippet--flashMessages' => '<div class="alert alert-success fade in">' . $this->translation['Item has been added to the shopping cart.'] . '<a href="#" class="close" data-dismiss="alert">×</a></div>'
-				);
+			$error = TRUE;
+		}
+		
+		if(!$error){
+		
+			if(!$this->existsInCart($itemId, $variant)){
+				$product = $this->productRepository->find($itemId);
+				
+				$variantEntity = $this->em->getRepository('WebCMS\EshopModule\Doctrine\ProductVariant')->find($variant);
+				
+				$item = new \WebCMS\EshopModule\Doctrine\OrderItem;
+				$item->setItemId($itemId);
+				$item->setName($product->getTitle());
+				$item->setQuantity($quantity);
+				$item->setPrice($product->getPrice());
+				$item->setVariant($variant);
+				$item->setVat($product->getVat());
+				
+				if(is_object($variantEntity)){
+					$item->setName($item->getName() . ' - ' . $variantEntity->getTitle());
+					$item->setPrice($variantEntity->getPrice());
+				}
+				
+				$this->order->addItem($item);
+
+				if($this->isAjax()){
+					$snippets = array(
+						'snippet--flashMessages' => '<div class="alert alert-success fade in">' . $this->translation['Item has been added to the shopping cart.'] . '<a href="#" class="close" data-dismiss="alert">×</a></div>'
+					);
+				}else{
+					$this->flashMessage($this->translation['Item has been added to the shopping cart.'], 'success');
+				}
 			}else{
-				$this->flashMessage($this->translation['Item has been added to the shopping cart.'], 'success');
+				if($this->isAjax()){
+					$snippets = array(
+						'snippet--flashMessages' => '<div class="alert alert-danger fade in">' . $this->translation['This item has been already added.'] . '<a href="#" class="close" data-dismiss="alert">×</a></div>'
+					);
+				}else{
+					$this->flashMessage($this->translation['This item has been already added.'], 'danger');
+				}
 			}
-		}else{
-		if($this->isAjax()){
-				$snippets = array(
-					'snippet--flashMessages' => '<div class="alert alert-danger fade in">' . $this->translation['This item has been already added.'] . '<a href="#" class="close" data-dismiss="alert">×</a></div>'
-				);
-			}else{
-				$this->flashMessage($this->translation['This item has been already added.'], 'danger');
-			}
+		
 		}
 		
 		if($this->isAjax()){
@@ -384,9 +414,9 @@ class CartPresenter extends BasePresenter{
 	 * @param type $itemId
 	 * @return boolean
 	 */
-	private function existsInCart($itemId){
+	private function existsInCart($itemId, $variant){
 		foreach($this->order->getItems() as $item){
-			if($itemId === $item->getItemId())
+			if($itemId === $item->getItemId() && $variant === $item->getVariant())
 				return TRUE;
 		}
 		

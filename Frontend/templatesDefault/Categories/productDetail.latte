@@ -5,7 +5,14 @@
 	</header>
 	<section class="productDescription">
 	    <div class="description descriptionBlock">
-		{!$product->getDescription()}
+			
+			{if $product->getStore() > 0}
+				{_'It is in store.'}
+			{else}
+				{_'It is not in store.'}
+			{/if}
+			
+			{!$product->getDescription()}
 	    </div>
 	    <div class="price descriptionBlock">
 		<span class="withVat">
@@ -14,6 +21,7 @@
 		<span class="withoutVat">
 		    {$product->getPrice()|price} {_'bez DPH 21 %'}
 		</span>
+		
 		{include '../addToCart.latte' item => $product, shortText => TRUE}
 		<span class="clearfix"></span>
 	    </div>

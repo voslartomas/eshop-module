@@ -23,7 +23,6 @@ class CategoriesPresenter extends BasePresenter{
 
 	protected function beforeRender() {
 		
-		
 		$parameters = $this->getParameter('parameters');
 		
 		$product = NULL;
@@ -53,9 +52,22 @@ class CategoriesPresenter extends BasePresenter{
 			$product = $this->productRepository->findBy(array(
 				'slug' => $lastParam
 			));
+			
 			if(count($product) > 0){
 				unset($parameters[count($parameters) - 1]);
 				$product = $product[0];
+			}
+			
+			// variants
+			$idVariant = $this->getParameter('variant');
+			if($idVariant){
+				$variant = $this->em->getRepository('WebCMS\EshopModule\Doctrine\ProductVariant')->find($idVariant);
+				
+				$this->em->detach($product);
+				
+				$product->setPrice($variant->getPrice());
+				$product->setStore($variant->getStore());
+				$product->setTitle($product->getTitle() . ' - ' . $variant->getTitle());
 			}
 			
 			// define category

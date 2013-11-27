@@ -15,8 +15,13 @@ class ProductsPresenter extends BasePresenter{
 	
 	private $repository;
 	
+	private $variantRepository;
+	
 	/* @var \WebCMS\EshopModule\Doctrine\Product */
 	private $product;
+	
+	/* @var \WebCMS\EshopModule\Doctrine\ProductVariant */
+	private $variant;
 	
 	private $photos;
 	
@@ -35,6 +40,7 @@ class ProductsPresenter extends BasePresenter{
 		
 		$this->categoryRepository = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Category');
 		$this->repository = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Product');
+		$this->variantRepository = $this->em->getRepository('WebCMS\EshopModule\Doctrine\ProductVariant');
 	}
 	
 	protected function createComponentProductForm(){
@@ -65,7 +71,7 @@ class ProductsPresenter extends BasePresenter{
 		
 		if($this->product){
 			$defaults = $this->product->toArray();
-			$defaults['priceWithVat'] = round($defaults['priceWithVat'], 4);
+			$defaults['priceWithVat'] = round($defaults['priceWithVat'], 2);
 			
 			$defaultCategories = array();
 			foreach($this->product->getCategories() as $c){
@@ -77,18 +83,6 @@ class ProductsPresenter extends BasePresenter{
 		}
 		
 		return $form;
-	}
-	
-	public function actionUpdateProduct($idPage, $id){
-		if($id) $this->product = $this->repository->find($id);
-		else $this->product = new \WebCMS\EshopModule\Doctrine\Product();
-		
-		if($this->product->getId()) $this->photos = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Photo')->findBy(array(
-			'product' => $this->product
-		));
-	else 
-		$this->photos = array();
-	
 	}
 	
 	public function productFormSubmitted(UI\Form $form){
@@ -195,19 +189,38 @@ class ProductsPresenter extends BasePresenter{
 			$this->redirect('Products:default', array('idPage' => $idPage));
 	}
 		
-	public function renderUpdateProduct($idPage){
+	public function actionUpdateProduct($idPage, $id){
+		if($id) $this->product = $this->repository->find($id);
+		else $this->product = new \WebCMS\EshopModule\Doctrine\Product();
+		
+		if($this->product->getId()){
+			$this->photos = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Photo')->findBy(array(
+				'product' => $this->product
+			));
+		}
+		else{ 
+			$this->photos = array();
+		}
+	}
+	
+	public function renderUpdateProduct($idPage, $panel){
 		$this->reloadContent();
+		
+		if(!$panel){
+			$panel = 'basic';
+		}
 		
 		$this->template->photos = $this->photos;
 		$this->template->product = $this->product;
 		$this->template->idPage = $idPage;
+		$this->template->panel = $panel;
 	}
 	
 	protected function createComponentProductsVariantGrid($name){
-				
+		
 		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\ProductVariant', NULL,
 			array(
-				'product = ' . $this->product
+				'product = ' . $this->product->getId()
 			)
 		);
 		
@@ -215,10 +228,84 @@ class ProductsPresenter extends BasePresenter{
 		$grid->addColumnNumber('price', 'Price')->setCustomRender(function($item){
 			return \WebCMS\PriceFormatter::format($item->getPrice()) . ' (' .\WebCMS\PriceFormatter::format($item->getPriceWithVat()) . ')';
 		})->setSortable()->setFilterNumber();
+		$grid->addColumnNumber('store', 'Store');
 		
-		$grid->addActionHref("updateVariant", 'Edit', 'updateVariant', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
-		$grid->addActionHref("deleteVariant", 'Delete', 'deleteVariant', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
+		$grid->addActionHref("updateVariant", 'Edit', 'updateVariant', array('idPage' => $this->actualPage->getId(), 'idProduct' => $this->product->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
+		$grid->addActionHref("deleteVariant", 'Delete', 'deleteVariant', array('idPage' => $this->actualPage->getId(), 'idProduct' => $this->product->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
 
 		return $grid;
+	}
+	
+	public function createComponentVariantForm(){
+		$form = $this->createForm();
+		
+		$form->addText('title', 'Title')->setAttribute('class', 'form-control')->setRequired();
+		$form->addText('priceWithVat', 'Price with VAT')->setAttribute('class', 'form-control');
+		$form->addText('store', 'Store')->setAttribute('class', 'form-control');
+		$form->addHidden('idProduct')->setDefaultValue($this->product->getId());
+		
+		$form->addSubmit('save', 'Save')->setAttribute('class', 'btn btn-success');
+		$form->onSuccess[] = callback($this, 'variantFormSubmitted');
+		
+		if($this->variant->getId()){
+			$defaults = $this->variant->toArray();
+			$defaults['priceWithVat'] = round($defaults['priceWithVat'], 2);
+			
+			$form->setDefaults($defaults);
+		}
+		
+		return $form;
+	}
+	
+	public function variantFormSubmitted($form){
+		$values = $form->getValues();
+		
+		$product = $this->repository->find($values->idProduct);
+		
+		$this->variant->setTitle($values->title);
+		$this->variant->setPrice($values->priceWithVat - $values->priceWithVat * ($product->getVat() / ($product->getVat() + 100)));
+		$this->variant->setStore($values->store);
+		$this->variant->setProduct($product);
+		
+		if(!$this->variant->getId()){
+			$this->em->persist($this->variant);
+		}
+		
+		$this->em->flush();
+
+		$this->flashMessage($this->translation['Product variant has been added.'], 'success');
+		
+		$this->redirect('updateProduct', array(
+			'idPage' => $this->getParameter('idPage'),
+			'id' => $values->idProduct,
+			'panel' => 'variants'
+		));
+	}
+	
+	public function actionUpdateVariant($idPage, $idProduct, $id){
+		if($id) $this->variant = $this->variantRepository->find($id);
+		else $this->variant = new \WebCMS\EshopModule\Doctrine\ProductVariant;	
+		
+		if($idProduct) $this->product = $this->repository->find($idProduct);
+		else $this->product = new \WebCMS\EshopModule\Doctrine\Product();
+	}
+	
+	public function renderUpdateVariant(){
+		$this->reloadModalContent();
+	}
+	
+	public function actionDeleteVariant($id, $idProduct, $idPage){
+		
+		$variant = $this->variantRepository->find($id);
+	
+		$this->em->remove($variant);
+		$this->em->flush();
+		
+		$this->flashMessage($this->translation['Product variant has been deleted.'], 'success');
+		$this->redirect('updateProduct', array(
+			'idPage' => $idPage,
+			'id' => $idProduct,
+			'panel' => 'variants'
+		));
 	}
 }
