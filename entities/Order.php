@@ -422,7 +422,14 @@ class Order extends \AdminModule\Doctrine\Entity {
 
 	public function setStatus($status) {
 		
-		if($status->getStoreDecrease() && ($this->status->getId() != $status->getId())){
+		$decrease = TRUE;
+		if($this->status){
+			if($this->status->getId() === $status->getId()){
+				$decrease = FALSE;
+			}
+		}
+		
+		if($status->getStoreDecrease() && $decrease){
 			foreach($this->getItems() as $item){
 				if($item->getProduct() && !$item->getProductVariant()){
 					$newStore = $item->getProduct()->getStore() - $item->getQuantity();

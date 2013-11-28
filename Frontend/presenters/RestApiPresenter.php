@@ -56,8 +56,10 @@ class RestApiPresenter extends BasePresenter{
 			if($this->action === 'product' && $this->id){
 				
 				$this->updateProduct($this->id, $_POST);
+			}elseif($this->action === 'order' && !$this->id){
+				$this->createOrder($_POST);
 			}else{
-				$this->sendResponse(new \Nette\Application\Responses\JsonResponse('Not found')); 
+				$this->sendAPIResponse('404', 'Bad request.', array());
 			}
 		// delete actions
 		}elseif($this->method === 'DELETE'){
@@ -91,6 +93,11 @@ class RestApiPresenter extends BasePresenter{
 					'href' => '/product/id',
 					'rel' => 'update',
 					'method' => 'PUT'
+				),
+				array(
+					'href' => '/order',
+					'rel' => 'create',
+					'method' => 'POST'
 				)
 			)
 		);
@@ -181,5 +188,45 @@ class RestApiPresenter extends BasePresenter{
 		);
 		
 		$this->sendResponse(new \Nette\Application\Responses\JsonResponse($r));
+	}
+
+	private function createOrder($data) {
+		
+		$status = $this->em->getRepository('WebCMS\EshopModule\Doctrine\OrderState')->findOneBy(array(
+			'storeDecrease' => TRUE
+		));
+				
+		$order = new \WebCMS\EshopModule\Doctrine\Order;
+		$order->setFirstname($this->translation['API order']);
+		
+		// order items
+		foreach($data['idProduct'] as $id){
+			$product = $this->productRepository->find($id);
+			
+			$orderItem = new \WebCMS\EshopModule\Doctrine\OrderItem;
+			$orderItem->setOrder($order);
+			$orderItem->setName($product->getTitle());
+			$orderItem->setPrice($product->getPrice());
+			$orderItem->setQuantity(1);
+			$orderItem->setType(\WebCMS\EshopModule\Doctrine\OrderItem::ITEM);
+			$orderItem->setVat($product->getVat());
+			
+			if(is_object($product->getVariantParent())){
+				$orderItem->setProductVariant($product);
+				$orderItem->setProduct($product->getVariantParent());
+			}else{
+				$orderItem->setProduct($product);
+			}
+			
+			$order->addItem($orderItem);
+		}
+		
+		$order->setStatus($status);
+		$order->getPriceTotal();
+		
+		$this->em->persist($order);
+		$this->em->flush();
+		
+		$this->sendAPIResponse('200', 'Order created.', NULL);
 	}
 }
