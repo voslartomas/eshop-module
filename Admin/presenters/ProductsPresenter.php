@@ -15,8 +15,6 @@ class ProductsPresenter extends BasePresenter{
 	
 	private $repository;
 	
-	private $variantRepository;
-	
 	/* @var \WebCMS\EshopModule\Doctrine\Product */
 	private $product;
 	
@@ -40,7 +38,6 @@ class ProductsPresenter extends BasePresenter{
 		
 		$this->categoryRepository = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Category');
 		$this->repository = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Product');
-		$this->variantRepository = $this->em->getRepository('WebCMS\EshopModule\Doctrine\ProductVariant');
 	}
 	
 	protected function createComponentProductForm(){
@@ -80,6 +77,11 @@ class ProductsPresenter extends BasePresenter{
 			$defaultCategories = array();
 			foreach($this->product->getCategories() as $c){
 				$defaultCategories[] = $c->getId();
+			}
+			
+			// store
+			if(count($this->product->getVariants()) > 0){
+				$form['store']->disabled = 'disabled';
 			}
 			
 			$defaults['categories'] = $defaultCategories;
@@ -179,6 +181,7 @@ class ProductsPresenter extends BasePresenter{
 		$grid->addColumnNumber('vat', 'Vat')->setCustomRender(function($item){
 			return $item->getVat() . '%';
 		})->setSortable()->setFilterNumber();
+		$grid->addColumnNumber('store', 'Store')->setSortable()->setFilterNumber();
 				
 		$grid->addActionHref("updateProduct", 'Edit', 'updateProduct', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
 		$grid->addActionHref("deleteProduct", 'Delete', 'deleteProduct', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
@@ -226,9 +229,9 @@ class ProductsPresenter extends BasePresenter{
 	
 	protected function createComponentProductsVariantGrid($name){
 		
-		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\ProductVariant', NULL,
+		$grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\Product', NULL,
 			array(
-				'product = ' . $this->product->getId()
+				'variantParent = ' . $this->product->getId()
 			)
 		);
 		
@@ -273,7 +276,8 @@ class ProductsPresenter extends BasePresenter{
 		$this->variant->setTitle($values->title);
 		$this->variant->setPrice($values->priceWithVat - $values->priceWithVat * ($product->getVat() / ($product->getVat() + 100)));
 		$this->variant->setStore($values->store);
-		$this->variant->setProduct($product);
+		$this->variant->setVat($product->getVat());
+		$this->variant->setVariantParent($product);
 		
 		if(!$this->variant->getId()){
 			$this->em->persist($this->variant);
@@ -291,8 +295,8 @@ class ProductsPresenter extends BasePresenter{
 	}
 	
 	public function actionUpdateVariant($idPage, $idProduct, $id){
-		if($id) $this->variant = $this->variantRepository->find($id);
-		else $this->variant = new \WebCMS\EshopModule\Doctrine\ProductVariant;	
+		if($id) $this->variant = $this->repository->find($id);
+		else $this->variant = new \WebCMS\EshopModule\Doctrine\Product;	
 		
 		if($idProduct) $this->product = $this->repository->find($idProduct);
 		else $this->product = new \WebCMS\EshopModule\Doctrine\Product();
@@ -304,7 +308,7 @@ class ProductsPresenter extends BasePresenter{
 	
 	public function actionDeleteVariant($id, $idProduct, $idPage){
 		
-		$variant = $this->variantRepository->find($id);
+		$variant = $this->repository->find($id);
 	
 		$this->em->remove($variant);
 		$this->em->flush();

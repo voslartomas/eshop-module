@@ -61,7 +61,7 @@ class CategoriesPresenter extends BasePresenter{
 			// variants
 			$idVariant = $this->getParameter('variant');
 			if($idVariant){
-				$variant = $this->em->getRepository('WebCMS\EshopModule\Doctrine\ProductVariant')->find($idVariant);
+				$variant = $this->productRepository->find($idVariant);
 				
 				$this->em->detach($product);
 				

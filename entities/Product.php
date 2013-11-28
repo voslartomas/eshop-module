@@ -51,17 +51,17 @@ class Product extends \AdminModule\Seo {
 	private $price;
 	
 	/**
-	 * @orm\Column(type="integer")
+	 * @orm\Column(type="integer", nullable=true)
 	 */
 	private $vat;
 	
 	/**
-	 * @orm\Column(type="boolean")
+	 * @orm\Column(type="boolean", nullable=true)
 	 */
 	private $favourite;
 	
 	/**
-	 * @orm\Column(type="boolean")
+	 * @orm\Column(type="boolean", nullable=true)
 	 */
 	private $action;
 	
@@ -77,12 +77,18 @@ class Product extends \AdminModule\Seo {
 	private $store;
 	
 	/**
-	 * @orm\Column(type="boolean")
+	 * @orm\Column(type="boolean", nullable=true)
 	 */
 	private $hide;
 	
 	/**
-	 * @orm\OneToMany(targetEntity="ProductVariant", mappedBy="product", cascade={"persist"})
+	 * @orm\ManyToOne(targetEntity="Product", inversedBy="variants")
+	 * @orm\JoinColumn(onDelete="CASCADE")
+	 */
+	private $variantParent;
+	
+	/**
+	 * @orm\OneToMany(targetEntity="Product", mappedBy="variantParent", cascade={"persist"})
 	 */
 	private $variants;
 	
@@ -91,7 +97,7 @@ class Product extends \AdminModule\Seo {
 	private $link;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $defaultPicture;
 	
@@ -223,7 +229,17 @@ class Product extends \AdminModule\Seo {
 	}
 	
 	public function getStore() {
-		return $this->store;
+		
+		if(count($this->getVariants()) > 0){
+			$store = 0;
+			foreach($this->getVariants() as $variant){
+				$store += $variant->getStore();
+			}
+		}else{
+			$store = $this->store;
+		}
+		
+		return $store;
 	}
 
 	public function getHide() {
@@ -252,5 +268,13 @@ class Product extends \AdminModule\Seo {
 
 	public function setVariants($variants) {
 		$this->variants = $variants;
+	}
+	
+	public function getVariantParent() {
+		return $this->variantParent;
+	}
+
+	public function setVariantParent($variantParent) {
+		$this->variantParent = $variantParent;
 	}
 }

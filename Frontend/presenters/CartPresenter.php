@@ -349,11 +349,11 @@ class CartPresenter extends BasePresenter{
 		$this->redirectThis();
 	}
 	
-	public function actionSetQuantity($itemId, $quantity){
+	public function actionSetQuantity($itemId, $quantity, $variant){
 		if($quantity > 0){
 		
 			foreach($this->order->getItems() as $item){
-				if($itemId === $item->getItemId()){
+				if($itemId === $item->getItemId() && $variant === $item->getVariant()){
 					$item->setQuantity($quantity);
 				}
 			}
@@ -383,11 +383,11 @@ class CartPresenter extends BasePresenter{
 		}
 		
 		if(!$error){
-		
+			
 			if(!$this->existsInCart($itemId, $variant)){
 				$product = $this->productRepository->find($itemId);
 				
-				$variantEntity = $this->em->getRepository('WebCMS\EshopModule\Doctrine\ProductVariant')->find($variant);
+				$variantEntity = $this->productRepository->find($variant);
 				
 				$item = new \WebCMS\EshopModule\Doctrine\OrderItem;
 				$item->setItemId($itemId);
