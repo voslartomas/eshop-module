@@ -40,6 +40,11 @@ class Eshop extends \WebCMS\Module {
 		array(
 			'name' => 'Parameters',
 			'frontend' => FALSE
+			),
+		array(
+			'name' => 'RestApi',
+			'frontend' => TRUE,
+			'parameters' => TRUE
 			)
 	);
 	
