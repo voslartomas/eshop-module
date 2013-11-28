@@ -92,6 +92,16 @@ class Product extends \AdminModule\Seo {
 	 */
 	private $variants;
 	
+	/**
+	 * @orm\Column()
+	 */
+	private $barcode;
+	
+	/**
+	 *  @orm\Column
+	 */
+	private $barcodeType;
+	
 	private $priceWithVat;
 	
 	private $link;
@@ -276,5 +286,21 @@ class Product extends \AdminModule\Seo {
 
 	public function setVariantParent($variantParent) {
 		$this->variantParent = $variantParent;
+	}
+	
+	public function getBarcode() {
+		return $this->barcode;
+	}
+
+	public function getBarcodeType() {
+		return $this->barcodeType;
+	}
+
+	public function setBarcode($barcode) {
+		$this->barcode = $barcode;
+	}
+
+	public function setBarcodeType($barcodeType) {
+		$this->barcodeType = $barcodeType;
 	}
 }

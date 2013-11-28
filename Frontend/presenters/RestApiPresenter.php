@@ -10,12 +10,16 @@ class RestApiPresenter extends BasePresenter{
 	
 	public function startup() {
 		parent::startup();
+		
+		$this->getContext()->container->httpResponse->setContentType('application/json', 'UTF-8');
 	}
 	
 	/**
 	 * JSON list with links and version of the API
 	 */
-	public function renderDefault(){}
+	public function renderDefault(){
+		
+	}
 	
 	
 	

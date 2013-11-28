@@ -56,6 +56,8 @@ class ProductsPresenter extends BasePresenter{
 		$form->addText('metaTitle', 'SEO title')->setAttribute('class', 'form-control');
 		$form->addText('metaDescription', 'SEO description')->setAttribute('class', 'form-control');
 		$form->addText('metaKeywords', 'SEO keywords')->setAttribute('class', 'form-control');
+		$form->addText('barcode', 'Barcode')->setAttribute('class', 'form-control');
+		$form->addText('barcodeType', 'Barcode type')->setAttribute('class', 'form-control');
 		$form->addCheckbox('favourite', 'Favourite')->setAttribute('class', 'form-control');
 		$form->addCheckbox('action', 'Action')->setAttribute('class', 'form-control');
 		$form->addCheckbox('hide', 'Hide')->setAttribute('class', 'form-control');
@@ -99,6 +101,8 @@ class ProductsPresenter extends BasePresenter{
 		$this->product->setMetaTitle($values->metaTitle);
 		$this->product->setMetaDescription($values->metaDescription);
 		$this->product->setMetaKeywords($values->metaKeywords);
+		$this->product->setBarcode($values->barcode);
+		$this->product->setBarcodeType($values->barcodeType);
 		$this->product->setLanguage($this->state->language);
 		$this->product->setHide($values->hide);
 		$this->product->setStore($values->store);
