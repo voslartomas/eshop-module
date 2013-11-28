@@ -188,6 +188,19 @@ class CartPresenter extends BasePresenter{
 			$this->order->addPayment($payment);
 			$this->order->addShipping($shipping);
 			
+			// set product and variant entity
+			foreach($this->order->getItems() as $item){
+				if($item->getItemId()){
+					$product = $this->productRepository->find($item->getItemId());
+					$item->setProduct($product);
+				}
+				
+				if($item->getVariant()){
+					$product = $this->productRepository->find($item->getVariant());
+					$item->setProductVariant($product);
+				}
+			}
+			
 			// send info email with summary
 			$this->sendSummaryEmail($values);
 			
@@ -398,7 +411,7 @@ class CartPresenter extends BasePresenter{
 				$item->setVat($product->getVat());
 				
 				if(is_object($variantEntity)){
-					$item->setName($item->getName() . ' - ' . $variantEntity->getTitle());
+					$item->setName($variantEntity->getTitle());
 					$item->setPrice($variantEntity->getPrice());
 				}
 				

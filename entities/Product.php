@@ -126,7 +126,14 @@ class Product extends \AdminModule\Seo {
 	}
 	
 	public function getTitle() {
-		return $this->title;
+		
+		if(count($this->getVariantParent()) > 0){
+			$title = $this->getVariantParent()->getTitle() . ' - ' . $this->title;
+		}else{
+			$title = $this->title;
+		}
+		
+		return $title;
 	}
 
 	public function getDescription() {

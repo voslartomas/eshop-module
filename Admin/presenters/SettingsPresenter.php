@@ -234,6 +234,10 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 			'0' => 'No',
 			'1' => 'Yes'
 		))->setFilterText();
+		$grid->addColumnText('storeDecrease', 'Store decrease')->setReplacement(array(
+			'0' => 'No',
+			'1' => 'Yes'
+		))->setFilterText();
 		
 		$grid->addActionHref("updateStatus", 'Edit', 'updateStatus', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
 		$grid->addActionHref("deleteStatus", 'Delete', 'deleteStatus', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
@@ -257,6 +261,7 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 		
 		$form->addText('title', 'Title');
 		$form->addCheckbox('default', 'Default');
+		$form->addCheckbox('storeDecrease', 'Store decrease');
 		$form->addSubmit('send', 'Save');
 		
 		$form->onSuccess[] = callback($this, 'statusFormSubmitted');
@@ -282,6 +287,7 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 		
 		$this->status->setTitle($values->title);
 		$this->status->setDefault($values->default);
+		$this->status->setStoreDecrease($values->storeDecrease);
 		$this->status->setLanguage($this->state->language);
 		
 		if(!$this->status->getId())

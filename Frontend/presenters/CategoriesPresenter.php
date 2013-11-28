@@ -67,7 +67,6 @@ class CategoriesPresenter extends BasePresenter{
 				
 				$product->setPrice($variant->getPrice());
 				$product->setStore($variant->getStore());
-				$product->setTitle($product->getTitle() . ' - ' . $variant->getTitle());
 			}
 			
 			// define category

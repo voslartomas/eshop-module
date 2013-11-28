@@ -13,6 +13,7 @@ use Doctrine\orm\Mapping as orm;
  */
 class OrderItem extends \AdminModule\Doctrine\Entity {
 	
+	
 	private $itemId;
 	
 	/**
@@ -40,6 +41,16 @@ class OrderItem extends \AdminModule\Doctrine\Entity {
 	 * @orm\JoinColumn(onDelete="CASCADE")
 	 */
 	private $order;
+	
+	/**
+	 * @orm\ManyToOne(targetEntity="Product")
+	 */
+	private $product;
+	
+	/**
+	 * @orm\ManyToOne(targetEntity="Product")
+	 */
+	private $productVariant;
 	
 	private $type;
 	
@@ -125,5 +136,21 @@ class OrderItem extends \AdminModule\Doctrine\Entity {
 
 	public function setVariant($variant) {
 		$this->variant = $variant;
+	}
+	
+	public function getProduct() {
+		return $this->product;
+	}
+
+	public function getProductVariant() {
+		return $this->productVariant;
+	}
+
+	public function setProduct($product) {
+		$this->product = $product;
+	}
+
+	public function setProductVariant($productVariant) {
+		$this->productVariant = $productVariant;
 	}
 }

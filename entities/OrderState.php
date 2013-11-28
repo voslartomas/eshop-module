@@ -26,6 +26,11 @@ class OrderState extends \AdminModule\Doctrine\Entity{
 	 */
 	private $language;
 	
+	/**
+	 * @orm\Column(type="boolean")
+	 */
+	private $storeDecrease;
+	
 	public function getTitle() {
 		return $this->title;
 	}
@@ -48,5 +53,13 @@ class OrderState extends \AdminModule\Doctrine\Entity{
 
 	public function setLanguage($language) {
 		$this->language = $language;
+	}
+	
+	public function getStoreDecrease() {
+		return $this->storeDecrease;
+	}
+
+	public function setStoreDecrease($storeDecrease) {
+		$this->storeDecrease = $storeDecrease;
 	}
 }

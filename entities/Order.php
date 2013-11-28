@@ -19,32 +19,32 @@ class Order extends \AdminModule\Doctrine\Entity {
 	private $firstname;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $lastname;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $email;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $phone;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $street;
 	
 	/**
-	 * @orm\Column
+	 * @orm\Column(nullable=true)
 	 */
 	private $city;
 	
 	/**
-	 * @orm\Column(type="integer")
+	 * @orm\Column(type="integer", nullable=true)
 	 */
 	private $postcode;
 	
@@ -421,6 +421,19 @@ class Order extends \AdminModule\Doctrine\Entity {
 	}
 
 	public function setStatus($status) {
+		
+		if($status->getStoreDecrease() && ($this->status->getId() != $status->getId())){
+			foreach($this->getItems() as $item){
+				if($item->getProduct() && !$item->getProductVariant()){
+					$newStore = $item->getProduct()->getStore() - $item->getQuantity();
+					$item->getProduct()->setStore($newStore);
+				}elseif($item->getProductVariant()){
+					$newStore = $item->getProductVariant()->getStore() - $item->getQuantity();
+					$item->getProductVariant()->setStore($newStore);
+				}
+			}
+		}
+		
 		$this->status = $status;
 	}
 	

@@ -84,6 +84,8 @@ class ProductsPresenter extends BasePresenter{
 			// store
 			if(count($this->product->getVariants()) > 0){
 				$form['store']->disabled = 'disabled';
+				$form['barcode']->disabled = 'disabled';
+				$form['barcodeType']->disabled = 'disabled';
 			}
 			
 			$defaults['categories'] = $defaultCategories;
@@ -101,11 +103,15 @@ class ProductsPresenter extends BasePresenter{
 		$this->product->setMetaTitle($values->metaTitle);
 		$this->product->setMetaDescription($values->metaDescription);
 		$this->product->setMetaKeywords($values->metaKeywords);
-		$this->product->setBarcode($values->barcode);
-		$this->product->setBarcodeType($values->barcodeType);
 		$this->product->setLanguage($this->state->language);
 		$this->product->setHide($values->hide);
-		$this->product->setStore($values->store);
+		
+		if($values->offsetExists('store')){
+			$this->product->setStore($values->store);
+			$this->product->setBarcode($values->barcode);
+			$this->product->setBarcodeType($values->barcodeType);
+		}
+		
 		$this->product->setPrice($values->priceWithVat - $values->priceWithVat * ($values->vat / ($values->vat + 100)));
 		$this->product->setVat($values->vat);
 		$this->product->setFavourite($values->favourite);
@@ -244,6 +250,7 @@ class ProductsPresenter extends BasePresenter{
 			return \WebCMS\PriceFormatter::format($item->getPrice()) . ' (' .\WebCMS\PriceFormatter::format($item->getPriceWithVat()) . ')';
 		})->setSortable()->setFilterNumber();
 		$grid->addColumnNumber('store', 'Store');
+		$grid->addColumnNumber('barcode', 'Barcode');
 		
 		$grid->addActionHref("updateVariant", 'Edit', 'updateVariant', array('idPage' => $this->actualPage->getId(), 'idProduct' => $this->product->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
 		$grid->addActionHref("deleteVariant", 'Delete', 'deleteVariant', array('idPage' => $this->actualPage->getId(), 'idProduct' => $this->product->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
@@ -257,6 +264,8 @@ class ProductsPresenter extends BasePresenter{
 		$form->addText('title', 'Title')->setAttribute('class', 'form-control')->setRequired();
 		$form->addText('priceWithVat', 'Price with VAT')->setAttribute('class', 'form-control');
 		$form->addText('store', 'Store')->setAttribute('class', 'form-control');
+		$form->addText('barcode', 'Barcode')->setAttribute('class', 'form-control');
+		$form->addText('barcodeType', 'Barcode type')->setAttribute('class', 'form-control');
 		$form->addHidden('idProduct')->setDefaultValue($this->product->getId());
 		
 		$form->addSubmit('save', 'Save')->setAttribute('class', 'btn btn-success');
@@ -280,6 +289,8 @@ class ProductsPresenter extends BasePresenter{
 		$this->variant->setTitle($values->title);
 		$this->variant->setPrice($values->priceWithVat - $values->priceWithVat * ($product->getVat() / ($product->getVat() + 100)));
 		$this->variant->setStore($values->store);
+		$this->variant->setBarcode($values->barcode);
+		$this->variant->setBarcodeType($values->barcodeType);
 		$this->variant->setVat($product->getVat());
 		$this->variant->setVariantParent($product);
 		
