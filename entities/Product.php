@@ -46,7 +46,7 @@ class Product extends \AdminModule\Seo {
 	private $language;
 	
 	/**
-	 * @orm\Column(type="decimal", precision=12, scale=4)
+	 * @orm\Column(type="decimal", precision=12, scale=4, nullable=true)
 	 */
 	private $price;
 	
@@ -72,7 +72,7 @@ class Product extends \AdminModule\Seo {
 	private $parameters;
 	
 	/**
-	 * @orm\Column(type="integer")
+	 * @orm\Column(type="integer", nullable=true)
 	 */
 	private $store;
 	
@@ -93,12 +93,12 @@ class Product extends \AdminModule\Seo {
 	private $variants;
 	
 	/**
-	 * @orm\Column()
+	 * @orm\Column(nullable=true)
 	 */
 	private $barcode;
 	
 	/**
-	 *  @orm\Column
+	 *  @orm\Column(nullable=true)
 	 */
 	private $barcodeType;
 	

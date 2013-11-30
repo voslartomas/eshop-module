@@ -53,9 +53,9 @@ class RestApiPresenter extends BasePresenter{
 		// create actions
 		}elseif($this->method === 'POST'){
 			
-			if($this->action === 'product' && $this->id){
+			if($this->action === 'product' && !$this->id){
 				
-				$this->updateProduct($this->id, $_POST);
+				$this->updateProduct($_POST);
 			}elseif($this->action === 'order' && !$this->id){
 				$this->createOrder($_POST);
 			}else{
@@ -153,30 +153,66 @@ class RestApiPresenter extends BasePresenter{
 	 * @param type $id
 	 * @param type $data
 	 */
-	private function updateProduct($id, $data){
+	private function updateProduct($data){
 		
-		$product = $this->productRepository->find($id);
+		if(array_key_exists('barcode', $data) && array_key_exists('title', $data)){
+			
+			$product = $this->productRepository->findOneBy(array(
+				'barcode' => $data['barcode']
+			));
+
+			if(is_object($product)){
+
+				$this->setAttribute($product, $data, 'store');
+
+				$this->em->flush();
+
+				$this->sendAPIResponse('200', 'Product ' . $product->getTitle() . ' updated.', $this->productToArray($product));
+
+			}else{
+			
+				$product = new \WebCMS\EshopModule\Doctrine\Product;
+				
+				if(!array_key_exists('vat', $data)){
+					$product->setVat(0);
+				}
+				
+				$this->setAttribute($product, $data, 'title');
+				$this->setAttribute($product, $data, 'price');
+				$this->setAttribute($product, $data, 'vat');
+				$this->setAttribute($product, $data, 'barcode');
+				$this->setAttribute($product, $data, 'barcodeType');
+				$this->setAttribute($product, $data, 'store');
+				
+				if(!array_key_exists('price', $data)){
+					$product->setPrice(0);
+				}else{
+					$product->setPrice($data['price'] - $data['price'] * ($product->getVat() / ($product->getVat() + 100)));
+				}
+				
+				$product->setLanguage($this->language);
+				$product->setHide(true);
+				
+				$this->em->persist($product);
+				$this->em->flush();
+				
+				$this->sendAPIResponse('200', 'Product ' . $product->getTitle() . ' added.', $this->productToArray($product));
+			}
 		
-		if($product->getId()){
-			
-			$this->setAttribute($product, $data, 'barcode');
-			$this->setAttribute($product, $data, 'barcodeType');
-			$this->setAttribute($product, $data, 'store');
-			
-			$this->em->flush();
-			
-			$this->sendAPIResponse('200', 'Product updated.', $this->productToArray($product));
-			
 		}else{
-			// product not found
+			$this->sendAPIResponse('501', 'No barcode or title.', null);
 		}
 	}
 	
 	private function setAttribute($entity, $data, $key){
 		if(array_key_exists($key, $data)){
 			$getter = 'set' . ucfirst($key);
-			$entity->$getter($data[$key]);
+			
+			if(method_exists($entity, $getter)){
+				$entity->$getter($data[$key]);
+			}
 		}
+		
 	}
 	
 	private function sendAPIResponse($status, $message, $response){

@@ -74,7 +74,10 @@ class ProductsPresenter extends BasePresenter{
 		
 		if($this->product){
 			$defaults = $this->product->toArray();
-			$defaults['priceWithVat'] = round($defaults['priceWithVat'], 2);
+			
+			if(array_key_exists('priceWithVat', $defaults)){
+				$defaults['priceWithVat'] = round($defaults['priceWithVat'], 2);
+			}
 			
 			$defaultCategories = array();
 			foreach($this->product->getCategories() as $c){
