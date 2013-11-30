@@ -38,12 +38,20 @@ class RestApiPresenter extends BasePresenter{
 			$this->id = $parameters[1];
 		}
 		
+		// TODO request authentication
+		
 		// listing actions
 		if($this->method === 'GET'){
 			if(!$this->action){
 				$this->baseResource();
 			}elseif($this->action === 'product' && !$this->id){
-				$this->listProducts();
+				
+				$barcodes = false;
+				if(array_key_exists('onlyWithoutBarcode', $_GET)){
+					$barcodes = true;
+				}
+				
+				$this->listProducts(null, $barcodes);
 			}elseif($this->action === 'product' && $this->id){
 				$this->listProducts($this->id);
 			}
@@ -53,17 +61,34 @@ class RestApiPresenter extends BasePresenter{
 		// create actions
 		}elseif($this->method === 'POST'){
 			
-			if($this->action === 'product' && !$this->id){
-				
-				$this->updateProduct($_POST);
-			}elseif($this->action === 'order' && !$this->id){
-				$this->createOrder($_POST);
-			}else{
-				$this->sendAPIResponse('404', 'Bad request.', array());
+			// check if request is authorized
+			if($this->checkHash($_POST['hash'])){
+			
+				if($this->action === 'product' && !$this->id){
+
+					$this->updateProduct($_POST);
+				}elseif($this->action === 'barcode'){
+
+					$this->fillBarcode($_POST);
+				}elseif($this->action === 'order' && !$this->id){
+					$this->createOrder($_POST);
+				}elseif($this->action === 'configuration'){
+					$this->checkConfiguration($_POST);
+				}else{
+					$this->sendAPIResponse('400', 'Bad request.', array());
+				}
 			}
 		// delete actions
 		}elseif($this->method === 'DELETE'){
 			
+		}
+	}
+	
+	private function checkHash($hash){
+		if($this->getApiHash() == $hash){
+			return TRUE;
+		}else{
+			$this->sendAPIResponse('401', 'Not authorized.', null);
 		}
 	}
 	
@@ -109,10 +134,17 @@ class RestApiPresenter extends BasePresenter{
 	 * Returns list of products or one product in JSON.
 	 * @param type $id Id of product to get
 	 */
-	private function listProducts($id = NULL){
+	private function listProducts($id = NULL, $onlyWithoutBarcode = FALSE){
 		
 		if(!$id){
-			$products = $this->productRepository->findAll();
+			
+			if($onlyWithoutBarcode){
+				$products = $this->productRepository->findBy(array(
+					'barcode' => ""
+				));
+			}else{
+				$products = $this->productRepository->findAll();
+			}
 			
 			$r = array();
 			foreach($products as $p){
@@ -126,8 +158,7 @@ class RestApiPresenter extends BasePresenter{
 			$response = $this->productToArray($product);
 		}
 		
-		
-		$this->sendResponse(new \Nette\Application\Responses\JsonResponse($response));
+		$this->sendAPIResponse('200', 'Successfuly fetched product data.', $response);
 	}
 	
 	/**
@@ -204,6 +235,23 @@ class RestApiPresenter extends BasePresenter{
 		}
 	}
 	
+	private function checkConfiguration($data){
+		$hash = $data['hash'];
+		
+		if($hash === $this->getApiHash()){
+			$this->sendAPIResponse('200', 'API hash is correct.', null);
+		}else{
+			$this->sendAPIResponse('0', 'API hash is incorrect.', null);
+		}
+	}
+	
+	private function getApiHash(){
+		$identification = $this->settings->get('API identificator', 'eshopModule', 'text', array())->getValue();
+		$token = $this->settings->get('API token', 'eshopModule', 'text', array())->getValue();
+		
+		return sha1($identification . $token . $identification);
+	}
+	
 	private function setAttribute($entity, $data, $key){
 		if(array_key_exists($key, $data)){
 			$getter = 'set' . ucfirst($key);
@@ -264,5 +312,17 @@ class RestApiPresenter extends BasePresenter{
 		$this->em->flush();
 		
 		$this->sendAPIResponse('200', 'Order created.', NULL);
+	}
+	
+	private function fillBarcode($data){
+		
+		$product = $this->productRepository->find($data['id']);
+		
+		$this->setAttribute($product, $data, 'barcode');
+		$this->setAttribute($product, $data, 'barcodeType');
+		
+		$this->em->flush();
+		
+		$this->sendAPIResponse('200', 'Barcode update for ' . $product->getTitle() . '.', $this->productToArray($product));
 	}
 }

@@ -194,6 +194,7 @@ class ProductsPresenter extends BasePresenter{
 		$grid->addColumnNumber('vat', 'Vat')->setCustomRender(function($item){
 			return $item->getVat() . '%';
 		})->setSortable()->setFilterNumber();
+		$grid->addColumnText('barcode', 'Barcode')->setSortable()->setFilterText();
 		$grid->addColumnNumber('store', 'Store')->setSortable()->setFilterNumber();
 				
 		$grid->addActionHref("updateProduct", 'Edit', 'updateProduct', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
