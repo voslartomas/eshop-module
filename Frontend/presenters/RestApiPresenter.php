@@ -70,7 +70,7 @@ class RestApiPresenter extends BasePresenter{
 				}elseif($this->action === 'barcode'){
 
 					$this->fillBarcode($_POST);
-				}elseif($this->action === 'order' && !$this->id){
+				}elseif($this->action === 'order'){
 					$this->createOrder($_POST);
 				}elseif($this->action === 'configuration'){
 					$this->checkConfiguration($_POST);
@@ -279,13 +279,18 @@ class RestApiPresenter extends BasePresenter{
 		$status = $this->em->getRepository('WebCMS\EshopModule\Doctrine\OrderState')->findOneBy(array(
 			'storeDecrease' => TRUE
 		));
-				
+		
+		// TODO if status does not exists find default one
+		
 		$order = new \WebCMS\EshopModule\Doctrine\Order;
 		$order->setFirstname($this->translation['API order']);
 		
 		// order items
-		foreach($data['idProduct'] as $id){
-			$product = $this->productRepository->find($id);
+		foreach($data['barcode'] as $id){
+			
+			$product = $this->productRepository->findOneBy(array(
+				'barcode' => $id
+			));
 			
 			$orderItem = new \WebCMS\EshopModule\Doctrine\OrderItem;
 			$orderItem->setOrder($order);
@@ -311,7 +316,7 @@ class RestApiPresenter extends BasePresenter{
 		$this->em->persist($order);
 		$this->em->flush();
 		
-		$this->sendAPIResponse('200', 'Order created.', NULL);
+		$this->sendAPIResponse('200', 'Order ' . $order->getId() . ' created.', NULL);
 	}
 	
 	private function fillBarcode($data){

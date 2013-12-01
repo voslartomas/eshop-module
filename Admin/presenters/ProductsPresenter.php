@@ -254,7 +254,7 @@ class ProductsPresenter extends BasePresenter{
 			return \WebCMS\PriceFormatter::format($item->getPrice()) . ' (' .\WebCMS\PriceFormatter::format($item->getPriceWithVat()) . ')';
 		})->setSortable()->setFilterNumber();
 		$grid->addColumnNumber('store', 'Store');
-		$grid->addColumnNumber('barcode', 'Barcode');
+		$grid->addColumnText('barcode', 'Barcode');
 		
 		$grid->addActionHref("updateVariant", 'Edit', 'updateVariant', array('idPage' => $this->actualPage->getId(), 'idProduct' => $this->product->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
 		$grid->addActionHref("deleteVariant", 'Delete', 'deleteVariant', array('idPage' => $this->actualPage->getId(), 'idProduct' => $this->product->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
