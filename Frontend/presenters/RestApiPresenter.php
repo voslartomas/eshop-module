@@ -257,7 +257,11 @@ class RestApiPresenter extends BasePresenter{
 			$getter = 'set' . ucfirst($key);
 			
 			if(method_exists($entity, $getter)){
-				$entity->$getter($data[$key]);
+				if($data[$key] == null){
+					$entity->$getter("");
+				}else{
+					$entity->$getter($data[$key]);
+				}
 			}
 		}
 		
