@@ -58,7 +58,7 @@ class ParametersPresenter extends BasePresenter{
 		$this->em->remove($value);
 		$this->em->flush();
 		
-		$this->flashMessage($this->translation['Parameter has been removed.'], 'success');
+		$this->flashMessage('Parameter has been removed.', 'success');
 		
 		$this->redirect('default', array(
 			'idPage' => $this->actualPage->getId()
@@ -98,7 +98,7 @@ class ParametersPresenter extends BasePresenter{
 		}
 		
 		$this->em->flush();
-		$this->flashMessage($this->translation['Parameter value has been saved.'], 'success');
+		$this->flashMessage('Parameter value has been saved.', 'success');
 		
 		$this->redirect('this', array(
 			'idPage' => $this->actualPage->getId(),
@@ -139,7 +139,7 @@ class ParametersPresenter extends BasePresenter{
 		$this->em->remove($value);
 		$this->em->flush();
 		
-		$this->flashMessage($this->translation['Parameter value has been removed.'], 'success');
+		$this->flashMessage('Parameter value has been removed.', 'success');
 		
 		$this->redirect('updateParameter', array(
 			'idPage' => $this->actualPage->getId(),
@@ -170,7 +170,7 @@ class ParametersPresenter extends BasePresenter{
 		}
 		
 		$this->em->flush();
-		$this->flashMessage($this->translation['Parameter value has been saved.'], 'success');
+		$this->flashMessage('Parameter value has been saved.', 'success');
 		
 		$this->redirect('updateParameter', array(
 			'idPage' => $this->actualPage->getId(),

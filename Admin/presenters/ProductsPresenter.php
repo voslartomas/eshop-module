@@ -171,7 +171,7 @@ class ProductsPresenter extends BasePresenter{
 		if(!$this->product->getId()) $this->em->persist($this->product); // FIXME only if is new we have to persist entity, otherway it can be just flushed
 		$this->em->flush();
 		
-		$this->flashMessage($this->translation['Product has been added.'], 'success');
+		$this->flashMessage('Product has been added.', 'success');
 		
 		if(!$this->isAjax())
 			$this->redirect('this');
@@ -208,7 +208,7 @@ class ProductsPresenter extends BasePresenter{
 		$this->em->remove($this->product);
 		$this->em->flush();
 		
-		$this->flashMessage($this->translation['Product has been removed.'], 'success');
+		$this->flashMessage('Product has been removed.', 'success');
 		
 		if(!$this->isAjax())
 			$this->redirect('Products:default', array('idPage' => $idPage));
@@ -304,7 +304,7 @@ class ProductsPresenter extends BasePresenter{
 		
 		$this->em->flush();
 
-		$this->flashMessage($this->translation['Product variant has been added.'], 'success');
+		$this->flashMessage('Product variant has been added.', 'success');
 		
 		$this->redirect('updateProduct', array(
 			'idPage' => $this->getParameter('idPage'),
@@ -332,7 +332,7 @@ class ProductsPresenter extends BasePresenter{
 		$this->em->remove($variant);
 		$this->em->flush();
 		
-		$this->flashMessage($this->translation['Product variant has been deleted.'], 'success');
+		$this->flashMessage('Product variant has been deleted.', 'success');
 		$this->redirect('updateProduct', array(
 			'idPage' => $idPage,
 			'id' => $idProduct,

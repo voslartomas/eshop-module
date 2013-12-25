@@ -116,7 +116,7 @@ class CartPresenter extends BasePresenter{
 		$this->em->remove($order);
 		$this->em->flush();
 		
-		$this->flashMessage($this->translation['Order has been deleted.'], 'success');
+		$this->flashMessage('Order has been deleted.', 'success');
 		if(!$this->isAjax())
 			$this->redirect('Cart:default', array(
 				'idPage' => $idPage
@@ -201,7 +201,7 @@ class CartPresenter extends BasePresenter{
 		
 		$this->em->flush();
 		
-		$this->flashMessage($this->translation['Order has been saved.'], 'success');
+		$this->flashMessage('Order has been saved.', 'success');
 		$this->redirect('Cart:editOrder', array(
 				'idPage' => $this->actualPage->getId(),
 				'id' => $this->getParam('id')
@@ -247,7 +247,7 @@ class CartPresenter extends BasePresenter{
 			
 		$this->em->flush();
 		
-		$this->flashMessage($this->translation['Order item has been saved.'], 'success');
+		$this->flashMessage('Order item has been saved.', 'success');
 		$this->redirect('Cart:editOrder', array(
 				'idPage' => $this->actualPage->getId(),
 				'id' => $this->getParam('id')
@@ -268,7 +268,7 @@ class CartPresenter extends BasePresenter{
 		$this->em->remove($item);
 		$this->em->flush();
 		
-		$this->flashMessage($this->translation['Order item has been deleted.'], 'success');
+		$this->flashMessage('Order item has been deleted.', 'success');
 		
 		if(!$this->isAjax())
 			$this->redirect('Cart:editOrder', array(

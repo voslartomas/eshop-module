@@ -351,7 +351,7 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 		$template->products = $products;
 		$template->save('./upload/exports/export-zbozicz-' . $this->state->language->getAbbr() . '.xml');
 		
-		$this->flashMessage($this->translation['XML file has been exported. You can find it in Filesystem in directory Exports.'], 'success');
+		$this->flashMessage('XML file has been exported. You can find it in Filesystem in directory Exports.', 'success');
 	}
 	
 	public function setProductsLinks($products, $catPage){

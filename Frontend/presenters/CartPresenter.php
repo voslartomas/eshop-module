@@ -136,13 +136,13 @@ class CartPresenter extends BasePresenter{
 		if(array_key_exists('payment', $_POST)){
 			$this->order->setPayment($_POST['payment']);
 		}else{
-			$this->flashMessageTranslated('Please pick payment.', 'info');
+			$this->flashMessage('Please pick payment.', 'info');
 		}
 		
 		if(array_key_exists('shipping', $_POST)){
 			$this->order->setShipping($_POST['shipping']);
 		}else{
-			$this->flashMessageTranslated('Please pick shipping.', 'info');
+			$this->flashMessage('Please pick shipping.', 'info');
 		}
 		
 		$this->order->getPriceTotal(); // TODO no tohle je trochu blbe volat ne? alespon globalni funkci pro vsechny ceny
@@ -209,9 +209,9 @@ class CartPresenter extends BasePresenter{
 			$this->order = new \WebCMS\EshopModule\Doctrine\Order;
 			$this->saveOrderState();
 			
-			$this->flashMessage($this->translation['Order has been sent. On given email has been sent email with summary.'], 'success');
+			$this->flashMessage('Order has been sent. On given email has been sent email with summary.', 'success');
 		}else{
-			$this->flashMessage($this->translation['Please fill all required data.'], 'danger');
+			$this->flashMessage('Please fill all required data.', 'danger');
 		}
 		
 		$this->redirectThis();
@@ -232,7 +232,7 @@ class CartPresenter extends BasePresenter{
 		$this->order->setPayment($idPayment);
 		$this->saveOrderState();
 		
-		$this->flashMessageTranslated('Payment has been setted.', 'success');
+		$this->flashMessage('Payment has been setted.', 'success');
 		
 		$this->redirectThis();
 	}
@@ -252,7 +252,7 @@ class CartPresenter extends BasePresenter{
 		$this->order->setShipping($idShipping);
 		$this->saveOrderState();
 		
-		$this->flashMessageTranslated('Shipping has been setted.', 'success');
+		$this->flashMessage('Shipping has been setted.', 'success');
 		
 		$this->redirectThis();
 	}
@@ -358,7 +358,7 @@ class CartPresenter extends BasePresenter{
 			}
 		}
 		
-		$this->flashMessage($this->translation['Item has been removed from cart.'], 'success');
+		$this->flashMessage('Item has been removed from cart.', 'success');
 		$this->redirectThis();
 	}
 	
@@ -371,10 +371,10 @@ class CartPresenter extends BasePresenter{
 				}
 			}
 
-			$this->flashMessage($this->translation['New quantity for item has been set.'], 'success');
+			$this->flashMessage('New quantity for item has been set.', 'success');
 		
 		}else{
-			$this->flashMessage($this->translation['Quantity must be greater then zero.'], 'danger');
+			$this->flashMessage('Quantity must be greater then zero.', 'danger');
 		}
 		$this->redirectThis();
 	}
@@ -422,7 +422,7 @@ class CartPresenter extends BasePresenter{
 						'snippet--flashMessages' => '<div class="alert alert-success fade in">' . $this->translation['Item has been added to the shopping cart.'] . '<a href="#" class="close" data-dismiss="alert">×</a></div>'
 					);
 				}else{
-					$this->flashMessage($this->translation['Item has been added to the shopping cart.'], 'success');
+					$this->flashMessage('Item has been added to the shopping cart.', 'success');
 				}
 			}else{
 				if($this->isAjax()){
@@ -430,7 +430,7 @@ class CartPresenter extends BasePresenter{
 						'snippet--flashMessages' => '<div class="alert alert-danger fade in">' . $this->translation['This item has been already added.'] . '<a href="#" class="close" data-dismiss="alert">×</a></div>'
 					);
 				}else{
-					$this->flashMessage($this->translation['This item has been already added.'], 'danger');
+					$this->flashMessage('This item has been already added.', 'danger');
 				}
 			}
 		
