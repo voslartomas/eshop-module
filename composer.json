@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-		"webcms2/webcms2": "@dev"
+		"webcms2/webcms2": "0.*"
     },
     "autoload": {
         "classmap": ["/"]
