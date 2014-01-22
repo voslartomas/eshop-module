@@ -4,12 +4,7 @@ Eshop module (eshop-module)
 [![Total Downloads](https://poser.pugx.org/webcms2/eshop-module/downloads.png)](https://packagist.org/packages/webcms2/eshop-module)
 [![Latest Stable Version](https://poser.pugx.org/webcms2/eshop-module/v/stable.png)](https://github.com/webcms2/eshop-module/releases)
 
-Module for WebCMS2.
-
-PROGRESS
---------
-
-This module is currently under development. No tags has been created.
+E-commerce module for webcms.
 
 INSTALLATION
 -----------
