@@ -12,5 +12,5 @@ INSTALLATION
 Add this line into your compser.json file.
 
 ```
-"webcms2/eshop-module" : "dev-master"
+"webcms2/eshop-module" : "0.*@dev"
 ```
