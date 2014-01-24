@@ -78,6 +78,39 @@
 
 			  </div>
 		</div>
+	    <div class="panel panel-default">
+			<div class="panel-heading">
+			  <h4 class="panel-title">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+				  {_'Product parameters'}
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseFour" class="panel-collapse collapse{if $panel == 'parameters'} in{/if}">
+			  <div class="panel-body">
+
+				  <a class="btn btn-primary ajax" n:href="updateParameter idPage => $idPage, idProduct => $product->getId()" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add parameter'}</a>
+
+					<br /><br />
+
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>{_'Name'}</th>
+								<th>{_'Value'}</th>
+							</tr>
+						</thead>
+						{foreach $product->getParametersArray() as $parameter}
+							<tr>
+								<td>{$parameter[0]->getParameter()->getName()}</td>
+								<td>{foreach $parameter as $p}{$p->getValue()}{if !$iterator->isLast()}, {/if}{/foreach}</td>
+							</tr>
+						{/foreach}
+				  </table>
+			  </div>
+
+			  </div>
+		</div>
 	{/if}
   </div>
 </div>

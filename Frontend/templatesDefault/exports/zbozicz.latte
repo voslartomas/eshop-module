@@ -2,14 +2,14 @@
 <SHOP>
 	{foreach $products as $product}
 		<SHOPITEM>
-			<PRODUCT>Světélkující podložka pod myš</PRODUCT>
-			<DESCRIPTION>Fosforeskující okraj, nevyžaduje baterie.</DESCRIPTION>
-			<URL>http://obchod.cz/podlozky-pod-mys/fosfor</URL>
+			<PRODUCT>{$product->getName()}</PRODUCT>
+			<DESCRIPTION>{$product->getDescription()}</DESCRIPTION>
+			<URL>{$product->getLink()}</URL>
 			<ITEM_TYPE>new</ITEM_TYPE>
 			<DELIVERY_DATE>1</DELIVERY_DATE>
-			<IMGURL>http://obchod.cz/obrazky/podlozky-pod-mys/fosfor.jpg</IMGURL>
-			<PRICE>620</PRICE>
-			<PRICE_VAT>756</PRICE_VAT>
+			<IMGURL>{$product->getMainPhoto()|thumbnail:'system'}</IMGURL>
+			<PRICE>{$product->getPrice()}</PRICE>
+			<PRICE_VAT>{$product->getPriceWithVat()}</PRICE_VAT>
 		</SHOPITEM>
 	{/foreach}
 </SHOP>

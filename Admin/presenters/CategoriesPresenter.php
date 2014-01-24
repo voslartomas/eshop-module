@@ -75,7 +75,11 @@ class CategoriesPresenter extends BasePresenter{
 			$parent = NULL;
 
 		$this->category->setTitle($values->title);
-		$this->category->setSlug($values->slug);
+		
+		if(!empty($values->slug)){
+		    $this->category->setSlug($values->slug);
+		}
+		
 		$this->category->setMetaTitle($values->metaTitle);
 		$this->category->setMetaDescription($values->metaDescription);
 		$this->category->setMetaKeywords($values->metaKeywords);
@@ -108,6 +112,10 @@ class CategoriesPresenter extends BasePresenter{
 		$this->em->flush();
 
 		$this->flashMessage('Category has been added.', 'success');
+		
+		if($this->settings->get('Save zbozi.cz XML file after product update', 'eshopModule', 'checkbox')->getValue()){
+		    $this->handleGenerateZboziczXml();
+		}
 		
 		if(!$this->isAjax())
 			$this->redirect('Categories:default', array('idPage' => $this->actualPage->getId()));

@@ -323,50 +323,9 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 	public function createComponentExportSettingsForm(){
 		
 		$settings = array();
-		$settings[] = $this->settings->get('Save zbozi.cz XML file after product update', 'eshopModule', 'checkbox', array());
+		$settings[] = $this->settings->get('Save zbozi.cz XML file after product update', 'eshopModule', 'checkbox');
 		
 		return $this->createSettingsForm($settings);
 	}
 	
-	public function handleGenerateZboziczXml(){
-		
-		if(!file_exists('./upload/exports')){
-			mkdir('./upload/exports');
-		}
-		
-		$catPage = $this->em->getRepository('\AdminModule\Page')->findOneBy(array(
-			'language' => $this->state->language,
-			'moduleName' => 'Eshop',
-			'presenter' => 'Categories'
-		));
-		
-		$products = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Product')->findBy(array(
-			'language' => $this->state->language
-		));
-		
-		$this->setProductsLinks($products, $catPage);
-		
-		$template = $this->createTemplate();
-		$template->setFile('../app/templates/eshop-module/exports/zbozicz.latte');
-		$template->products = $products;
-		$template->save('./upload/exports/export-zbozicz-' . $this->state->language->getAbbr() . '.xml');
-		
-		$this->flashMessage('XML file has been exported. You can find it in Filesystem in directory Exports.', 'success');
-	}
-	
-	public function setProductsLinks($products, $catPage){
-		foreach($products as $c){
-			
-			$category = $c->getCategories();
-			$category = $category[0];
-			
-			$c->setLink($this->link('//:Frontend:Eshop:Categories:default',
-					array(
-						'id' => $catPage->getId(),
-						'path' => $catPage->getPath() . '/' . $category->getPath() . '/' . $c->getSlug(),
-						'abbr' => ($this->state->language->getDefaultFrontend() ? '' : $this->state->language->getAbbr() . '/')
-					)
-					));
-		}
-	}
 }
