@@ -2,12 +2,12 @@
 <SHOP>
 	{foreach $products as $product}
 		<SHOPITEM>
-			<PRODUCT>{$product->getName()}</PRODUCT>
-			<DESCRIPTION>{$product->getDescription()}</DESCRIPTION>
+			<PRODUCT>{$product->getTitle()}</PRODUCT>
+			<DESCRIPTION>{$product->getDescription()|striptags}</DESCRIPTION>
 			<URL>{$product->getLink()}</URL>
 			<ITEM_TYPE>new</ITEM_TYPE>
 			<DELIVERY_DATE>1</DELIVERY_DATE>
-			<IMGURL>{$product->getMainPhoto()|thumbnail:'system'}</IMGURL>
+			<IMGURL>{$baseUri}{$product->getMainPhoto()->getPath()|thumbnail:'system'}</IMGURL>
 			<PRICE>{$product->getPrice()}</PRICE>
 			<PRICE_VAT>{$product->getPriceWithVat()}</PRICE_VAT>
 		</SHOPITEM>
