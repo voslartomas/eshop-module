@@ -474,21 +474,22 @@ use Doctrine\orm\Mapping as orm;
 	public function setAccount($account) {
 	    $this->account = $account;
 	}
-	
-	public function getPaymentItem(){
-	    foreach($this->getItems() as $item){
-		if($item->getType() === OrderItem::PAYMENT){
+
+	public function getPaymentItem() {
+	    foreach ($this->getItems() as $item) {
+		if ($item->getType() === OrderItem::PAYMENT) {
 		    return $item;
 		}
 	    }
 	}
-	
-	public function getShippingItem(){
-	    foreach($this->getItems() as $item){
-		if($item->getType() === OrderItem::SHIPPING){
+
+	public function getShippingItem() {
+	    foreach ($this->getItems() as $item) {
+		if ($item->getType() === OrderItem::SHIPPING) {
 		    return $item;
 		}
 	    }
 	}
+
     }
     
