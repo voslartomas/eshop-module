@@ -114,7 +114,7 @@ use Nette\Application\UI;
 
 	    $this->flashMessage('Category has been added.', 'success');
 
-	    $this->handleGenereateXml();
+	    $this->handleGenerateXml();
 
 	    if (!$this->isAjax())
 		$this->redirect('Categories:default', array('idPage' => $this->actualPage->getId()));
