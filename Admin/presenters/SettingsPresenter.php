@@ -6,7 +6,7 @@ namespace AdminModule\EshopModule;
  * Description of SettingsPresenter
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class SettingsPresenter extends \AdminModule\BasePresenter {
+class SettingsPresenter extends BasePresenter {
 			
 	/* @var \WebCMS\EshopModule\Doctrine\Payment */
 	private $payment;
@@ -324,6 +324,7 @@ class SettingsPresenter extends \AdminModule\BasePresenter {
 		
 		$settings = array();
 		$settings[] = $this->settings->get('Save zbozi.cz XML file after product update', 'eshopModule', 'checkbox');
+		$settings[] = $this->settings->get('Save heureka.cz XML file after product update', 'eshopModule', 'checkbox');
 		
 		return $this->createSettingsForm($settings);
 	}

@@ -30,7 +30,7 @@
 	    $this->template->id = $id;
 	}
 
-	public function handleGenerateZboziczXml() {
+	public function handleGenerateXml($force = false) {
 
 	    if (!file_exists('./upload/exports')) {
 		mkdir('./upload/exports');
@@ -47,14 +47,24 @@
 	    ));
 
 	    $this->setProductsLinks($products, $catPage);
-
-	    $template = $this->createTemplate();
-	    $template->registerHelperLoader('\WebCMS\SystemHelper::loader');
-	    $template->setFile('../app/templates/eshop-module/exports/zbozicz.latte');
-	    $template->products = $products;
-	    $template->save('./upload/exports/export-zbozicz-' . $this->state->language->getAbbr() . '.xml');
-
-	    $this->flashMessage('XML file has been exported. You can find it in Filesystem in directory Exports.', 'success');
+	    
+	    if($this->settings->get('Save zbozi.cz XML file after product update', 'eshopModule', 'checkbox')->getValue() || $force){
+		$template = $this->createTemplate();
+		$template->registerHelperLoader('\WebCMS\SystemHelper::loader');
+		$template->setFile('../app/templates/eshop-module/exports/zbozicz.latte');
+		$template->products = $products;
+		$template->save('./upload/exports/export-zbozicz-' . $this->state->language->getAbbr() . '.xml');
+	    }
+	    
+	    if($this->settings->get('Save heureka.cz XML file after product update', 'eshopModule', 'checkbox')->getValue() || $force){
+		$template = $this->createTemplate();
+		$template->registerHelperLoader('\WebCMS\SystemHelper::loader');
+		$template->setFile('../app/templates/eshop-module/exports/heureka.latte');
+		$template->products = $products;
+		$template->save('./upload/exports/export-heureka-' . $this->state->language->getAbbr() . '.xml');
+	    }
+	    
+	    $this->flashMessage('XML files has been exported. You can find these in Filesystem in directory Exports.', 'success');
 	}
 
 	private function setProductsLinks($products, $catPage) {
@@ -62,8 +72,8 @@
 
 		$category = $c->getCategories();
 		$category = $category[0];
-		
-		if($category && $catPage){
+
+		if ($category && $catPage) {
 		    $c->setLink($this->link('//:Frontend:Eshop:Categories:default', array(
 			    'id' => $catPage->getId(),
 			    'path' => $catPage->getPath() . '/' . $category->getPath() . '/' . $c->getSlug(),

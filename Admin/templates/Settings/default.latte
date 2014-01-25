@@ -1,98 +1,98 @@
 {block content}
-	
-	{include ../tabs.latte active => 'settings'}
 
-	<h1>{_'Eshop settings'}</h1>
-	
-	<div class="panel-group" id="accordion">
-		<div class="panel panel-default">
-		  <div class="panel-heading">
+{include ../tabs.latte active => 'settings'}
+
+<h1>{_'Eshop settings'}</h1>
+
+<div class="panel-group" id="accordion">
+	<div class="panel panel-default">
+		<div class="panel-heading">
 			<h4 class="panel-title">
-			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-				{_'Basic settings'}
-			  </a>
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+					{_'Basic settings'}
+				</a>
 			</h4>
-		  </div>
-		  <div id="collapseOne" class="panel-collapse collapse">
-			<div class="panel-body">
-			  {control settingsForm}
-			</div>
-		  </div>
 		</div>
-		<div class="panel panel-default">
-		  <div class="panel-heading">
-			<h4 class="panel-title">
-			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-				{_'Payments'}
-			  </a>
-			</h4>
-		  </div>
-		  <div id="collapseTwo" class="panel-collapse collapse">
+		<div id="collapseOne" class="panel-collapse collapse">
 			<div class="panel-body">
-			  <a n:href="updatePayment idPage => $actualPage->getId()" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add payment'}</a>
-
-			  <br /><br />
-
-			  {control paymentsGrid}
+				{control settingsForm}
 			</div>
-		  </div>
 		</div>
-		<div class="panel panel-default">
-		  <div class="panel-heading">
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
 			<h4 class="panel-title">
-			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-				{_'Transport'}
-			  </a>
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+					{_'Payments'}
+				</a>
 			</h4>
-		  </div>
-		  <div id="collapseThree" class="panel-collapse collapse">
+		</div>
+		<div id="collapseTwo" class="panel-collapse collapse">
 			<div class="panel-body">
-			  <a n:href="updateShipping idPage => $actualPage->getId()" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add shipping'}</a>
+				<a n:href="updatePayment idPage => $actualPage->getId()" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add payment'}</a>
 
-			  <br /><br />
+				<br /><br />
 
-			  {control shippingsGrid}
+				{control paymentsGrid}
 			</div>
-		  </div>
 		</div>
-		<div class="panel panel-default">
-		  <div class="panel-heading">
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
 			<h4 class="panel-title">
-			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
-				{_'Status'}
-			  </a>
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+					{_'Transport'}
+				</a>
 			</h4>
-		  </div>
-		  <div id="collapseFour" class="panel-collapse collapse">
+		</div>
+		<div id="collapseThree" class="panel-collapse collapse">
 			<div class="panel-body">
-			  <a n:href="updateStatus idPage => $actualPage->getId()" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add status'}</a>
+				<a n:href="updateShipping idPage => $actualPage->getId()" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add shipping'}</a>
 
-			  <br /><br />
+				<br /><br />
 
-			  {control statusesGrid}
+				{control shippingsGrid}
 			</div>
-		  </div>
 		</div>
-		<div class="panel panel-default">
-		  <div class="panel-heading">
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
 			<h4 class="panel-title">
-			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
-				{_'Exports'}
-			  </a>
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+					{_'Status'}
+				</a>
 			</h4>
-		  </div>
-		  <div id="collapseFive" class="panel-collapse collapse">
+		</div>
+		<div id="collapseFour" class="panel-collapse collapse">
 			<div class="panel-body">
-				
+				<a n:href="updateStatus idPage => $actualPage->getId()" class="btn btn-primary ajax" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Add status'}</a>
+
+				<br /><br />
+
+				{control statusesGrid}
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+					{_'Exports'}
+				</a>
+			</h4>
+		</div>
+		<div id="collapseFive" class="panel-collapse collapse">
+			<div class="panel-body">
+
 				{control exportSettingsForm}
-				
+
 				<br />
-				
-				<a n:href="generateZboziczXml!" class="btn btn-primary ajax">{_'Generate XML export for zbozi.cz'}</a>
-				
+
+				<a n:href="generateXml! force=>true" class="btn btn-primary ajax">{_'Generate XML exports'}</a>
+
 			</div>
-		  </div>
 		</div>
-	  </div>
-	
+	</div>
+</div>
+
 {/block}

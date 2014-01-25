@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<SHOP>
+	{foreach $products as $product}
+		<SHOPITEM>
+			<ITEM_ID>{$product->getId()}</ITEM_ID>
+			<PRODUCT>{$product->getTitle()}</PRODUCT>
+			<PRODUCTNAME>{$product->getTitle()}</PRODUCTNAME>
+			<DESCRIPTION>{$product->getDescription()|striptags}</DESCRIPTION>
+			<URL>{$product->getLink()}</URL>
+			<DELIVERY_DATE>1</DELIVERY_DATE>
+			<IMGURL>{$baseUri}{$product->getMainPhoto()->getPath()|thumbnail:'system'}</IMGURL>
+			<PRICE_VAT>{$product->getPriceWithVat()}</PRICE_VAT>
+			<CATEGORY_TEXT>{foreach $product->getCategories() as $c}{$c->getTitle()}{if !$iterator->isLast()} | {/if}{/foreach}</CATEGORY_TEXT>
+		</SHOPITEM>
+	{/foreach}
+</SHOP>

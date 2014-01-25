@@ -178,9 +178,7 @@ use Nette\Application\UI;
 
 	    $this->flashMessage('Product has been added.', 'success');
 	    
-	    if($this->settings->get('Save zbozi.cz XML file after product update', 'eshopModule', 'checkbox')->getValue()){
-		$this->handleGenerateZboziczXml();
-	    }
+	    $this->handleGenerateXml();
 	    
 	    if (!$this->isAjax())
 		$this->redirect('this');
