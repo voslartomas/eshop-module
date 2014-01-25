@@ -44,8 +44,8 @@ use Nette\Application\UI;
 	    $form->addText('metaDescription', 'SEO description')->setAttribute('class', 'form-control');
 	    $form->addText('metaKeywords', 'SEO keywords')->setAttribute('class', 'form-control');
 	    $form->addSelect('parent', 'Parent')->setTranslator(NULL)->setItems($hierarchy)->setAttribute('class', 'form-control');
-	    $form->addCheckbox('visible', 'Show')->setAttribute('class', 'form-control')->setDefaultValue(1);
-	    $form->addCheckbox('favourite', 'Favourite')->setAttribute('class', 'form-control');
+	    $form->addCheckbox('visible', 'Show')->setDefaultValue(1);
+	    $form->addCheckbox('favourite', 'Favourite');
 	    $form->addTextarea('description', 'Description')->setAttribute('class', 'editor');
 
 	    $form->addSubmit('save', 'Save')->setAttribute('class', 'btn btn-success');
@@ -114,7 +114,7 @@ use Nette\Application\UI;
 
 	    $this->flashMessage('Category has been added.', 'success');
 
-	    $this->handleGenereateXml();
+	    $this->handleGenerateXml();
 
 	    if (!$this->isAjax())
 		$this->redirect('Categories:default', array('idPage' => $this->actualPage->getId()));
