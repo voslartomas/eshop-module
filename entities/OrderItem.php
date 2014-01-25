@@ -52,6 +52,9 @@ class OrderItem extends \AdminModule\Doctrine\Entity {
 	 */
 	private $productVariant;
 	
+	/**
+	 * @orm\Column(type="integer")
+	 */
 	private $type;
 	
 	private $variant;

@@ -1,0 +1,58 @@
+<dat:dataPack xmlns:dat="http://www.stormware.cz/schema/version_2/data.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" id="ob001" ico="12345678" application="StwTest" version="2.0" note="Import Objednávky">
+	{foreach $orders as $order}
+		<dat:dataPackItem id="{$order->getId()}" version="2.0">
+			<ord:order version="2.0">
+				<ord:orderHeader>
+					<ord:orderType>receivedOrder</ord:orderType>
+					<ord:numberOrder>{$order->getId()}</ord:numberOrder>
+					<ord:date>{$order->getCreated()|date:'Y-m-d'}</ord:date>
+					<ord:dateFrom>{$order->getCreated()|date:'Y-m-d'}</ord:dateFrom>
+					<ord:dateTo>{$order->getCreated()|date:'Y-m-d'}</ord:dateTo>
+					<ord:text>{_'Order text'}</ord:text>
+					<ord:partnerIdentity>
+						<typ:address>
+							<typ:company>{$order->getInvoiceCompany()}</typ:company>
+							<typ:division></typ:division>
+							<typ:name>{$order->getFirstName()} {$order->getLastName()}</typ:name>
+							<typ:city>{$order->getCity()}</typ:city>
+							<typ:street>{$order->getStreet()}</typ:street>
+							<typ:zip>{$order->getPostcode()}</typ:zip>
+							<typ:ico>{$order->getInvoiceNo()}</typ:ico>
+							<typ:dic>{$order->getInvoiceVatNo()}</typ:dic>
+						</typ:address>
+						<typ:address>
+							<typ:company>{$order->getInvoiceCompany()}</typ:company>
+							<typ:division></typ:division>
+							<typ:name>{$order->getFirstName()} {$order->getLastName()}</typ:name>
+							<typ:city>{$order->getInvoiceCity()}</typ:city>
+							<typ:street>{$order->getInvoiceStreet()}</typ:street>
+							<typ:zip>{$order->getInvoicePostcode()}</typ:zip>
+							<typ:ico>{$order->getInvoiceNo()}</typ:ico>
+							<typ:dic>{$order->getInvoiceVatNo()}</typ:dic>
+						</typ:address>
+					</ord:partnerIdentity>
+					<ord:paymentType>
+						<typ:ids>{$order->getPaymentItem()->getName()}</typ:ids>
+					</ord:paymentType>
+				</ord:orderHeader>
+				<ord:orderDetail>
+				<!-- textova polozka -->
+					{foreach $order->getItems() as $item}
+						<ord:orderItem>
+							<ord:text>{$item->getName()}</ord:text>
+							<ord:quantity>{$item->getQuantity()}</ord:quantity>
+							<ord:delivered>0</ord:delivered>
+							<ord:rateVAT>high</ord:rateVAT>
+							<ord:homeCurrency>
+								<typ:unitPrice>{$item->getPrice()}</typ:unitPrice>
+							</ord:homeCurrency>
+						</ord:orderItem>
+					{/foreach}
+				</ord:orderDetail>
+				<ord:orderSummary>
+					<ord:roundingDocument>math2one</ord:roundingDocument>
+				</ord:orderSummary>
+			</ord:order>
+		</dat:dataPackItem>
+	{/foreach}
+</dat:dataPack>
