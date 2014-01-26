@@ -9,53 +9,121 @@
 		<li {if $active == "rts"}class="active"{/if}><a class="ajax" n:href="Eshop:rts idPage => $idPage">{_'RTS'}</a></li>
 	  </ul>
 	
-	  <span>
-		  <h1>{_'Online users'} <small>12</small></h1>
-	  </span>
+	  <div class="row">
 	  
-	  <table class="table">
-		  <thead>
-			<tr>
-				<th>{_'Icon'}</th>
-				<th>{_'Text'}</th>
-				<th>{_'Date'}</th>
-			</tr>
-		  </thead>
-		  <tbody>
-			  <tr>
-				  <td>
-					  <span class="glyphicon glyphicon-shopping-cart"></span>
-				  </td>
-				  <td>
-					  {_'User is in the cart.'}
-				  </td>
-				  <td>
-					  Right now
-				  </td>
-			  </tr>
-			  <tr>
-				  <td>
-					  <span class="glyphicon glyphicon-eye-open"></span>
-				  </td>
-				  <td>
-					  {_'Category view.'}
-				  </td>
-				  <td>
-					  5 minutes ago
-				  </td>
-			  </tr>
-			  <tr>
-				  <td>
-					  <span class="glyphicon glyphicon-user"></span>
-				  </td>
-				  <td>
-					  {_'New user registered.'}
-				  </td>
-				  <td>
-					  15 minutes ago
-				  </td>
-			  </tr>
-		  </tbody>
-	  </table>
+		<div class="col-xs-6 col-md-4">
+			<span>
+				<h1>{_'Online users'} <small>12</small></h1>
+			</span>
+		</div>
+	  
+		<div class="col-xs-6 col-md-4">
+			<span>
+				<h1>{_'Logged users'} <small>3</small></h1>
+			</span>
+		</div>
 		
+		<div class="col-xs-6 col-md-4">
+			<span>
+				<h1>{_'Clicks/minute'} <small>4</small></h1>
+			</span>
+		</div>
+			
+	  </div>
+	  
+	  <div class="row">
+	  
+		  <div class="col-xs-6">
+		  
+			<h2>{_'Real time users actions'}</h2>
+
+			<table class="table">
+				<thead>
+				  <tr>
+					  <th>{_'Icon'}</th>
+					  <th>{_'Text'}</th>
+				  </tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<span class="glyphicon glyphicon-shopping-cart"></span>
+						</td>
+						<td>
+							{_'User is in the cart.'}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="glyphicon glyphicon-eye-open"></span>
+						</td>
+						<td>
+							{_'Category view.'}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="glyphicon glyphicon-user"></span>
+						</td>
+						<td>
+							{_'New user registered.'}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+	  
+				  </div>
+				  
+		<div class="col-xs-6">
+				
+			<h2>{_'Action history'}</h2>
+
+			<table class="table">
+				<thead>
+				  <tr>
+					  <th>{_'Icon'}</th>
+					  <th>{_'Text'}</th>
+					  <th>{_'Date'}</th>
+				  </tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<span class="glyphicon glyphicon-shopping-cart"></span>
+						</td>
+						<td>
+							{_'User is in the cart.'}
+						</td>
+						<td>
+							Right now
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="glyphicon glyphicon-eye-open"></span>
+						</td>
+						<td>
+							{_'Category view.'}
+						</td>
+						<td>
+							5 minutes ago
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="glyphicon glyphicon-user"></span>
+						</td>
+						<td>
+							{_'New user registered.'}
+						</td>
+						<td>
+							15 minutes ago
+						</td>
+					</tr>
+				</tbody>
+			</table>
+				  
+	  </div>		
+					  
+	  </div>
 {/block}
