@@ -57,13 +57,15 @@ class EshopPresenter extends BasePresenter{
 			'hide' => FALSE
 		));
 		
+		$countActionProducts = count($countActionProducts) >= 2 ? count($countActionProducts) - 2 : 0;
+		
 		$actionProducts = $this->repositoryProducts->findBy(array(
 			'language' => $this->language,
 			'action' => TRUE,
 			'hide' => FALSE
 		), array(
 			'id' => 'DESC'
-		), 2, mt_rand(0, count($countActionProducts) - 2));
+		), 2, mt_rand(0, $countActionProducts));
 		
 		$this->setCategoriesLinks($favouritesCategories, $catPage);
 		$this->setProductsLinks($favouritesProducts, $catPage);
