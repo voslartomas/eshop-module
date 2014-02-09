@@ -70,7 +70,7 @@ class SettingsPresenter extends BasePresenter {
 		$grid->addColumnText('title', 'Name')->setFilterText();
 		
 		$grid->addColumnNumber('price', 'Price')->setCustomRender(function($item){
-			return \WebCMS\SystemHelper::price($item->getPrice());
+			return \WebCMS\Helpers\SystemHelper::price($item->getPrice());
 		});
 		
 		$grid->addActionHref("updatePayment", 'Edit', 'updatePayment', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));
@@ -152,7 +152,7 @@ class SettingsPresenter extends BasePresenter {
 		$grid->addColumnText('title', 'Name')->setFilterText();
 		
 		$grid->addColumnNumber('price', 'Price')->setCustomRender(function($item){
-			return \WebCMS\SystemHelper::price($item->getPrice());
+			return \WebCMS\Helpers\SystemHelper::price($item->getPrice());
 		});
 		
 		$grid->addActionHref("updateShipping", 'Edit', 'updateShipping', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax', 'data-toggle' => 'modal', 'data-target' => '#myModal', 'data-remote' => 'false'));

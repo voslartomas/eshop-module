@@ -11,7 +11,7 @@ use Doctrine\orm\Mapping as orm;
  * @orm\Entity
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class OrderItem extends \AdminModule\Doctrine\Entity {
+class OrderItem extends \WebCMS\Entity\Entity {
 	
 	
 	private $itemId;

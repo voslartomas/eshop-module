@@ -36,7 +36,7 @@
 		mkdir('./upload/exports');
 	    }
 
-	    $catPage = $this->em->getRepository('\AdminModule\Page')->findOneBy(array(
+	    $catPage = $this->em->getRepository('\WebCMS\Entity\Page')->findOneBy(array(
 		'language' => $this->state->language,
 		'moduleName' => 'Eshop',
 		'presenter' => 'Categories'
@@ -50,7 +50,7 @@
 	    
 	    if($this->settings->get('Save zbozi.cz XML file after product update', 'eshopModule', 'checkbox')->getValue() || $force){
 		$template = $this->createTemplate();
-		$template->registerHelperLoader('\WebCMS\SystemHelper::loader');
+		$template->registerHelperLoader('\WebCMS\Helpers\SystemHelper::loader');
 		$template->setFile('../app/templates/eshop-module/exports/zbozicz.latte');
 		$template->products = $products;
 		$template->save('./upload/exports/export-zbozicz-' . $this->state->language->getAbbr() . '.xml');
@@ -58,7 +58,7 @@
 	    
 	    if($this->settings->get('Save heureka.cz XML file after product update', 'eshopModule', 'checkbox')->getValue() || $force){
 		$template = $this->createTemplate();
-		$template->registerHelperLoader('\WebCMS\SystemHelper::loader');
+		$template->registerHelperLoader('\WebCMS\Helpers\SystemHelper::loader');
 		$template->setFile('../app/templates/eshop-module/exports/heureka.latte');
 		$template->products = $products;
 		$template->save('./upload/exports/export-heureka-' . $this->state->language->getAbbr() . '.xml');

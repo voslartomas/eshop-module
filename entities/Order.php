@@ -12,7 +12,7 @@ use Doctrine\orm\Mapping as orm;
      * @orm\Table(name="Orders")
      * @author Tomáš Voslař <tomas.voslar at webcook.cz>
      */
-    class Order extends \AdminModule\Doctrine\Entity {
+    class Order extends \WebCMS\Entity\Entity {
 
 	/**
 	 * @orm\Column
@@ -122,7 +122,7 @@ use Doctrine\orm\Mapping as orm;
 	private $updated;
 
 	/**
-	 * @orm\ManyToOne(targetEntity="\AdminModule\Language")
+	 * @orm\ManyToOne(targetEntity="\WebCMS\Entity\Language")
 	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private $language;

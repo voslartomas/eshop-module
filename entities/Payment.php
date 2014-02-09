@@ -9,7 +9,7 @@ use Doctrine\orm\Mapping as orm;
  * @orm\Entity
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class Payment extends \AdminModule\Doctrine\Entity{
+class Payment extends \WebCMS\Entity\Entity{
 	/**
 	 * @orm\Column(type="decimal", precision=12, scale=4)
 	 */
@@ -31,7 +31,7 @@ class Payment extends \AdminModule\Doctrine\Entity{
 	private $paymentGate;
 	
 	/**
-	 * @orm\ManyToOne(targetEntity="\AdminModule\Language")
+	 * @orm\ManyToOne(targetEntity="\WebCMS\Entity\Language")
 	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private $language;

@@ -283,7 +283,7 @@ class CartPresenter extends BasePresenter{
 		// order items
 		$items = '';
 		foreach($this->order->getItems() as $item){
-			$items .= $item->getName() . ' ' . $item->getQuantity() . ' x ' . \WebCMS\SystemHelper::price($item->getPriceWithVat()) . ' = ' . \WebCMS\SystemHelper::price($item->getPriceTotalWithVat()) . '<br />';
+			$items .= $item->getName() . ' ' . $item->getQuantity() . ' x ' . \WebCMS\Helpers\SystemHelper::price($item->getPriceWithVat()) . ' = ' . \WebCMS\Helpers\SystemHelper::price($item->getPriceTotalWithVat()) . '<br />';
 		}
 		
 		// get account URL
@@ -291,7 +291,7 @@ class CartPresenter extends BasePresenter{
 			'name' => 'Account'
 		));
 		
-		$page = $this->em->getRepository('AdminModule\Page')->findOneBy(array(
+		$page = $this->em->getRepository('WebCMS\Entity\Page')->findOneBy(array(
 			'module' => $moduleAccount
 		));
 		
@@ -328,8 +328,8 @@ class CartPresenter extends BasePresenter{
 					$values->street,
 					$values->city,
 					$values->postcode,
-					\WebCMS\SystemHelper::price($this->order->getPriceTotal()),
-					\WebCMS\SystemHelper::price($this->order->getPriceTotalWithVat()),
+					\WebCMS\Helpers\SystemHelper::price($this->order->getPriceTotal()),
+					\WebCMS\Helpers\SystemHelper::price($this->order->getPriceTotalWithVat()),
 					$items,
 					$accountUrl
 				)

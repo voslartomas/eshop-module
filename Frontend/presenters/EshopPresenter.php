@@ -32,7 +32,7 @@ class EshopPresenter extends BasePresenter{
 	
 	public function renderDefault($id){
 		
-		$catPage = $this->em->getRepository('\AdminModule\Page')->findOneBy(array(
+		$catPage = $this->em->getRepository('\WebCMS\Entity\Page')->findOneBy(array(
 			'language' => $this->language,
 			'moduleName' => 'Eshop',
 			'presenter' => 'Categories'
@@ -82,7 +82,7 @@ class EshopPresenter extends BasePresenter{
 			$this->invalidateControl('lazyLoader');
 		}
 		
-		$catPage = $this->em->getRepository('\AdminModule\Page')->findOneBy(array(
+		$catPage = $this->em->getRepository('\WebCMS\Entity\Page')->findOneBy(array(
 			'language' => $this->language,
 			'moduleName' => 'Eshop',
 			'presenter' => 'Categories'

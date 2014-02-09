@@ -197,7 +197,7 @@ use Nette\Application\UI;
 
 	    $grid->addColumnText('title', 'Name')->setSortable()->setFilterText();
 	    $grid->addColumnNumber('price', 'Price')->setCustomRender(function($item) {
-		return \WebCMS\PriceFormatter::format($item->getPrice()) . ' (' . \WebCMS\PriceFormatter::format($item->getPriceWithVat()) . ')';
+		return \WebCMS\Helpers\PriceFormatter::format($item->getPrice()) . ' (' . \WebCMS\Helpers\PriceFormatter::format($item->getPriceWithVat()) . ')';
 	    })->setSortable()->setFilterNumber();
 	    $grid->addColumnNumber('vat', 'Vat')->setCustomRender(function($item) {
 		return $item->getVat() . '%';
@@ -259,7 +259,7 @@ use Nette\Application\UI;
 
 	    $grid->addColumnText('title', 'Name')->setSortable()->setFilterText();
 	    $grid->addColumnNumber('price', 'Price')->setCustomRender(function($item) {
-		return \WebCMS\PriceFormatter::format($item->getPrice()) . ' (' . \WebCMS\PriceFormatter::format($item->getPriceWithVat()) . ')';
+		return \WebCMS\Helpers\PriceFormatter::format($item->getPrice()) . ' (' . \WebCMS\Helpers\PriceFormatter::format($item->getPriceWithVat()) . ')';
 	    })->setSortable()->setFilterNumber();
 	    $grid->addColumnNumber('store', 'Store');
 	    $grid->addColumnText('barcode', 'Barcode');

@@ -9,7 +9,7 @@ use Doctrine\orm\Mapping as orm;
  * @orm\Entity
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class Shipping extends \AdminModule\Doctrine\Entity{
+class Shipping extends \WebCMS\Entity\Entity{
 	/**
 	 * @orm\Column(type="decimal", precision=12, scale=4)
 	 */
@@ -26,7 +26,7 @@ class Shipping extends \AdminModule\Doctrine\Entity{
 	private $title;
 	
 	/**
-	 * @orm\ManyToOne(targetEntity="\AdminModule\Language")
+	 * @orm\ManyToOne(targetEntity="\WebCMS\Entity\Language")
 	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private $language;

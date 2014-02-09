@@ -9,7 +9,7 @@ use Doctrine\orm\Mapping as orm;
  * @orm\Entity
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class ParameterValue extends \AdminModule\Doctrine\Entity {
+class ParameterValue extends \WebCMS\Entity\Entity {
 	/**
 	 * @orm\Column
 	 */

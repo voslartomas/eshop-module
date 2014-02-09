@@ -12,7 +12,7 @@ class BasePresenter extends \FrontendModule\BasePresenter{
 	protected function startup(){
 		parent::startup();
 		
-		$cart = $this->em->getRepository('AdminModule\Page')->findBy(array(
+		$cart = $this->em->getRepository('WebCMS\Entity\Page')->findBy(array(
 			'language' => $this->language,
 			'presenter' => 'Cart'
 		));
