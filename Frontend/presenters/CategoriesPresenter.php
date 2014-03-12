@@ -170,7 +170,7 @@ class CategoriesPresenter extends BasePresenter {
 	    'title' => 'Main'
 	));
 
-	return $this->getStructure($context, $category, $repository, FALSE, 'nav navbar-nav', TRUE, FALSE, $fromPage);
+	return $this->getStructure($context, $category, $repository, FALSE, 'nav navbar-nav', TRUE, FALSE, $fromPage, 'nav navbar', 'Eshop');
     }
 
 }
