@@ -37,7 +37,7 @@ class CategoriesPresenter extends BasePresenter {
 	    if (count($category) > 0) {
 		$title = $category[0]->getTitle();
 		$category = $category[0];
-		$categories = $this->getStructure($this, $category, $this->repository, TRUE, 'nav navbar-nav', FALSE, FALSE, $this->actualPage, '', 'Eshop');
+		$categories = $this->getStructure($this, $category, $this->repository, TRUE, 'nav navbar-nav', FALSE, FALSE, $this->actualPage, '', 'Eshop');	
 	    } else {
 		$category = NULL;
 		$title = '';
@@ -114,7 +114,7 @@ class CategoriesPresenter extends BasePresenter {
 	    // check for products
 	    $products = $category->getProducts();
 
-	    $categories = $this->getStructure($this, $category, $this->repository, TRUE, 'nav navbar-nav', FALSE, FALSE, $this->actualPage);
+	    $categories = $this->getStructure($this, $category, $this->repository, TRUE, 'nav navbar-nav', FALSE, FALSE, $this->actualPage, 'nav navbar1', 'Eshop');
 	}
 
 	// it is here, because of breadcrumbs
