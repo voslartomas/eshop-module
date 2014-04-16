@@ -1,6 +1,6 @@
 <?php
 
-    namespace AdminModule\EshopModule;
+namespace AdminModule\EshopModule;
 
 use Nette\Application\UI;
 
@@ -104,6 +104,8 @@ use Nette\Application\UI;
 
 	    if (!empty($values->slug)) {
 		$this->product->setSlug($values->slug);
+	    }else{
+	    	$this->product->setSlug(\Nette\Utils\Strings::webalize($values->title));
 	    }
 
 	    $this->product->setMetaTitle($values->metaTitle);
