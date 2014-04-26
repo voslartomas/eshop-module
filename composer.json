@@ -14,8 +14,8 @@
         }
     ],
     "require": {
-		"webcms2/webcms2": "0.*@dev",
-		"webcms2/account-module": "0.*@dev"
+		"webcms2/webcms2": "<0.4",
+		"webcms2/account-module": "<0.2"
     },
     "autoload": {
         "classmap": ["/"]

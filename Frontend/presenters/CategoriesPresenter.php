@@ -38,7 +38,7 @@ class CategoriesPresenter extends BasePresenter{
 			if(count($category) > 0){ 
 				$title = $category[0]->getTitle();
 				$category = $category[0];
-				$categories = $this->getStructure($this, $category, $this->repository, TRUE, 'nav navbar-nav', FALSE, FALSE, $this->actualPage);
+				$categories = $this->getStructure($this, $category, $this->repository, TRUE, 'nav navbar-nav', FALSE, FALSE, $this->actualPage, 'nav navbar', 'Eshop');
 			}else{
 				$category = NULL;
 				$title = '';
