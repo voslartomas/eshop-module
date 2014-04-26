@@ -102,6 +102,12 @@ use Gedmo\Mapping\Annotation as gedmo;
 	 *  @orm\Column(nullable=true)
 	 */
 	private $barcodeType;
+	
+	/**
+	 * @orm\Column(nullable=true)
+	 */
+	private $availability;
+	
 	private $priceWithVat;
 	private $link;
 
@@ -356,5 +362,17 @@ use Gedmo\Mapping\Annotation as gedmo;
 	    return $id;
 	}
 
+	public function getAvailability()
+	{
+	    return $this->availability;
+	}
+	
+	public function setAvailability($availability)
+	{
+	    $this->availability = $availability;
+	    
+	    return $this;
+	}
+	
     }
     

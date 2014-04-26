@@ -61,6 +61,7 @@ use Nette\Application\UI;
 	    $form->addCheckbox('action', 'Action')->setAttribute('class', 'form-control');
 	    $form->addCheckbox('hide', 'Hide')->setAttribute('class', 'form-control');
 	    $form->addText('store', 'Store')->setAttribute('class', 'form-control');
+	    $form->addText('availability', 'Availability')->setAttribute('class', 'form-control');
 	    //$form->addText('price', 'Price')->setAttribute('class', 'form-control');
 	    $form->addText('vat', 'Vat')->setAttribute('class', 'form-control');
 	    $form->addText('priceWithVat', 'Price with VAT')->setAttribute('class', 'form-control');
@@ -113,7 +114,8 @@ use Nette\Application\UI;
 	    $this->product->setMetaKeywords($values->metaKeywords);
 	    $this->product->setLanguage($this->state->language);
 	    $this->product->setHide($values->hide);
-
+	    $this->product->setAvailability($values->availability);
+	    
 	    if ($values->offsetExists('store')) {
 		$this->product->setStore($values->store);
 		$this->product->setBarcode($values->barcode);
@@ -278,6 +280,7 @@ use Nette\Application\UI;
 	    $form->addText('title', 'Title')->setAttribute('class', 'form-control')->setRequired();
 	    $form->addText('priceWithVat', 'Price with VAT')->setAttribute('class', 'form-control');
 	    $form->addText('store', 'Store')->setAttribute('class', 'form-control');
+	    $form->addText('availability', 'Availability')->setAttribute('class', 'form-control');
 	    $form->addText('barcode', 'Barcode')->setAttribute('class', 'form-control');
 	    $form->addText('barcodeType', 'Barcode type')->setAttribute('class', 'form-control');
 	    $form->addHidden('idProduct')->setDefaultValue($this->product->getId());
@@ -303,6 +306,7 @@ use Nette\Application\UI;
 	    $this->variant->setTitle($values->title);
 	    $this->variant->setPrice($values->priceWithVat - $values->priceWithVat * ($product->getVat() / ($product->getVat() + 100)));
 	    $this->variant->setStore($values->store);
+	    $this->variant->setAvailability($values->availability);
 	    $this->variant->setBarcode($values->barcode);
 	    $this->variant->setBarcodeType($values->barcodeType);
 	    $this->variant->setVat($product->getVat());

@@ -172,5 +172,4 @@ class CategoriesPresenter extends BasePresenter {
 
 	return $this->getStructure($context, $category, $repository, FALSE, 'nav navbar-nav', TRUE, FALSE, $fromPage, 'nav navbar', 'Eshop');
     }
-
 }
