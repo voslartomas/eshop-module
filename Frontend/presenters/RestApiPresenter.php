@@ -62,7 +62,7 @@ class RestApiPresenter extends BasePresenter {
 	} elseif ($this->method === 'POST') {
 
 	    // check if request is authorized
-	    if ($this->checkHash($_POST['hash'])) {
+	    if ($this->checkHash($_POST['hash'])) { 
 
 		if ($this->action === 'product' && !$this->id) {
 
@@ -238,7 +238,10 @@ class RestApiPresenter extends BasePresenter {
     }
 
     private function processPictures($product){
-	mkdir("upload/eshop/" . $product->getBarcode(), 0755);
+	
+	if(!file_exists("upload/eshop/" . $product->getBarcode())){
+	    mkdir("upload/eshop/" . $product->getBarcode(), 0755);
+	}
 		
 	// process uploaded pictures
 	foreach ($_FILES as $f){
