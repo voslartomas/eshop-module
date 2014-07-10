@@ -224,6 +224,9 @@ class Category extends \WebCMS\Entity\Seo{
 		return $this->path;
 	}
 
+	/**
+	 * @param string $path
+	 */
 	public function setPath($path) {
 		$this->path = $path;
 	}

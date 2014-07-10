@@ -190,6 +190,9 @@ use Gedmo\Mapping\Annotation as gedmo;
 	    $this->photos = $photos;
 	}
 
+	/**
+	 * @param \Doctrine\Common\Collections\ArrayCollection $categories
+	 */
 	public function setCategories($categories) {
 	    $this->categories = $categories;
 	}

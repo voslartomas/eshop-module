@@ -2,8 +2,6 @@
 
 namespace AdminModule\EshopModule;
 
-use Nette\Application\UI;
-
 /**
  * Description of CartPresenter
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
@@ -96,6 +94,9 @@ class CartPresenter extends BasePresenter {
 	return $grid;
     }
 
+    /**
+     * @param \Grido\Grid $grid
+     */
     private function setOperations(&$grid, $operations) {
 	$grid->setOperation($operations, function($operation, $ids) {
 	    if (strpos($operation, 'setStatus-') !== false) {

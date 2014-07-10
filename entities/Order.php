@@ -158,6 +158,9 @@ use Doctrine\orm\Mapping as orm;
 	    }
 	}
 
+	/**
+	 * @param OrderItem $item
+	 */
 	public function addPayment($item) {
 	    $item->setOrder($this);
 	    $item->setType(OrderItem::PAYMENT);
@@ -176,6 +179,9 @@ use Doctrine\orm\Mapping as orm;
 	    }
 	}
 
+	/**
+	 * @param OrderItem $item
+	 */
 	public function addShipping($item) {
 	    $item->setOrder($this);
 	    $item->setType(OrderItem::SHIPPING);
@@ -186,6 +192,9 @@ use Doctrine\orm\Mapping as orm;
 	    $this->getPriceTotal();
 	}
 
+	/**
+	 * @param OrderItem $item
+	 */
 	public function addItem($item) {
 	    $item->setOrder($this);
 	    $item->setType(OrderItem::ITEM);
@@ -411,6 +420,9 @@ use Doctrine\orm\Mapping as orm;
 	    $this->updated = $updated;
 	}
 
+	/**
+	 * @param \Nette\Http\SessionSection $language
+	 */
 	public function setLanguage($language) {
 	    $this->language = $language;
 	}
