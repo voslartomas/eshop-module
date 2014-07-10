@@ -2,8 +2,6 @@
 
 namespace AdminModule\EshopModule;
 
-use Nette\Application\UI;
-
 /**
  * Description of ParametersPresenter
  *

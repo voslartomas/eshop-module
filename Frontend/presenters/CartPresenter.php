@@ -468,6 +468,9 @@ class CartPresenter extends BasePresenter {
 	));
     }
 
+    /**
+     * @param CartPresenter $context
+     */
     public function cartBox($context, $fromPage, $initAnimation = FALSE) {
 	$eshopSession = $context->session->getSection('eshop' . $context->language->getId());
 	$order = $eshopSession->order;

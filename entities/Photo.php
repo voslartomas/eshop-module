@@ -60,6 +60,9 @@ class Photo extends \WebCMS\Entity\Entity {
 		return $this->default;
 	}
 
+	/**
+	 * @param boolean $default
+	 */
 	public function setDefault($default) {
 		$this->default = $default;
 	}

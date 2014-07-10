@@ -181,7 +181,6 @@ class RestApiPresenter extends BasePresenter {
 
     /**
      * Updates product.
-     * @param type $id
      * @param type $data
      */
     private function updateProduct($data) {
@@ -319,6 +318,9 @@ class RestApiPresenter extends BasePresenter {
 	return sha1($identification . $token . $identification);
     }
 
+    /**
+     * @param string $key
+     */
     private function setAttribute($entity, $data, $key) {
 	if (array_key_exists($key, $data)) {
 	    $getter = 'set' . ucfirst($key);
@@ -333,6 +335,10 @@ class RestApiPresenter extends BasePresenter {
 	}
     }
 
+    /**
+     * @param string $status
+     * @param string $message
+     */
     private function sendAPIResponse($status, $message, $response) {
 
 	$r = array(
@@ -401,6 +407,9 @@ class RestApiPresenter extends BasePresenter {
 	$this->sendAPIResponse('200', 'Barcode update for ' . $product->getTitle() . '.', $this->productToArray($product));
     }
     
+    /**
+     * @param string $dir
+     */
     private function unzip($filePath, $dir){
 	$zip = new \ZipArchive;
 	$res = $zip->open($filePath);

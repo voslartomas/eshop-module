@@ -2,8 +2,6 @@
 
 namespace WebCMS\EshopModule\Doctrine;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Gedmo\Mapping\Annotation as gedmo;
 use Doctrine\orm\Mapping as orm;
 
 /**

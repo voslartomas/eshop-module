@@ -33,6 +33,9 @@ class ParameterValue extends \WebCMS\Entity\Entity {
 		$this->value = $value;
 	}
 
+	/**
+	 * @param Parameter $parameter
+	 */
 	public function setParameter($parameter) {
 		$this->parameter = $parameter;
 	}
