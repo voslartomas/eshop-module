@@ -115,6 +115,11 @@ use Gedmo\Mapping\Annotation as gedmo;
 	 * @orm\Column(nullable=true)
 	 */
 	private $defaultPicture;
+	
+	/**
+	 * @orm\Column(nullable=true)
+	 */
+	private $color;
 
 	public function __construct() {
 	    $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -377,5 +382,16 @@ use Gedmo\Mapping\Annotation as gedmo;
 	    return $this;
 	}
 	
-    }
+	public function getColor()
+	{
+	    return $this->color;
+	}
+	
+	public function setColor($color)
+	{
+	    $this->color = $color;
+	    
+	    return $this;
+	}
+}
     
