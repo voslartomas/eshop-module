@@ -109,8 +109,12 @@ class EshopPresenter extends BasePresenter{
 		
 		$template->products = $products;
 		
+		ob_start();
 		$template->render();
-		$this->terminate();
+		$content = ob_get_clean();
+		ob_clean();
+
+		$this->payload->data = $content;
 	}
 	
 	private function setCategoriesLinks($categories, $catPage){
