@@ -16,7 +16,7 @@ class EshopPresenter extends \AdminModule\BasePresenter {
 	protected function startup() {
 		parent::startup();
 		
-		$this->repository = $this->em->getRepository('WebCMS\PageModule\Doctrine\Page');
+		$this->repository = $this->em->getRepository('WebCMS\PageModule\Entity\Page');
 	}
 
 	protected function beforeRender() {
@@ -53,7 +53,17 @@ class EshopPresenter extends \AdminModule\BasePresenter {
 		$countOf['orders'] = count($orders);
 		$countOf['ordersTotalPrice'] = $totalPrice;
 		
+		$this->template->active = 'statistics';
 		$this->template->counts = $countOf;
 		$this->template->idPage = $idPage;
+	}
+	
+	public function actionRts($idPage){}
+	
+	public function renderRts($idPage){
+	    $this->reloadContent();
+	    
+	    $this->template->idPage = $idPage;
+	    $this->template->active = 'rts';
 	}
 }

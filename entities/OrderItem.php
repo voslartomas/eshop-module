@@ -2,8 +2,6 @@
 
 namespace WebCMS\EshopModule\Doctrine;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Gedmo\Mapping\Annotation as gedmo;
 use Doctrine\orm\Mapping as orm;
 
 /**
@@ -11,7 +9,7 @@ use Doctrine\orm\Mapping as orm;
  * @orm\Entity
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class OrderItem extends \AdminModule\Doctrine\Entity {
+class OrderItem extends \WebCMS\Entity\Entity {
 	
 	
 	private $itemId;

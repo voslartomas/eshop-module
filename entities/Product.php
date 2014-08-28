@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as gedmo;
      * @orm\Table(name="eshopProduct")
      * @author Tomáš Voslař <tomas.voslar at webcook.cz>
      */
-    class Product extends \AdminModule\Seo {
+    class Product extends \WebCMS\Entity\Seo {
 
 	/**
 	 * @orm\Column(length=64)
@@ -41,7 +41,7 @@ use Gedmo\Mapping\Annotation as gedmo;
 	private $categories;
 
 	/**
-	 * @orm\ManyToOne(targetEntity="\AdminModule\Language")
+	 * @orm\ManyToOne(targetEntity="\WebCMS\Entity\Language")
 	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private $language;
@@ -115,6 +115,11 @@ use Gedmo\Mapping\Annotation as gedmo;
 	 * @orm\Column(nullable=true)
 	 */
 	private $defaultPicture;
+	
+	/**
+	 * @orm\Column(nullable=true)
+	 */
+	private $color;
 
 	public function __construct() {
 	    $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -190,6 +195,9 @@ use Gedmo\Mapping\Annotation as gedmo;
 	    $this->photos = $photos;
 	}
 
+	/**
+	 * @param \Doctrine\Common\Collections\ArrayCollection $categories
+	 */
 	public function setCategories($categories) {
 	    $this->categories = $categories;
 	}
@@ -374,5 +382,16 @@ use Gedmo\Mapping\Annotation as gedmo;
 	    return $this;
 	}
 	
-    }
+	public function getColor()
+	{
+	    return $this->color;
+	}
+	
+	public function setColor($color)
+	{
+	    $this->color = $color;
+	    
+	    return $this;
+	}
+}
     

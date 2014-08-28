@@ -12,7 +12,7 @@ use Doctrine\orm\Mapping as orm;
      * @orm\Table(name="Orders")
      * @author Tomáš Voslař <tomas.voslar at webcook.cz>
      */
-    class Order extends \AdminModule\Doctrine\Entity {
+    class Order extends \WebCMS\Entity\Entity {
 
 	/**
 	 * @orm\Column
@@ -122,7 +122,7 @@ use Doctrine\orm\Mapping as orm;
 	private $updated;
 
 	/**
-	 * @orm\ManyToOne(targetEntity="\AdminModule\Language")
+	 * @orm\ManyToOne(targetEntity="\WebCMS\Entity\Language")
 	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private $language;
@@ -158,6 +158,9 @@ use Doctrine\orm\Mapping as orm;
 	    }
 	}
 
+	/**
+	 * @param OrderItem $item
+	 */
 	public function addPayment($item) {
 	    $item->setOrder($this);
 	    $item->setType(OrderItem::PAYMENT);
@@ -176,6 +179,9 @@ use Doctrine\orm\Mapping as orm;
 	    }
 	}
 
+	/**
+	 * @param OrderItem $item
+	 */
 	public function addShipping($item) {
 	    $item->setOrder($this);
 	    $item->setType(OrderItem::SHIPPING);
@@ -186,6 +192,9 @@ use Doctrine\orm\Mapping as orm;
 	    $this->getPriceTotal();
 	}
 
+	/**
+	 * @param OrderItem $item
+	 */
 	public function addItem($item) {
 	    $item->setOrder($this);
 	    $item->setType(OrderItem::ITEM);
@@ -411,6 +420,9 @@ use Doctrine\orm\Mapping as orm;
 	    $this->updated = $updated;
 	}
 
+	/**
+	 * @param \Nette\Http\SessionSection $language
+	 */
 	public function setLanguage($language) {
 	    $this->language = $language;
 	}
@@ -474,21 +486,22 @@ use Doctrine\orm\Mapping as orm;
 	public function setAccount($account) {
 	    $this->account = $account;
 	}
-	
-	public function getPaymentItem(){
-	    foreach($this->getItems() as $item){
-		if($item->getType() === OrderItem::PAYMENT){
+
+	public function getPaymentItem() {
+	    foreach ($this->getItems() as $item) {
+		if ($item->getType() === OrderItem::PAYMENT) {
 		    return $item;
 		}
 	    }
 	}
-	
-	public function getShippingItem(){
-	    foreach($this->getItems() as $item){
-		if($item->getType() === OrderItem::SHIPPING){
+
+	public function getShippingItem() {
+	    foreach ($this->getItems() as $item) {
+		if ($item->getType() === OrderItem::SHIPPING) {
 		    return $item;
 		}
 	    }
 	}
+
     }
     

@@ -14,15 +14,15 @@
         }
     ],
     "require": {
-		"webcms2/webcms2": "<0.4",
-		"webcms2/account-module": "<0.2"
+		"webcms2/webcms2": "~0.4@dev",
+		"webcms2/account-module": "~0.2@dev"
     },
     "autoload": {
         "classmap": ["/"]
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1.x-dev"
+            "dev-master": "0.2.x-dev"
         }
     }
 }

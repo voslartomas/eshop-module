@@ -32,7 +32,7 @@ class EshopPresenter extends BasePresenter{
 	
 	public function renderDefault($id){
 		
-		$catPage = $this->em->getRepository('\AdminModule\Page')->findOneBy(array(
+		$catPage = $this->em->getRepository('\WebCMS\Entity\Page')->findOneBy(array(
 			'language' => $this->language,
 			'moduleName' => 'Eshop',
 			'presenter' => 'Categories'
@@ -84,7 +84,7 @@ class EshopPresenter extends BasePresenter{
 			$this->invalidateControl('lazyLoader');
 		}
 		
-		$catPage = $this->em->getRepository('\AdminModule\Page')->findOneBy(array(
+		$catPage = $this->em->getRepository('\WebCMS\Entity\Page')->findOneBy(array(
 			'language' => $this->language,
 			'moduleName' => 'Eshop',
 			'presenter' => 'Categories'
@@ -109,8 +109,12 @@ class EshopPresenter extends BasePresenter{
 		
 		$template->products = $products;
 		
+		ob_start();
 		$template->render();
-		$this->terminate();
+		$content = ob_get_clean();
+		ob_clean();
+
+		$this->payload->data = $content;
 	}
 	
 	private function setCategoriesLinks($categories, $catPage){

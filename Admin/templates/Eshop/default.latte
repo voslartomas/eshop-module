@@ -3,7 +3,12 @@
 	{include ../tabs.latte active => 'eshop'}
 
 	<h1>{$actualPage->getTitle()}</h1>
-		
+	
+	<ul class="nav nav-tabs" id="myTab">
+		<li {if $active == "statistics"}class="active"{/if}><a class="ajax" n:href="Eshop:default idPage => $idPage">{_'Summary'}</a></li>
+		<li {if $active == "rts"}class="active"{/if}><a class="ajax" n:href="Eshop:rts idPage => $idPage">{_'RTS'}</a></li>
+	  </ul>
+	
 	<table class="table table-responsive table-bordered">
 		<tr>
 			<th>{_'Count of categories'}</th>

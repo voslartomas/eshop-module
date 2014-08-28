@@ -10,7 +10,7 @@ use Doctrine\orm\Mapping as orm;
  * @orm\Table(name="eshopPhoto")
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class Photo extends \AdminModule\Doctrine\Entity {
+class Photo extends \WebCMS\Entity\Entity {
 	/**
 	 * @orm\Column
 	 */
@@ -60,6 +60,9 @@ class Photo extends \AdminModule\Doctrine\Entity {
 		return $this->default;
 	}
 
+	/**
+	 * @param boolean $default
+	 */
 	public function setDefault($default) {
 		$this->default = $default;
 	}
