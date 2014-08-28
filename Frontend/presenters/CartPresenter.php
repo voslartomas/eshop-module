@@ -288,7 +288,7 @@ class CartPresenter extends BasePresenter {
 	}
 
 	// get account URL
-	$moduleAccount = $this->em->getRepository('AdminModule\Module')->findOneBy(array(
+	$moduleAccount = $this->em->getRepository('WebCMS\Entity\Module')->findOneBy(array(
 	    'name' => 'Account'
 	));
 
