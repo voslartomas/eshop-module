@@ -383,6 +383,10 @@ class CartPresenter extends BasePresenter {
      */
     private function addCartItem($itemId, $quantity, $variant) {
 
+	if (!$quantity) {
+                $quantity = 1;
+        }
+
 	$error = FALSE;
 	if ($variant === 'error') {
 	    $snippets = array(
