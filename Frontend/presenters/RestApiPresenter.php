@@ -20,8 +20,8 @@ class RestApiPresenter extends BasePresenter {
 	$this->method = $this->request->getMethod();
 	$this->productRepository = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Product');
 	
-	$thumbnails = $this->em->getRepository('WebCMS\Enitity\Thumbnail')->findAll();
-        $this->thumbnailCreator = new \WebCMS\ThumbnailCreator($this->settings, $thumbnails);
+	$thumbnails = $this->em->getRepository('WebCMS\Entity\Thumbnail')->findAll();
+        $this->thumbnailCreator = new \WebCMS\Helpers\ThumbnailCreator($this->settings, $thumbnails);
     }
 
     /**
