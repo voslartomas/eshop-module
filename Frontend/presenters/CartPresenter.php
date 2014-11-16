@@ -496,7 +496,7 @@ class CartPresenter extends BasePresenter
 	        'path' => $fromPage->getPath(),
 	        'abbr' => $context->abbr,
 	    ));
-        $template->items = $order->getItems();
+        $template->items = ($order instanceof \WebCMS\EshopModule\Doctrine\Order ? $order->getItems() : array());
 
         if (is_object($order)) {
             if ($order->getQuantityTotal() > 0) {
