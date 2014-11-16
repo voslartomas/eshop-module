@@ -9,61 +9,71 @@ use Doctrine\orm\Mapping as orm;
  * @orm\Entity
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class Shipping extends \WebCMS\Entity\Entity{
-	/**
-	 * @orm\Column(type="decimal", precision=12, scale=4)
-	 */
-	private $price;
-	
-	/**
-	 * @orm\Column(type="integer")
-	 */
-	private $vat;
-	
-	/**
-	 * @orm\Column
-	 */
-	private $title;
-	
-	/**
-	 * @orm\ManyToOne(targetEntity="\WebCMS\Entity\Language")
-	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
-	 */
-	private $language;
-	
-	public function getPrice() {
-		return $this->price;
-	}
+class Shipping extends \WebCMS\Entity\Entity
+{
+    /**
+     * @orm\Column(type="decimal", precision=12, scale=4)
+     */
+    private $price;
 
-	public function getPriceWithVat(){
-		return $this->getPrice() * (($this->getVat() / 100) + 1);
-	}
-	
-	public function getVat() {
-		return $this->vat;
-	}
+    /**
+     * @orm\Column(type="integer")
+     */
+    private $vat;
 
-	public function getTitle() {
-		return $this->title;
-	}
+    /**
+     * @orm\Column
+     */
+    private $title;
 
-	public function setPrice($price) {
-		$this->price = $price;
-	}
+    /**
+     * @orm\ManyToOne(targetEntity="\WebCMS\Entity\Language")
+     * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $language;
 
-	public function setVat($vat) {
-		$this->vat = $vat;
-	}
+    public function getPrice()
+    {
+        return $this->price;
+    }
 
-	public function setTitle($title) {
-		$this->title = $title;
-	}
-	
-	public function getLanguage() {
-		return $this->language;
-	}
+    public function getPriceWithVat()
+    {
+        return $this->getPrice() * (($this->getVat() / 100) + 1);
+    }
 
-	public function setLanguage($language) {
-		$this->language = $language;
-	}
+    public function getVat()
+    {
+        return $this->vat;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    public function setVat($vat)
+    {
+        $this->vat = $vat;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+    }
 }

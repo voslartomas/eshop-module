@@ -9,34 +9,39 @@ use Doctrine\orm\Mapping as orm;
  * @orm\Entity
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class ParameterValue extends \WebCMS\Entity\Entity {
-	/**
-	 * @orm\Column
-	 */
-	private $value;
-	
-	/**
-	 * @orm\ManyToOne(targetEntity="Parameter", inversedBy="values")
-	 * @orm\JoinColumn(onDelete="CASCADE")
-	 */
-	private $parameter;
-	
-	public function getValue() {
-		return $this->value;
-	}
+class ParameterValue extends \WebCMS\Entity\Entity
+{
+    /**
+     * @orm\Column
+     */
+    private $value;
 
-	public function getParameter() {
-		return $this->parameter;
-	}
+    /**
+     * @orm\ManyToOne(targetEntity="Parameter", inversedBy="values")
+     * @orm\JoinColumn(onDelete="CASCADE")
+     */
+    private $parameter;
 
-	public function setValue($value) {
-		$this->value = $value;
-	}
+    public function getValue()
+    {
+        return $this->value;
+    }
 
-	/**
-	 * @param Parameter $parameter
-	 */
-	public function setParameter($parameter) {
-		$this->parameter = $parameter;
-	}
+    public function getParameter()
+    {
+        return $this->parameter;
+    }
+
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * @param Parameter $parameter
+     */
+    public function setParameter($parameter)
+    {
+        $this->parameter = $parameter;
+    }
 }

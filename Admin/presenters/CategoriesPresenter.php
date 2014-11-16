@@ -1,6 +1,6 @@
 <?php
 
-    namespace AdminModule\EshopModule;
+namespace AdminModule\EshopModule;
 
 use Nette\Application\UI;
 
@@ -9,207 +9,222 @@ use Nette\Application\UI;
      *
      * @author Tomáš Voslař <tomas.voslar at webcook.cz>
      */
-    class CategoriesPresenter extends BasePresenter {
+    class CategoriesPresenter extends BasePresenter
+    {
+        private $repository;
 
-	private $repository;
+    /* @var \WebCMS\EshopModule\Doctrine\Category */
+    private $category;
 
-	/* @var \WebCMS\EshopModule\Doctrine\Category */
-	private $category;
+        protected function beforeRender()
+        {
+            parent::beforeRender();
+        }
 
-	protected function beforeRender() {
-	    parent::beforeRender();
-	}
+        protected function startup()
+        {
+            parent::startup();
 
-	protected function startup() {
-	    parent::startup();
+            $this->repository = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Category');
+        }
 
-	    $this->repository = $this->em->getRepository('WebCMS\EshopModule\Doctrine\Category');
-	}
+        protected function createComponentCategoryForm()
+        {
+            $hierarchy = $this->repository->getTreeForSelect(array(
+        array('by' => 'root', 'dir' => 'ASC'),
+        array('by' => 'lft', 'dir' => 'ASC'),
+        ), array(
+        'language = '.$this->state->language->getId(),
+        ));
 
-	protected function createComponentCategoryForm() {
+            $hierarchy = $hierarchy;
 
-	    $hierarchy = $this->repository->getTreeForSelect(array(
-		array('by' => 'root', 'dir' => 'ASC'),
-		array('by' => 'lft', 'dir' => 'ASC')
-		), array(
-		'language = ' . $this->state->language->getId()
-	    ));
+            $form = $this->createForm();
+            $form->addText('title', 'Name')->setAttribute('class', 'form-control');
+            $form->addText('slug', 'SEO adresa url')->setAttribute('class', 'form-control');
+            $form->addText('metaTitle', 'SEO title')->setAttribute('class', 'form-control');
+            $form->addText('metaDescription', 'SEO description')->setAttribute('class', 'form-control');
+            $form->addText('metaKeywords', 'SEO keywords')->setAttribute('class', 'form-control');
+            $form->addSelect('parent', 'Parent')->setTranslator(null)->setItems($hierarchy)->setAttribute('class', 'form-control');
+            $form->addCheckbox('visible', 'Show')->setDefaultValue(1);
+            $form->addCheckbox('favourite', 'Favourite');
+            $form->addTextarea('description', 'Description')->setAttribute('class', 'editor');
 
-	    $hierarchy = $hierarchy;
+            $form->addSubmit('save', 'Save')->setAttribute('class', 'btn btn-success');
 
-	    $form = $this->createForm();
-	    $form->addText('title', 'Name')->setAttribute('class', 'form-control');
-	    $form->addText('slug', 'SEO adresa url')->setAttribute('class', 'form-control');
-	    $form->addText('metaTitle', 'SEO title')->setAttribute('class', 'form-control');
-	    $form->addText('metaDescription', 'SEO description')->setAttribute('class', 'form-control');
-	    $form->addText('metaKeywords', 'SEO keywords')->setAttribute('class', 'form-control');
-	    $form->addSelect('parent', 'Parent')->setTranslator(NULL)->setItems($hierarchy)->setAttribute('class', 'form-control');
-	    $form->addCheckbox('visible', 'Show')->setDefaultValue(1);
-	    $form->addCheckbox('favourite', 'Favourite');
-	    $form->addTextarea('description', 'Description')->setAttribute('class', 'editor');
+            $form->onSuccess[] = callback($this, 'categoryFormSubmitted');
 
-	    $form->addSubmit('save', 'Save')->setAttribute('class', 'btn btn-success');
+            if ($this->category->getId()) {
+                $form->setDefaults($this->category->toArray());
+            }
 
-	    $form->onSuccess[] = callback($this, 'categoryFormSubmitted');
+            return $form;
+        }
 
-	    if ($this->category->getId()) {
-		$form->setDefaults($this->category->toArray());
-	    }
+        public function actionUpdateCategory($idPage, $id)
+        {
+            if ($id) {
+                $this->category = $this->repository->find($id);
+            } else {
+                $this->category = new \WebCMS\EshopModule\Doctrine\Category();
+            }
+        }
 
-	    return $form;
-	}
+        public function categoryFormSubmitted(UI\Form $form)
+        {
+            $values = $form->getValues();
 
-	public function actionUpdateCategory($idPage, $id) {
-	    if ($id)
-		$this->category = $this->repository->find($id);
-	    else
-		$this->category = new \WebCMS\EshopModule\Doctrine\Category();
-	}
+            if ($values->parent) {
+                $parent = $this->repository->find($values->parent);
+            } else {
+                $parent = null;
+            }
 
-	public function categoryFormSubmitted(UI\Form $form) {
-	    $values = $form->getValues();
+            $this->category->setTitle($values->title);
 
-	    if ($values->parent)
-		$parent = $this->repository->find($values->parent);
-	    else
-		$parent = NULL;
+            if (!empty($values->slug)) {
+                $this->category->setSlug($values->slug);
+            }
 
-	    $this->category->setTitle($values->title);
+            $this->category->setMetaTitle($values->metaTitle);
+            $this->category->setMetaDescription($values->metaDescription);
+            $this->category->setMetaKeywords($values->metaKeywords);
+            $this->category->setVisible($values->visible);
+            $this->category->setParent($parent);
+            $this->category->setFavourite($values->favourite);
+            $this->category->setDescription($values->description);
+            $this->category->setLanguage($this->state->language);
+            $this->category->setPath('tmp value');
 
-	    if (!empty($values->slug)) {
-		$this->category->setSlug($values->slug);
-	    }
+            if (array_key_exists('files', $_POST)) {
+                $this->category->setPicture($_POST['files'][0]);
+            } else {
+                $this->category->setPicture(null);
+            }
 
-	    $this->category->setMetaTitle($values->metaTitle);
-	    $this->category->setMetaDescription($values->metaDescription);
-	    $this->category->setMetaKeywords($values->metaKeywords);
-	    $this->category->setVisible($values->visible);
-	    $this->category->setParent($parent);
-	    $this->category->setFavourite($values->favourite);
-	    $this->category->setDescription($values->description);
-	    $this->category->setLanguage($this->state->language);
-	    $this->category->setPath('tmp value');
+            if (!$this->category->getId()) {
+                $this->em->persist($this->category);
+            } // FIXME only if is new we have to persist entity, otherway it can be just flushed
+        $this->em->flush();
 
-	    if (array_key_exists('files', $_POST))
-		$this->category->setPicture($_POST['files'][0]);
-	    else
-		$this->category->setPicture(NULL);
+        // FIXME it is necessary to recalculate childrens path when slug is changed or is changed parent!
+        // creates path
+        $path = $this->repository->getPath($this->category);
+            $final = array();
+            foreach ($path as $p) {
+                if ($p->getParent() != NULL) {
+                    $final[] = $p->getSlug();
+                }
+            }
 
-	    if (!$this->category->getId())
-		$this->em->persist($this->category); // FIXME only if is new we have to persist entity, otherway it can be just flushed
-	    $this->em->flush();
+            $this->category->setPath(implode('/', $final));
 
-	    // FIXME it is necessary to recalculate childrens path when slug is changed or is changed parent!
-	    // creates path
-	    $path = $this->repository->getPath($this->category);
-	    $final = array();
-	    foreach ($path as $p) {
-		if ($p->getParent() != NULL)
-		    $final[] = $p->getSlug();
-	    }
+            $this->em->flush();
 
-	    $this->category->setPath(implode('/', $final));
+            $this->flashMessage('Category has been added.', 'success');
 
-	    $this->em->flush();
+            $this->handleGenerateXml();
 
-	    $this->flashMessage('Category has been added.', 'success');
+            $this->forward('Categories:default', array('idPage' => $this->actualPage->getId()));
+        }
 
-	    $this->handleGenerateXml();
+        protected function createComponentCategoriesGrid($name)
+        {
+            $grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\Category', array(
+        array('by' => 'root', 'dir' => 'ASC'),
+        array('by' => 'lft', 'dir' => 'ASC'),
+        ), array(
+        'language = '.$this->state->language->getId(),
+        'level > 0',
+        )
+        );
 
-	    if (!$this->isAjax())
-		$this->redirect('Categories:default', array('idPage' => $this->actualPage->getId()));
-	}
+            $grid->addColumnText('title', 'Name')->setCustomRender(function ($item) {
+        return str_repeat("-", $item->getLevel()).$item->getTitle();
+        })->setFilterText();
 
-	protected function createComponentCategoriesGrid($name) {
+            $grid->addColumnText('visible', 'Visible')->setReplacement(array(
+        '1' => 'Yes',
+        NULL => 'No',
+        ));
 
-	    $grid = $this->createGrid($this, $name, '\WebCMS\EshopModule\Doctrine\Category', array(
-		array('by' => 'root', 'dir' => 'ASC'),
-		array('by' => 'lft', 'dir' => 'ASC')
-		), array(
-		'language = ' . $this->state->language->getId(),
-		'level > 0'
-		)
-	    );
+            $grid->addActionHref("moveUp", "Move up", 'moveUp', array('idPage' => $this->actualPage->getId()));
+            $grid->addActionHref("moveDown", "Move down", 'moveDown', array('idPage' => $this->actualPage->getId()));
+            $grid->addActionHref("updateCategory", 'Edit', 'updateCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
+            $grid->addActionHref("deleteCategory", 'Delete', 'deleteCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
 
-	    $grid->addColumnText('title', 'Name')->setCustomRender(function($item) {
-		return str_repeat("-", $item->getLevel()) . $item->getTitle();
-	    })->setFilterText();
+            return $grid;
+        }
 
-	    $grid->addColumnText('visible', 'Visible')->setReplacement(array(
-		'1' => 'Yes',
-		NULL => 'No'
-	    ));
+        public function actionDeleteCategory($idPage, $id)
+        {
+            $this->category = $this->repository->find($id);
+            $this->em->remove($this->category);
+            $this->em->flush();
 
-	    $grid->addActionHref("moveUp", "Move up", 'moveUp', array('idPage' => $this->actualPage->getId()));
-	    $grid->addActionHref("moveDown", "Move down", 'moveDown', array('idPage' => $this->actualPage->getId()));
-	    $grid->addActionHref("updateCategory", 'Edit', 'updateCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-primary ajax'));
-	    $grid->addActionHref("deleteCategory", 'Delete', 'deleteCategory', array('idPage' => $this->actualPage->getId()))->getElementPrototype()->addAttributes(array('class' => 'btn btn-danger', 'data-confirm' => 'Are you sure you want to delete this item?'));
+            $this->flashMessage('Category has been removed.', 'success');
 
-	    return $grid;
-	}
+            if (!$this->isAjax()) {
+                $this->redirect('Categories:default', array('idPage' => $idPage));
+            }
+        }
 
-	public function actionDeleteCategory($idPage, $id) {
-	    $this->category = $this->repository->find($id);
-	    $this->em->remove($this->category);
-	    $this->em->flush();
+        public function actionMoveUp($id, $idPage)
+        {
+            $this->category = $this->repository->find($id);
 
-	    $this->flashMessage('Category has been removed.', 'success');
+            $this->repository->moveUp($this->category);
+            $this->flashMessage('Category has been moved up.', 'success');
 
-	    if (!$this->isAjax())
-		$this->redirect('Categories:default', array('idPage' => $idPage));
-	}
+            if (!$this->isAjax()) {
+                $this->redirect('Categories:default', array('idPage' => $idPage));
+            }
+        }
 
-	public function actionMoveUp($id, $idPage) {
-	    $this->category = $this->repository->find($id);
+        public function actionMoveDown($id, $idPage)
+        {
+            $this->category = $this->repository->find($id);
 
-	    $this->repository->moveUp($this->category);
-	    $this->flashMessage('Category has been moved up.', 'success');
+            $this->repository->moveDown($this->category);
+            $this->flashMessage('Category has been moved down.', 'success');
 
-	    if (!$this->isAjax())
-		$this->redirect('Categories:default', array('idPage' => $idPage));
-	}
+            if (!$this->isAjax()) {
+                $this->redirect('Categories:default', array('idPage' => $idPage));
+            }
+        }
 
-	public function actionMoveDown($id, $idPage) {
-	    $this->category = $this->repository->find($id);
+        public function actionDefault($idPage)
+        {
+            $main = $this->repository->findBy(array(
+        'title' => 'Main',
+        'level' => 0,
+        'language' => $this->state->language,
+        ));
 
-	    $this->repository->moveDown($this->category);
-	    $this->flashMessage('Category has been moved down.', 'success');
+            if (count($main) == 0) {
+                $main = new \WebCMS\EshopModule\Doctrine\Category();
+                $main->setTitle('Main');
+                $main->setLanguage($this->state->language);
+                $main->setPath('');
+                $main->setVisible(false);
 
-	    if (!$this->isAjax())
-		$this->redirect('Categories:default', array('idPage' => $idPage));
-	}
+                $this->em->persist($main);
+                $this->em->flush();
+            }
+        }
 
-	public function actionDefault($idPage) {
-	    $main = $this->repository->findBy(array(
-		'title' => 'Main',
-		'level' => 0,
-		'language' => $this->state->language
-	    ));
+        public function renderUpdateCategory($idPage)
+        {
+            $this->reloadContent();
 
-	    if (count($main) == 0) {
-		$main = new \WebCMS\EshopModule\Doctrine\Category;
-		$main->setTitle('Main');
-		$main->setLanguage($this->state->language);
-		$main->setPath('');
-		$main->setVisible(FALSE);
+            $this->template->category = $this->category;
+            $this->template->idPage = $idPage;
+        }
 
-		$this->em->persist($main);
-		$this->em->flush();
-	    }
-	}
+        public function renderDefault($idPage)
+        {
+            $this->reloadContent();
 
-	public function renderUpdateCategory($idPage) {
-	    $this->reloadContent();
-
-	    $this->template->category = $this->category;
-	    $this->template->idPage = $idPage;
-	}
-
-	public function renderDefault($idPage) {
-	    $this->reloadContent();
-
-	    $this->template->idPage = $idPage;
-	}
-
+            $this->template->idPage = $idPage;
+        }
     }
-    

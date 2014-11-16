@@ -13,23 +13,23 @@ use Doctrine\orm\Mapping as orm;
  * @orm\Table(name="eshopCategory")
  * @author Tomáš Voslař <tomas.voslar at webcook.cz>
  */
-class Category extends \WebCMS\Entity\Seo{
-
+class Category extends \WebCMS\Entity\Seo
+{
     /**
      * @orm\Column(length=64)
      */
     private $title;
-	
+
     /**
      * @orm\Column(type="text", nullable=true)
      */
     private $description;
-	
-	/**
-	 * @orm\Column(nullable=true)
-	 */
-	private $picture;
-	
+
+    /**
+     * @orm\Column(nullable=true)
+     */
+    private $picture;
+
     /**
      * @gedmo\Slug(fields={"title"})
      * @orm\Column(length=64)
@@ -83,48 +83,50 @@ class Category extends \WebCMS\Entity\Seo{
      * @orm\Column(type="datetime")
      */
     private $updated;
-	
-	/**
-	 * @orm\ManyToOne(targetEntity="\WebCMS\Entity\Language")
-	 * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
-	 */
-	private $language;
-	
-	/**
-	 * @orm\Column
-	 */
-	private $path;
-	
-	/**
-	 * @orm\Column(type="boolean")
-	 */
-	public $visible;
-	
-	/**
-	 * @orm\ManyToMany(targetEntity="Product", mappedBy="categories")
-	 */
-	private $products;
-	
-	/**
-	 * @orm\Column(type="boolean", nullable=true)
-	 */
-	private $favourite;
-		
-	private $link;
-	
-    public function __construct()    {
+
+    /**
+     * @orm\ManyToOne(targetEntity="\WebCMS\Entity\Language")
+     * @orm\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $language;
+
+    /**
+     * @orm\Column
+     */
+    private $path;
+
+    /**
+     * @orm\Column(type="boolean")
+     */
+    public $visible;
+
+    /**
+     * @orm\ManyToMany(targetEntity="Product", mappedBy="categories")
+     */
+    private $products;
+
+    /**
+     * @orm\Column(type="boolean", nullable=true)
+     */
+    private $favourite;
+
+    private $link;
+
+    public function __construct()
+    {
         $this->children = new ArrayCollection();
-		$this->products = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getSlug()
     {
         return $this->slug;
     }
-	
-	public function setSlug($slug) {
-		$this->slug = $slug;
-	}
+
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
 
     public function getId()
     {
@@ -151,7 +153,7 @@ class Category extends \WebCMS\Entity\Seo{
         return $this->description;
     }
 
-	public function setParent($parent)
+    public function setParent($parent)
     {
         $this->parent = $parent;
     }
@@ -178,10 +180,10 @@ class Category extends \WebCMS\Entity\Seo{
 
     public function getLeft()
     {
-    	return $this->lft;
+        return $this->lft;
     }
 
-	public function getRight()
+    public function getRight()
     {
         return $this->rgt;
     }
@@ -195,83 +197,99 @@ class Category extends \WebCMS\Entity\Seo{
     {
         return $this->updated;
     }
-	
-	public function getLanguage() {
-		return $this->language;
-	}
 
-	public function setLanguage($language) {
-		$this->language = $language;
-	}
-	
-	public function getVisible() {
-		return $this->visible;
-	}
+    public function getLanguage()
+    {
+        return $this->language;
+    }
 
-	public function setVisible($visible) {
-		$this->visible = $visible;
-	}
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+    }
 
-	public function getDefault() {
-		return $this->default;
-	}
+    public function getVisible()
+    {
+        return $this->visible;
+    }
 
-	public function setDefault($default) {
-		$this->default = $default;
-	}
-		
-	public function getPath() {
-		return $this->path;
-	}
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+    }
 
-	/**
-	 * @param string $path
-	 */
-	public function setPath($path) {
-		$this->path = $path;
-	}
-	
-	public function getPicture() {
-		return $this->picture;
-	}
+    public function getDefault()
+    {
+        return $this->default;
+    }
 
-	public function setPicture($picture) {
-		$this->picture = $picture;
-	}
-	
-    public function __toString(){
+    public function setDefault($default)
+    {
+        $this->default = $default;
+    }
+
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
+    }
+
+    public function __toString()
+    {
         return $this->getTitle();
     }
-	
-	public function getProducts() {
-		
-		$products = array();
-		foreach($this->products as $p){
-			if(!$p->getHide()){
-				$products[] = $p;
-			}
-		}
-		
-		return $products;
-	}
 
-	public function setProducts($products) {
-		$this->products = $products;
-	}
-	
-	public function getFavourite() {
-		return $this->favourite;
-	}
+    public function getProducts()
+    {
+        $products = array();
+        foreach ($this->products as $p) {
+            if (!$p->getHide()) {
+                $products[] = $p;
+            }
+        }
 
-	public function setFavourite($favourite) {
-		$this->favourite = $favourite;
-	}
-	
-	public function getLink() {
-		return $this->link;
-	}
-	
-	public function setLink($link) {
-		$this->link = $link;
-	}
+        return $products;
+    }
+
+    public function setProducts($products)
+    {
+        $this->products = $products;
+    }
+
+    public function getFavourite()
+    {
+        return $this->favourite;
+    }
+
+    public function setFavourite($favourite)
+    {
+        $this->favourite = $favourite;
+    }
+
+    public function getLink()
+    {
+        return $this->link;
+    }
+
+    public function setLink($link)
+    {
+        $this->link = $link;
+    }
 }
