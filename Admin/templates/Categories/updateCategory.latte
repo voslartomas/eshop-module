@@ -1,70 +1,54 @@
 {block content}
 
 	<div class="page-heading">
+		<h1>{_'Eshop category edit'}</h1>
 		{include ../tabs.latte active => 'categories'}
 	</div>
 
-	<h1>{_'Eshop category edit'}</h1>
 	{form categoryForm}
 			
 	<div class="control-group">
-		{label title /}
-		<div class="controls">
-			{input title}
-		</div>
+		{label title class => 'control-label' /}
+		{input title class => 'form-control'}
 	</div>
 	<div class="control-group">
-		{label slug /}
-		<div class="controls">
-			{input slug}
-		</div>
+		{label slug class => 'control-label' /}
+		{input slug class => 'form-control'}
 	</div>
 	<div class="control-group">
-		{label metaTitle /}
-		<div class="controls">
-			{input metaTitle}
-		</div>
+		{label metaTitle class => 'control-label' /}
+		{input metaTitle class => 'form-control'}
 	</div>
 	<div class="control-group">
-		{label metaDescription /}
-		<div class="controls">
-			{input metaDescription}
-		</div>
+		{label metaDescription class => 'control-label' /}
+		{input metaDescription class => 'form-control'}
 	</div>
 	<div class="control-group">
-		{label metaKeywords /}
-		<div class="controls">
-			{input metaKeywords}
-		</div>
+		{label metaKeywords class => 'control-label' /}
+		{input metaKeywords class => 'form-control'}
 	</div>
 	<div class="control-group">
-		{label parent /}
-		<div class="controls">
-			{input parent}
-		</div>
+		{label parent class => 'control-label' /}
+		{input parent class => 'form-control'}
 	</div>
 	<div class="control-group">
-		{label visible /}
-		<div class="controls">
-			{input visible}
-		</div>
+		{input visible class => ''}
+		{label visible class => 'control-label' /}
 	</div>
 	<div class="control-group">
-		{label favourite /}
-		<div class="controls">
-			{input favourite}
-		</div>
+		{input favourite class => ''}
+		{label favourite class => 'control-label' /}
 	</div>
 	
 	<div class="control-group">
-		{label description /}
-		<div class="controls">
-			{input description}
-		</div>
+		{label description class => 'control-label' /}
+		{input description class => 'form-control editor'}
 	</div>
 		
-	<a n:href=":Admin:Filesystem:default dialog => true, multiple => true" data-container="#pictures" class="btn btn-primary ajax filesDialog" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Load files'}</a>
-	
+	<div class="control-group">
+		<a n:href=":Admin:Filesystem:default dialog => true, multiple => true" data-container="#pictures" class="btn btn-primary ajax filesDialog" data-remote="false" data-target="#myModal" data-toggle="modal">{_'Load files'}</a>
+	</div>
+
 	<br /><br />
 
 	  <div class="well row" id="pictures">
@@ -78,8 +62,10 @@
 			</div>
 		  {/if}
 	</div>
-	
-	{input save}
+
+	<div class="form-actions">
+		{input save class => 'btn btn-success'}
+	</div>
 	
 	{/form}	  
 	

@@ -1,10 +1,13 @@
 {block content}
 	
 	<div class="page-heading">
+		<h1>{$actualPage->getTitle()}</h1>
 		{include ../tabs.latte active => 'eshop'}
 	</div>
 
-	<h1>{$actualPage->getTitle()}</h1>
+	<br>
+
+	<div class="row control-group">
 	
 	<ul class="nav nav-tabs" id="myTab">
 		<li {if $active == "statistics"}class="active"{/if}><a class="ajax" n:href="Eshop:default idPage => $idPage">{_'Summary'}</a></li>
@@ -74,7 +77,7 @@
 				</tbody>
 			</table>
 	  
-				  </div>
+	  </div>
 				  
 		<div class="col-xs-6">
 				
@@ -127,5 +130,7 @@
 				  
 	  </div>		
 					  
+	  </div>
+
 	  </div>
 {/block}

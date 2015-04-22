@@ -1,8 +1,9 @@
 {block content}
 
-	{include ../tabs.latte active => 'parameters'}
-
-	<h1>{_'Parameter edit'}</h1>
+	<div class="page-heading">
+		<h1>{_'Parameter edit'}</h1>
+		{include ../tabs.latte active => 'parameters'}
+	</div>
 	
 	{control parameterForm}
 	

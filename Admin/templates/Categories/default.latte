@@ -1,19 +1,16 @@
 {block content}
 	
 	<div class="page-heading">
+		<h1>{_'Eshop categories'}</h1>
 		{include ../tabs.latte active => 'categories'}
 	</div>
 
-	<h1>{_'Eshop categories'}</h1>
-	
-	<a class="btn btn-primary ajax" n:href="Categories:updateCategory idPage => $idPage">{_'Add category'}</a>
+	<br><br>
 
-	<br /><br />
-
-	<div class="tab-content">
-		<div class="tab-pane active">
-			{control categoriesGrid}
-		</div>
+	<div class="row control-group">
+		<a class="btn btn-primary ajax" n:href="Categories:updateCategory idPage => $idPage">{_'Add category'}</a>
+		{control categoriesGrid}
 	</div>
+
 	
 {/block}

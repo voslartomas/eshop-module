@@ -1,15 +1,18 @@
 {block content}
 	
 	<div class="page-heading">
+		<h1>{_'Eshop orders'}</h1>
 		{include ../tabs.latte active => 'orders'}
 	</div>
 
-	<h1>{_'Eshop orders'}</h1>
+	<div class="row control-group">
 	
-	<div class="tab-content">
-		<div class="tab-pane active">
-			{control ordersGrid}
+		<div class="tab-content">
+			<div class="tab-pane active">
+				{control ordersGrid}
+			</div>
 		</div>
+
 	</div>
 	
 {/block}
